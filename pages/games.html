@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Games Library — Loginn Gaming Cafe</title>
+  <meta name="description" content="Browse all 50+ games available at Loginn Gaming Cafe — PC, PS5, Xbox, Racing Simulators. Kozhikode, Kerala." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="../css/games.css" />
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <span class="logo-icon"><i class="fa-solid fa-gamepad"></i></span>
+        <span class="logo-text">LOGINN<span class="accent-blue">.</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html#pricing" class="nav-link">Stations &amp; Pricing</a></li>
+        <li><a href="games.html"      class="nav-link">Games</a></li>
+        <li><a href="membership.html" class="nav-link">Membership</a></li>
+        <li><a href="gamepass.html"   class="nav-link">Game Pass</a></li>
+        <li><a href="news.html"       class="nav-link">News</a></li>
+        <li><a href="../index.html#find-us" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── PAGE HERO ── -->
+  <div class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="page-hero-tag"><i class="fa-solid fa-gamepad"></i> LIBRARY</div>
+      <h1 class="page-hero-title">Games <span class="accent-pink">Library</span></h1>
+      <p class="page-hero-sub">All titles available at Loginn across every platform — use the filters or search to find yours.</p>
+    </div>
+  </div>
+
+  <!-- ── GAMES SECTION ── -->
+  <section class="section">
+    <div class="container">
+
+      <!-- Stats -->
+      <div class="games-stats reveal">
+        <div class="games-stat"><span class="games-stat-num">7+</span><span class="games-stat-label">LAN PC Titles</span></div>
+        <div class="games-stat-divider"></div>
+        <div class="games-stat"><span class="games-stat-num">35+</span><span class="games-stat-label">PS5 / Xbox / PC Titles</span></div>
+        <div class="games-stat-divider"></div>
+        <div class="games-stat"><span class="games-stat-num">5</span><span class="games-stat-label">Racing SIM Titles</span></div>
+      </div>
+
+      <!-- Search -->
+      <div class="games-search-wrap reveal">
+        <div class="games-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="gameSearch" placeholder="Search by title, genre or tag…" autocomplete="off" />
+        </div>
+      </div>
+
+      <!-- Filter -->
+      <div class="games-filter reveal">
+        <button class="filter-btn active" data-filter="all">All <span id="visibleCount"></span></button>
+        <button class="filter-btn" data-filter="pc"><i class="fa-solid fa-computer"></i> PC</button>
+        <button class="filter-btn" data-filter="ps5"><i class="fa-brands fa-playstation"></i> PS5</button>
+        <button class="filter-btn" data-filter="xbox"><i class="fa-brands fa-xbox"></i> Xbox</button>
+        <button class="filter-btn" data-filter="sim"><i class="fa-solid fa-flag-checkered"></i> Racing SIM</button>
+      </div>
+
+      <!-- Cards (populated by games.js) -->
+      <div class="games-list" id="gamesList"></div>
+
+      <!-- Request CTA -->
+      <div class="games-request reveal">
+        <div class="games-request-title"><i class="fa-solid fa-plus accent-blue"></i> Don't see your game?</div>
+        <p class="games-request-sub">We're always adding new titles. Message us on WhatsApp and we'll let you know if it's available or when we can add it.</p>
+        <a href="https://wa.me/919999999999?text=Hi!%20I%27d%20like%20to%20request%20a%20game%20at%20Loginn" target="_blank" class="btn btn-whatsapp">
+          <i class="fa-brands fa-whatsapp"></i> Request a Game
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="footer-bar">
+    <div class="footer-bar-inner">
+      <span class="footer-logo">LOGINN<span class="accent-blue">.</span></span>
+      <span class="footer-copy">© 2026 Loginn. All rights reserved.</span>
+      <div class="footer-socials">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <a href="https://wa.me/919999999999" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/games.js"></script>
+</body>
+</html>

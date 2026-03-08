@@ -1,0 +1,299 @@
+/* ============================================================
+   LOGINN GAMING CAFE — css/common.css
+   Shared tokens, reset, typography, buttons, nav, footer
+============================================================ */
+
+/* ─── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --bg:        #080810;
+  --bg-alt:    #0d0d1a;
+  --bg-card:   #111122;
+  --bg-card-h: #161630;
+
+  --border:    rgba(255,255,255,0.07);
+  --border-hi: rgba(255,255,255,0.14);
+
+  --blue:       #00d4ff;
+  --pink:       #ff2d78;
+  --green:      #00ffaa;
+  --blue-dim:   rgba(0,212,255,0.13);
+  --pink-dim:   rgba(255,45,120,0.13);
+  --green-dim:  rgba(0,255,170,0.13);
+
+  --text:       #e8e8f0;
+  --text-muted: #6b6b8a;
+  --text-dim:   #3a3a5c;
+
+  --f-display: 'Orbitron', sans-serif;
+  --f-heading: 'Rajdhani', sans-serif;
+  --f-body:    'Inter', sans-serif;
+
+  --nav-h:   70px;
+  --r:       12px;
+  --r-sm:    8px;
+  --gap:     24px;
+  --section: 96px;
+
+  --accent-blue:      #00d4ff;
+  --accent-pink:      #ff2d78;
+  --accent-green:     #00ffaa;
+  --accent-blue-dim:  rgba(0,212,255,0.13);
+  --accent-pink-dim:  rgba(255,45,120,0.13);
+  --accent-green-dim: rgba(0,255,170,0.13);
+}
+
+/* ─── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html  { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body  {
+  background: var(--bg); color: var(--text);
+  font-family: var(--f-body); line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+img   { display: block; width: 100%; height: 100%; object-fit: cover; }
+a     { text-decoration: none; color: inherit; }
+ul    { list-style: none; }
+h1, h2, h3 { line-height: 1.1; }
+button { font-family: inherit; }
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 3px; }
+
+/* ─── UTILITY ────────────────────────────────────────────── */
+.accent-blue  { color: var(--blue);  }
+.accent-pink  { color: var(--pink);  }
+.accent-green { color: var(--green); }
+
+.badge-blue  { background: var(--blue-dim);  color: var(--blue);  border: 1px solid rgba(0,212,255,0.28); }
+.badge-pink  { background: var(--pink-dim);  color: var(--pink);  border: 1px solid rgba(255,45,120,0.28); }
+.badge-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,255,170,0.28); }
+
+/* ─── BUTTONS ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px; border-radius: var(--r-sm);
+  font-family: var(--f-heading); font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; border: 2px solid transparent;
+  transition: all 0.2s ease; white-space: nowrap;
+  min-height: 48px; touch-action: manipulation;
+}
+.btn-primary        { background: var(--blue);   color: #000;        border-color: var(--blue); }
+.btn-primary:hover  { background: transparent;   color: var(--blue); box-shadow: 0 0 22px rgba(0,212,255,0.3); }
+.btn-ghost          { background: transparent;   color: var(--text); border-color: var(--border-hi); }
+.btn-ghost:hover    { border-color: var(--blue); color: var(--blue); }
+.btn-outline-blue   { background: transparent;   color: var(--blue); border-color: var(--blue); }
+.btn-outline-blue:hover { background: var(--blue); color: #000;      box-shadow: 0 0 20px rgba(0,212,255,0.25); }
+.btn-outline-pink   { background: transparent;   color: var(--pink); border-color: var(--pink); }
+.btn-outline-pink:hover { background: var(--pink); color: #000;      box-shadow: 0 0 20px rgba(255,45,120,0.25); }
+.btn-whatsapp       { background: #25d366;       color: #000;        border-color: #25d366; }
+.btn-whatsapp:hover { background: transparent;   color: #25d366;     box-shadow: 0 0 20px rgba(37,211,102,0.3); }
+.w-full { width: 100%; justify-content: center; }
+
+/* ─── LAYOUT ─────────────────────────────────────────────── */
+.container { width: min(1200px, 100%); margin: 0 auto; padding: 0 28px; }
+.section   { padding: var(--section) 0; }
+.section-alt { background: var(--bg-alt); position: relative; }
+.section-alt::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 40px,
+    rgba(0,212,255,0.012) 40px, rgba(0,212,255,0.012) 41px
+  );
+}
+
+/* ─── SECTION HEADER ─────────────────────────────────────── */
+.section-header { text-align: center; margin-bottom: 56px; }
+.section-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--f-display); font-size: 0.62rem; letter-spacing: 0.18em;
+  color: var(--blue); border: 1px solid rgba(0,212,255,0.3);
+  padding: 5px 14px; border-radius: 100px; margin-bottom: 14px;
+}
+.section-title {
+  font-family: var(--f-display); font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 900; letter-spacing: -0.01em; margin-bottom: 10px;
+}
+.section-sub { color: var(--text-muted); font-size: 1rem; max-width: 500px; margin: 0 auto; line-height: 1.65; }
+
+/* ─── PAGE HERO (inner pages) ────────────────────────────── */
+.page-hero {
+  padding: calc(var(--nav-h) + 56px) 0 56px;
+  position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.page-hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.page-hero-inner { position: relative; z-index: 1; }
+.page-hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--f-display); font-size: 0.6rem; letter-spacing: 0.18em;
+  color: var(--blue); border: 1px solid rgba(0,212,255,0.3);
+  padding: 5px 14px; border-radius: 100px; margin-bottom: 14px;
+}
+.page-hero-title {
+  font-family: var(--f-display); font-size: clamp(2rem, 6vw, 3.6rem);
+  font-weight: 900; color: #fff; margin-bottom: 12px; line-height: 1.05;
+}
+.page-hero-sub {
+  font-size: clamp(0.88rem, 2vw, 1.05rem); color: var(--text-muted);
+  max-width: 520px; line-height: 1.7;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════════════════════ */
+#navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: var(--nav-h);
+  background: rgba(8,8,16,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+#navbar.scrolled { border-bottom-color: rgba(0,212,255,0.2); box-shadow: 0 0 32px rgba(0,212,255,0.07); }
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 100%; padding: 0 32px; max-width: 1400px; margin: 0 auto;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--f-display); font-size: 1.1rem; font-weight: 900;
+  letter-spacing: 0.04em; color: #fff; flex-shrink: 0; z-index: 1001;
+}
+.logo-icon {
+  width: 34px; height: 34px; background: var(--blue); color: #000;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; font-size: 0.9rem;
+}
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-link {
+  font-family: var(--f-heading); font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
+  position: relative; padding-bottom: 3px; transition: color 0.2s;
+}
+.nav-link::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 2px; background: var(--blue); transition: width 0.25s;
+}
+.nav-link:hover { color: #fff; }
+.nav-link:hover::after { width: 100%; }
+.nav-link.active { color: #fff; }
+.nav-link.active::after { width: 100%; }
+
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 8px;
+  z-index: 1001; min-width: 44px; min-height: 44px;
+  align-items: center; justify-content: center;
+}
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: all 0.3s; border-radius: 2px; }
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER BAR
+═══════════════════════════════════════════════════════════ */
+.footer-bar { border-top: 1px solid var(--border); margin-top: 0; }
+.footer-bar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 32px; max-width: 1200px; margin: 0 auto; flex-wrap: wrap; gap: 12px;
+}
+.footer-logo  { font-family: var(--f-display); font-size: 0.95rem; font-weight: 900; letter-spacing: 0.05em; }
+.footer-copy  { font-size: 0.78rem; color: var(--text-dim); }
+.footer-socials { display: flex; gap: 16px; }
+.footer-socials a {
+  font-size: 1.05rem; color: var(--text-dim); transition: color 0.2s, transform 0.2s;
+  min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center;
+}
+.footer-socials a:hover { color: var(--blue); transform: translateY(-2px); }
+
+/* ═══════════════════════════════════════════════════════════
+   FLOATING WHATSAPP
+═══════════════════════════════════════════════════════════ */
+.whatsapp-float {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  width: 56px; height: 56px; background: #25d366; color: #fff; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 1.45rem;
+  box-shadow: 0 6px 22px rgba(37,211,102,0.35); transition: transform 0.25s, box-shadow 0.25s;
+  touch-action: manipulation;
+}
+.whatsapp-float:hover { transform: scale(1.1) translateY(-2px); box-shadow: 0 10px 30px rgba(37,211,102,0.5); }
+
+/* ─── DOT BLINK ──────────────────────────────────────────── */
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot.pink  { background: var(--pink);  box-shadow: 0 0 8px var(--pink);  animation: blink 1.4s infinite; }
+.dot.blue  { background: var(--blue);  box-shadow: 0 0 8px var(--blue);  animation: blink 1.4s infinite; }
+.dot.green { background: var(--green); box-shadow: 0 0 8px var(--green); animation: blink 1.4s infinite; }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+/* ─── SCROLL REVEAL BASE ─────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — SHARED
+═══════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .hamburger { display: flex; }
+
+  .nav-links {
+    position: fixed;
+    /* sit flush under the navbar — no gap, no overlap */
+    top: var(--nav-h);
+    left: 0; right: 0;
+    background: rgba(8,8,16,0.98);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    /* top padding creates breathing room without a visual border line */
+    padding: 8px 24px 28px;
+    gap: 0;
+    /* no border-bottom on the panel itself — kills the "line through navbar" */
+    transform: translateY(-110%);
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+    z-index: 999;
+    overflow-y: auto;
+    max-height: calc(100vh - var(--nav-h));
+  }
+  .nav-links.open { transform: translateY(0); }
+
+  .nav-link {
+    padding: 15px 0;
+    /* divider only between items, not on the very first one */
+    border-bottom: 1px solid var(--border);
+    font-size: 1rem; width: 100%; min-height: 52px;
+    display: flex; align-items: center;
+  }
+  /* remove the bottom border from the last link */
+  .nav-links li:last-child .nav-link { border-bottom: none; }
+  /* remove the bottom underline pseudo-element on mobile — it clashes with the border */
+  .nav-link::after { display: none; }
+}
+
+@media (max-width: 768px) {
+  :root { --section: 60px; --gap: 20px; }
+  .container { padding: 0 20px; }
+  .section-header { margin-bottom: 36px; }
+}
+
+@media (max-width: 640px) {
+  :root { --section: 52px; --gap: 16px; }
+  .container { padding: 0 16px; }
+  .nav-inner { padding: 0 16px; }
+  .footer-bar-inner { flex-direction: column; text-align: center; padding: 20px 16px; }
+  .footer-socials { justify-content: center; }
+  .whatsapp-float { bottom: 20px; right: 16px; }
+}
+
+@media (max-width: 380px) {
+  :root { --section: 44px; }
+  .container { padding: 0 14px; }
+  .btn { padding: 11px 18px; font-size: 0.85rem; }
+  .section-title { font-size: clamp(1.4rem, 6vw, 1.8rem); }
+}

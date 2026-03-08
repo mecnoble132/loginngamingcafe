@@ -1,0 +1,81 @@
+/* ============================================================
+   LOGINN GAMING CAFE — css/news.css
+   News, Updates & Tournaments page styles
+============================================================ */
+
+/* ─── ACTIVE TOURNAMENT BANNER ───────────────────────────── */
+.tournament-banner {
+  background: linear-gradient(135deg, rgba(255,45,120,0.08), rgba(255,45,120,0.04));
+  border: 1px solid rgba(255,45,120,0.3); border-radius: var(--r);
+  padding: 24px 28px; margin-bottom: 48px;
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+}
+.tb-icon {
+  width: 56px; height: 56px; flex-shrink: 0;
+  background: var(--pink-dim); border: 1px solid rgba(255,45,120,0.3);
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; color: var(--pink);
+}
+.tb-body { flex: 1; min-width: 200px; }
+.tb-label {
+  font-family: var(--f-display); font-size: 0.58rem; font-weight: 700;
+  letter-spacing: 0.14em; color: var(--pink); margin-bottom: 5px;
+  display: flex; align-items: center; gap: 7px;
+}
+.tb-title { font-family: var(--f-heading); font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 4px; line-height: 1.25; }
+.tb-meta  { font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.tb-meta i { color: var(--pink); font-size: 0.78rem; }
+.tb-actions { display: flex; gap: 10px; flex-wrap: wrap; flex-shrink: 0; }
+
+/* ─── NEWS GRID ──────────────────────────────────────────── */
+.news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
+.news-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r);
+  padding: 24px; display: flex; flex-direction: column;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.news-card:hover { transform: translateY(-5px); border-color: var(--border-hi); box-shadow: 0 14px 36px rgba(0,0,0,0.28); }
+.news-date { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
+.news-tag  { display: inline-block; font-family: var(--f-display); font-size: 0.56rem; font-weight: 700; letter-spacing: 0.12em; padding: 3px 10px; border-radius: 100px; margin-bottom: 12px; width: fit-content; }
+.tag-blue  { background: var(--blue-dim);  color: var(--blue);  border: 1px solid rgba(0,212,255,0.28); }
+.tag-pink  { background: var(--pink-dim);  color: var(--pink);  border: 1px solid rgba(255,45,120,0.28); }
+.tag-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,255,170,0.28); }
+.news-title { font-family: var(--f-heading); font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 9px; line-height: 1.3; }
+.news-desc  { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; flex: 1; margin-bottom: 16px; }
+.news-cta   { font-family: var(--f-heading); font-size: 0.82rem; font-weight: 600; color: var(--blue); letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; transition: gap 0.2s, color 0.2s; width: fit-content; }
+.news-cta:hover { gap: 10px; color: #fff; }
+
+/* ─── PAST TOURNAMENT RESULTS ────────────────────────────── */
+.past-results { display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
+.result-item {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 14px 18px;
+  transition: border-color 0.2s;
+}
+.result-item:hover { border-color: var(--border-hi); }
+.result-game { font-family: var(--f-heading); font-size: 0.95rem; font-weight: 700; color: #fff; flex: 1; }
+.result-winner { font-size: 0.82rem; color: var(--text-muted); }
+.result-winner strong { color: var(--green); }
+.result-date  { font-size: 0.75rem; color: var(--text-dim); flex-shrink: 0; }
+.result-badge {
+  font-family: var(--f-display); font-size: 0.52rem; font-weight: 700;
+  letter-spacing: 0.1em; padding: 3px 10px; border-radius: 100px;
+  background: rgba(255,200,0,0.1); color: #ffc800;
+  border: 1px solid rgba(255,200,0,0.2); white-space: nowrap; flex-shrink: 0;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .news-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .tournament-banner { flex-direction: column; align-items: flex-start; }
+  .tb-actions { width: 100%; }
+  .tb-actions .btn { flex: 1; justify-content: center; }
+}
+@media (max-width: 640px) {
+  .news-grid { grid-template-columns: 1fr; }
+  .result-item { flex-wrap: wrap; gap: 8px; }
+  .result-date { width: 100%; }
+}
