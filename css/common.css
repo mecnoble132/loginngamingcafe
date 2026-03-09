@@ -663,10 +663,6 @@ button {
     padding: 0 20px;
   }
 
-  .nav-inner {
-    padding: 0 20px;
-  }
-
   .section-header {
     margin-bottom: 36px;
   }
@@ -702,33 +698,13 @@ button {
   }
 }
 
-@media (max-width: 480px) {
-  .container {
-    padding: 0 12px;
-  }
-
-  .nav-inner {
-    padding: 0 12px;
-  }
-
-  .nav-logo {
-    font-size: 0.9rem;
-    gap: 7px;
-  }
-
-  .logo-icon {
-    width: 28px;
-    height: 28px;
-  }
-}
-
 @media (max-width: 380px) {
   :root {
     --section: 44px;
   }
 
   .container {
-    padding: 0 10px;
+    padding: 0 14px;
   }
 
   .btn {
@@ -752,5 +728,21 @@ button {
   .logo-icon {
     width: 24px;
     height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-inner {
+    padding: 0 12px;
+  }
+
+  .nav-logo {
+    font-size: 0.9rem;
+    gap: 7px;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
   }
 }
