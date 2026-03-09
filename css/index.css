@@ -100,7 +100,7 @@
   display: flex; align-items: center; gap: 16px;
   margin: 48px 0 20px;
   font-family: var(--f-display); font-size: 0.6rem; font-weight: 700;
-  letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim);
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--text);
 }
 .sp-group-label:first-of-type { margin-top: 0; }
 .sp-group-label > span { display: flex; align-items: center; gap: 10px; white-space: nowrap; flex-wrap: wrap; }
@@ -346,10 +346,10 @@
   padding: 12px 24px;
   border-bottom: 1px solid var(--border);
   font-family: var(--f-display);
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.18em;
-  color: var(--text-muted);
+  color: var(--text);
   background: rgba(255,255,255,0.015);
 }
 .pricing-banner-heading i { color: var(--blue); font-size: 0.7rem; }

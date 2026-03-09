@@ -45,11 +45,11 @@ highlightNav(); // run on load
 
   function calcPrice() {
     const base  = 150 + Math.max(0, hours - 1) * 100;
-    const extra = (platform === 'console' && controllers === 2) ? 50 * hours : 0;
+    const extra = (platform === 'console' && controllers === 2) ? 50 : 0;
     const total = base + extra;
     const parts = [`₹150 for 1st hr`];
     if (hours > 1) parts.push(`₹100 × ${hours - 1} hr${hours > 2 ? 's' : ''}`);
-    if (extra)     parts.push(`₹50 × ${hours} hr${hours > 1 ? 's' : ''} (2nd ctrl)`);
+    if (extra)     parts.push(`₹50 (2nd controller)`);
     resultEl.textContent    = `₹${total}`;
     breakdownEl.textContent = parts.join(' + ');
     hoursEl.textContent     = hours;

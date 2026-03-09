@@ -24,9 +24,9 @@
   --text-muted: #6b6b8a;
   --text-dim:   #3a3a5c;
 
-  --f-display: 'Orbitron', sans-serif;
+  --f-display: 'Michroma', sans-serif;
   --f-heading: 'Rajdhani', sans-serif;
-  --f-body:    'Inter', sans-serif;
+  --f-body:    'Poppins', sans-serif;
 
   --nav-h:   70px;
   --r:       12px;
@@ -167,7 +167,7 @@ button { font-family: inherit; }
   letter-spacing: 0.04em; color: #fff; flex-shrink: 0; z-index: 1001;
 }
 .logo-icon {
-  width: 34px; height: 34px; background: var(--blue); color: #000;
+  width: 34px; height: 34px;
   display: flex; align-items: center; justify-content: center;
   border-radius: 8px; font-size: 0.9rem;
 }
