@@ -269,8 +269,9 @@
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px 24px;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
   text-decoration: none;
   transition: background 0.2s;
   cursor: pointer;
@@ -285,13 +286,13 @@
 }
 
 .soi-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 0.9rem;
   flex-shrink: 0;
 }
 
@@ -311,35 +312,25 @@
 }
 
 .soi-body {
-  flex: 1;
   min-width: 0;
 }
 
 .soi-name {
   font-family: var(--f-heading);
-  font-size: 1rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: #fff;
   line-height: 1.2;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 
 .soi-detail {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: none;
 }
 
 .soi-count {
-  font-family: var(--f-display);
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--text-dim);
-  flex-shrink: 0;
-  line-height: 1;
+  display: none;
 }
 
 .station-overview-item:hover .soi-count {
