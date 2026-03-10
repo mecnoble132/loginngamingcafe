@@ -388,6 +388,8 @@
   color: var(--text-muted);
   letter-spacing: 0;
   text-transform: none;
+  white-space: normal;   
+  max-width: 100%;
 }
 
 .sp-group-label::after {
