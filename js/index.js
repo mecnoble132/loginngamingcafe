@@ -6,7 +6,6 @@
 'use strict';
 
 // ===== ACTIVE NAV LINK on scroll (homepage hash sections) =====
-// FIX 1: Use class toggling, not inline style.color, to avoid conflicts
 const sections   = document.querySelectorAll('section[id]');
 const navLinkEls = document.querySelectorAll('.nav-link');
 
@@ -21,7 +20,6 @@ const highlightNav = () => {
   });
 
   navLinkEls.forEach(link => {
-    // Only manage hash links here (not page links — those are handled by common.js)
     const href = link.getAttribute('href');
     if (!href || !href.startsWith('#')) return;
     link.classList.toggle('active', href === `#${activeId}`);
@@ -29,10 +27,18 @@ const highlightNav = () => {
 };
 
 window.addEventListener('scroll', highlightNav, { passive: true });
-highlightNav(); // run on load
+highlightNav();
 
 // ===== PRICE CALCULATOR =====
+// Pricing rules:
+//   PC:          1st hr ₹150 · each extra hr ₹100 · DAY CAP ₹600
+//   Console/SIM: 1st hr ₹150 + ₹50×(players-1) · each extra hr ₹100 + ₹50×(players-1)
 (function () {
+  const PC_DAY_CAP = 600;
+  const FIRST_HR   = 150;
+  const EXTRA_HR   = 100;
+  const CTRL_FEE   = 50;   // per extra player, per hour
+
   const resultEl    = document.getElementById('calcResult');
   const breakdownEl = document.getElementById('calcBreakdown');
   const hoursEl     = document.getElementById('hoursDisplay');
@@ -44,35 +50,64 @@ highlightNav(); // run on load
   let hours = 1, platform = 'pc', controllers = 1;
 
   function calcPrice() {
-    const base  = 150 + Math.max(0, hours - 1) * 100;
-    const extra = (platform === 'console' && controllers === 2) ? 50 : 0;
-    const total = base + extra;
-    const parts = [`₹150 for 1st hr`];
-    if (hours > 1) parts.push(`₹100 × ${hours - 1} hr${hours > 2 ? 's' : ''}`);
-    if (extra)     parts.push(`₹50 (2nd controller)`);
+    let total, breakdown, capped = false;
+
+    if (platform === 'pc') {
+      total  = FIRST_HR + Math.max(0, hours - 1) * EXTRA_HR;
+      capped = total > PC_DAY_CAP;
+      total  = Math.min(total, PC_DAY_CAP);
+
+      if (capped) {
+        breakdown = `₹${FIRST_HR} 1st hr + ₹${EXTRA_HR}/hr after · Day rate applied (capped at ₹${PC_DAY_CAP})`;
+      } else if (hours === 1) {
+        breakdown = `₹${FIRST_HR} for 1st hr`;
+      } else {
+        breakdown = `₹${FIRST_HR} 1st hr + ₹${EXTRA_HR} × ${hours - 1} hr${hours - 1 > 1 ? 's' : ''} after`;
+      }
+    } else {
+      // Console / SIM: extra ₹50 per additional player, every hour
+      const extraCtrl = controllers - 1;
+      const firstHr   = FIRST_HR + extraCtrl * CTRL_FEE;
+      const laterHr   = EXTRA_HR  + extraCtrl * CTRL_FEE;
+      total = firstHr + Math.max(0, hours - 1) * laterHr;
+
+      if (hours === 1) {
+        breakdown = `₹${firstHr} for 1st hr · ${controllers} player${controllers > 1 ? 's' : ''}`;
+      } else {
+        breakdown = `₹${firstHr} 1st hr + ₹${laterHr} × ${hours - 1} hr${hours - 1 > 1 ? 's' : ''} · ${controllers} players`;
+      }
+    }
+
     resultEl.textContent    = `₹${total}`;
-    breakdownEl.textContent = parts.join(' + ');
+    resultEl.style.color    = capped ? 'var(--green)' : '';
+    breakdownEl.textContent = breakdown;
     hoursEl.textContent     = hours;
   }
 
-  stepUp.addEventListener('click',   () => { if (hours < 12) { hours++; calcPrice(); } });
+  // Hour stepper (max 24 hrs)
+  stepUp.addEventListener('click',   () => { if (hours < 24) { hours++; calcPrice(); } });
   stepDown.addEventListener('click', () => { if (hours > 1)  { hours--; calcPrice(); } });
 
+  // Platform buttons
   document.querySelectorAll('.calc-opt[data-platform]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.calc-opt[data-platform]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       platform = btn.dataset.platform;
-      ctrlRow.style.display = platform === 'console' ? 'flex' : 'none';
+      // Show player selector for console only (SIM is single-player)
+      ctrlRow.style.display = (platform === 'console') ? '' : 'none';
+      controllers = 1;
+      document.querySelectorAll('.ctrl-opt').forEach((b, i) => b.classList.toggle('active', i === 0));
       calcPrice();
     });
   });
 
-  document.querySelectorAll('.calc-opt[data-ctrl]').forEach(btn => {
+  // Player/controller buttons (1–4)
+  document.querySelectorAll('.ctrl-opt').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.calc-opt[data-ctrl]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.ctrl-opt').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      controllers = parseInt(btn.dataset.ctrl);
+      controllers = parseInt(btn.dataset.ctrl, 10);
       calcPrice();
     });
   });

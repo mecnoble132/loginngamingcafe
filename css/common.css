@@ -594,7 +594,7 @@ button {
 .reveal {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .reveal.visible {
