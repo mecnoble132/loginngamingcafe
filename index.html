@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Loginn — Gaming Cafe Thiruvananthapuram</title>
   <link rel="icon" type="image/png" sizes="48x48" href="./images/loginnfavicon.png">
-  <meta name="description" content="Loginn Gaming Cafe — Premium gaming rigs, PS5, Xbox, Racing Simulators. Walk-ins welcome. Located in Thiruvananthapuram, Kerala." />
+  <meta name="description"
+    content="Loginn Gaming Cafe — Premium gaming rigs, PS5, Xbox, Racing Simulators. Walk-ins welcome. Located in Thiruvananthapuram, Kerala." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -17,6 +19,7 @@
   <link rel="stylesheet" href="css/common.css" />
   <link rel="stylesheet" href="css/index.css" />
 </head>
+
 <body>
 
   <!-- ── NAVBAR ── -->
@@ -27,12 +30,13 @@
         <span class="logo-text">LOGINN<span class="accent-blue">.</span></span>
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#pricing"    class="nav-link">Stations &amp; Pricing</a></li>
-        <li><a href="pages/games.html"      class="nav-link">Games</a></li>
+        <li><a href="#pricing" class="nav-link">Stations &amp; Pricing</a></li>
+        <li><a href="#find-us" class="nav-link">Contact</a></li>
+        <li><a href="pages/games.html" class="nav-link">Games</a></li>
         <li><a href="pages/membership.html" class="nav-link">Membership</a></li>
-        <li><a href="pages/gamepass.html"   class="nav-link">Game Pass</a></li>
-        <li><a href="pages/news.html"       class="nav-link">News</a></li>
-        <li><a href="#find-us"    class="nav-link">Contact</a></li>
+        <li><a href="pages/gamepass.html" class="nav-link">Game Pass</a></li>
+        <li><a href="pages/news.html" class="nav-link">News</a></li>
+        <li><a href="#gallery" class="nav-link">Gallery</a></li>
       </ul>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -57,10 +61,12 @@
         Your ultimate gaming destination in Thiruvananthapuram.
       </p>
       <div class="hero-ctas">
-        <a href="https://wa.me/918075707064?text=Hi!%20I%27d%20like%20to%20book%20a%20session%20at%20Loginn" target="_blank" class="btn btn-primary">
+        <a href="https://wa.me/918075707064?text=Hi!%20I%27d%20like%20to%20book%20a%20session%20at%20Loginn"
+          target="_blank" class="btn btn-primary">
           <i class="fa-brands fa-whatsapp"></i> Book via WhatsApp
         </a>
-        <a href="pages/membership.html" class="btn btn-ghost">View Membership <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="pages/membership.html" class="btn btn-ghost">View Membership <i
+            class="fa-solid fa-arrow-right"></i></a>
       </div>
       <div class="hero-stats">
         <div class="stat"><span class="stat-num">25+</span><span class="stat-label">Gaming Rigs</span></div>
@@ -78,13 +84,226 @@
       <div class="section-header reveal">
         <span class="section-tag"><i class="fa-solid fa-microchip"></i> STATIONS &amp; PRICING</span>
         <h2 class="section-title">Pick Your <span class="accent-blue">Station</span></h2>
-        <p class="section-sub">Same rate across all stations — billed by actual time used</p>
+        <p class="section-sub">Same pricing for every rig — billed by actual time used</p>
       </div>
+
+      <!-- Overview Strip — Consoles: 4, SIM: 2, LAN PCs: 15 -->
+      <div class="station-overview">
+        <a href="#group-consoles" class="station-overview-item">
+          <div class="soi-icon pink"><i class="fa-brands fa-playstation"></i></div>
+          <div class="soi-body">
+            <div class="soi-name">Consoles</div>
+            <div class="soi-detail">PS5 (×3) · Xbox Series (×1)</div>
+          </div>
+          <div class="soi-count">4</div>
+        </a>
+        <div class="soi-divider"></div>
+        <a href="#group-sim" class="station-overview-item">
+          <div class="soi-icon yellow"><i class="fa-solid fa-flag-checkered"></i></div>
+          <div class="soi-body">
+            <div class="soi-name">Racing Simulators</div>
+            <div class="soi-detail">PS5 SIM · PC SIM</div>
+          </div>
+          <div class="soi-count">2</div>
+        </a>
+        <div class="soi-divider"></div>
+        <a href="#group-lan" class="station-overview-item">
+          <div class="soi-icon blue"><i class="fa-solid fa-computer"></i></div>
+          <div class="soi-body">
+            <div class="soi-name">LAN PCs</div>
+            <div class="soi-detail">Standard (×10) · Performance (×5) · Story (×1)</div>
+          </div>
+          <div class="soi-count">16</div>
+        </a>
+      </div>
+
+      <!-- Consoles -->
+      <div class="sp-group-label" id="group-consoles"><span>Consoles</span></div>
+      <div class="sp-grid sp-grid-2 sp-grid-capped">
+        <div class="sp-card reveal">
+          <div class="sp-card-img tint-pink">
+            <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&q=80" alt="PlayStation 5"
+              loading="lazy" />
+            <div class="sp-card-img-overlay"></div>
+          </div>
+          <div class="sp-card-body">
+            <div class="sp-card-top">
+              <div class="sp-icon pink"><i class="fa-brands fa-playstation"></i></div>
+              <div>
+                <h3 class="sp-title">PlayStation 5</h3>
+                <div class="sp-subtitle">Console · DualSense</div>
+              </div>
+              <div class="sp-badge badge-pink">3 Units</div>
+            </div>
+            <div class="sp-specs">
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> PS5 Disc Edition</div>
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> DualSense Controllers</div>
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> 4K Display</div>
+            </div>
+          </div>
+        </div>
+        <div class="sp-card reveal">
+          <div class="sp-card-img tint-green">
+            <img
+              src="https://images.unsplash.com/photo-1621259182978-fbf93132d53d?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Xbox Series X" loading="lazy" />
+            <div class="sp-card-img-overlay"></div>
+          </div>
+          <div class="sp-card-body">
+            <div class="sp-card-top">
+              <div class="sp-icon green"><i class="fa-brands fa-xbox"></i></div>
+              <div>
+                <h3 class="sp-title">Xbox Series</h3>
+                <div class="sp-subtitle">Console · Game Pass</div>
+              </div>
+              <div class="sp-badge badge-green">1 Unit</div>
+            </div>
+            <div class="sp-specs">
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Xbox Series Console</div>
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Xbox Controllers</div>
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Game Pass Ultimate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Racing Simulators -->
+      <div class="sp-group-label" id="group-sim"><span>Racing Simulators</span></div>
+      <div class="sp-grid sp-grid-2 sp-grid-capped">
+        <div class="sp-card reveal">
+          <div class="sp-card-img tint-pink">
+            <img
+              src="https://plus.unsplash.com/premium_photo-1744139468979-98d80748c5a5?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="PS5 Racing SIM" loading="lazy" />
+            <div class="sp-card-img-overlay"></div>
+          </div>
+          <div class="sp-card-body">
+            <div class="sp-card-top">
+              <div class="sp-icon pink"><i class="fa-solid fa-flag-checkered"></i></div>
+              <div>
+                <h3 class="sp-title">PS5 Racing SIM</h3>
+                <div class="sp-subtitle">Logitech G29 · Console</div>
+              </div>
+              <div class="sp-badge badge-pink">1 Pod</div>
+            </div>
+            <div class="sp-specs">
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Logitech G29 Wheel &amp; Pedals</div>
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> PlayStation 5</div>
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> GT7, WRC Generations &amp; more</div>
+            </div>
+          </div>
+        </div>
+        <div class="sp-card reveal">
+          <div class="sp-card-img tint-blue">
+            <img
+              src="https://images.unsplash.com/photo-1760553121003-93afc4d88ae0?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="PC Racing SIM" loading="lazy" />
+            <div class="sp-card-img-overlay"></div>
+          </div>
+          <div class="sp-card-body">
+            <div class="sp-card-top">
+              <div class="sp-icon blue"><i class="fa-solid fa-flag-checkered"></i></div>
+              <div>
+                <h3 class="sp-title">PC Racing SIM</h3>
+                <div class="sp-subtitle">Cammus C5 · Sim Rig</div>
+              </div>
+              <div class="sp-badge badge-blue">1 Pod</div>
+            </div>
+            <div class="sp-specs">
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Cammus C5 Direct Drive Wheel</div>
+              <div class="sp-spec"><i class="fa-solid fa-microchip"></i> Ryzen 5 5600X · RTX 3060 Ti</div>
+              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Assetto Corsa, Euro Truck &amp; more</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAN PCs -->
+      <div class="sp-group-label" id="group-lan"><span>LAN PCs</span></div>
+      <div class="sp-grid sp-grid-3">
+        <div class="sp-card reveal">
+          <div class="sp-card-img tint-blue">
+            <img
+              src="https://images.unsplash.com/photo-1660855551740-4474188debdb?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Standard PC" loading="lazy" />
+            <div class="sp-card-img-overlay"></div>
+          </div>
+          <div class="sp-card-body">
+            <div class="sp-card-top">
+              <div class="sp-icon blue"><i class="fa-solid fa-computer"></i></div>
+              <div>
+                <h3 class="sp-title">Standard</h3>
+                <div class="sp-subtitle">Competitive · 10 stations</div>
+              </div>
+              <div class="sp-badge badge-blue">10 PCs</div>
+            </div>
+            <div class="sp-specs">
+              <div class="sp-spec"><i class="fa-solid fa-microchip"></i> Ryzen 5 5500</div>
+              <div class="sp-spec"><i class="fa-solid fa-memory"></i> 16 GB RAM · 512 GB SSD</div>
+              <div class="sp-spec"><i class="fa-solid fa-display"></i> AMD RX 5600 XT</div>
+              <div class="sp-spec"><i class="fa-solid fa-tv"></i> Gigabyte G24F2 — 165 Hz</div>
+            </div>
+          </div>
+        </div>
+        <div class="sp-card reveal">
+          <div class="sp-card-img tint-blue">
+            <img
+              src="https://images.unsplash.com/photo-1632749042303-7f7a18ed6ff0?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Performance PC" loading="lazy" />
+            <div class="sp-card-img-overlay"></div>
+          </div>
+          <div class="sp-card-body">
+            <div class="sp-card-top">
+              <div class="sp-icon blue"><i class="fa-solid fa-computer"></i></div>
+              <div>
+                <h3 class="sp-title">Performance</h3>
+                <div class="sp-subtitle">High FPS · 5 stations</div>
+              </div>
+              <div class="sp-badge badge-blue">5 PCs</div>
+            </div>
+            <div class="sp-specs">
+              <div class="sp-spec"><i class="fa-solid fa-microchip"></i> Ryzen 5 5500</div>
+              <div class="sp-spec"><i class="fa-solid fa-memory"></i> 24 GB RAM · 1 TB SSD</div>
+              <div class="sp-spec"><i class="fa-solid fa-display"></i> Nvidia RTX 3060</div>
+              <div class="sp-spec"><i class="fa-solid fa-tv"></i> Zebronics N24A — 180 Hz</div>
+            </div>
+          </div>
+        </div>
+        <div class="sp-card reveal">
+          <div class="sp-card-img tint-pink">
+            <img
+              src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="Story PC" loading="lazy" />
+            <div class="sp-card-img-overlay"></div>
+          </div>
+          <div class="sp-card-body">
+            <div class="sp-card-top">
+              <div class="sp-icon pink"><i class="fa-solid fa-computer"></i></div>
+              <div>
+                <h3 class="sp-title">Story / Casual</h3>
+                <div class="sp-subtitle">Ultra · 1 station</div>
+              </div>
+              <div class="sp-badge badge-pink">1 PC</div>
+            </div>
+            <div class="sp-specs">
+              <div class="sp-spec"><i class="fa-solid fa-microchip"></i> Intel Core i7-12700K</div>
+              <div class="sp-spec"><i class="fa-solid fa-memory"></i> 32 GB RAM · 2 TB SSD</div>
+              <div class="sp-spec"><i class="fa-solid fa-display"></i> AMD RX 6900 XT</div>
+              <div class="sp-spec"><i class="fa-solid fa-tv"></i> Gigabyte G32QC — 165 Hz</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
       <!-- Unified Pricing Banner -->
       <div class="pricing-banner reveal">
         <div class="pricing-banner-heading">
-          <i class="fa-solid fa-tag"></i> PRICING
+          <div class="pbh-left">
+            <i class="fa-solid fa-tag"></i> PRICING
+          </div>
+          <div class="pbh-right">Same pricing for every rig</div>
         </div>
         <div class="pricing-banner-body">
           <div class="pricing-banner-item">
@@ -107,175 +326,10 @@
           </div>
         </div>
       </div>
-
-      <!-- Overview Strip — Consoles: 4, SIM: 2, LAN PCs: 15 -->
-      <div class="station-overview">
-        <a href="#group-consoles" class="station-overview-item">
-          <div class="soi-icon pink"><i class="fa-brands fa-playstation"></i></div>
-          <div class="soi-body"><div class="soi-name">Consoles</div><div class="soi-detail">PS5 (×3) · Xbox Series (×1)</div></div>
-          <div class="soi-count">4</div>
-        </a>
-        <div class="soi-divider"></div>
-        <a href="#group-sim" class="station-overview-item">
-          <div class="soi-icon yellow"><i class="fa-solid fa-flag-checkered"></i></div>
-          <div class="soi-body"><div class="soi-name">Racing Simulators</div><div class="soi-detail">PS5 SIM · PC SIM</div></div>
-          <div class="soi-count">2</div>
-        </a>
-        <div class="soi-divider"></div>
-        <a href="#group-lan" class="station-overview-item">
-          <div class="soi-icon blue"><i class="fa-solid fa-computer"></i></div>
-          <div class="soi-body"><div class="soi-name">LAN PCs</div><div class="soi-detail">Standard (×10) · Performance (×5) · Story (×1)</div></div>
-          <div class="soi-count">16</div>
-        </a>
-      </div>
-
-      <!-- Consoles -->
-      <div class="sp-group-label" id="group-consoles"><span>Consoles</span></div>
-      <div class="sp-grid sp-grid-2 sp-grid-capped">
-        <div class="sp-card reveal">
-          <div class="sp-card-img tint-pink">
-            <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&q=80" alt="PlayStation 5" loading="lazy" />
-            <div class="sp-card-img-overlay"></div>
-          </div>
-          <div class="sp-card-body">
-            <div class="sp-card-top">
-              <div class="sp-icon pink"><i class="fa-brands fa-playstation"></i></div>
-              <div><h3 class="sp-title">PlayStation 5</h3><div class="sp-subtitle">Console · DualSense</div></div>
-              <div class="sp-badge badge-pink">3 Units</div>
-            </div>
-            <div class="sp-specs">
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> PS5 Disc Edition</div>
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> DualSense Controllers</div>
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> 4K Display</div>
-            </div>
-          </div>
-        </div>
-        <div class="sp-card reveal">
-          <div class="sp-card-img tint-green">
-            <img src="https://images.unsplash.com/photo-1621259182978-fbf93132d53d?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Xbox Series X" loading="lazy" />
-            <div class="sp-card-img-overlay"></div>
-          </div>
-          <div class="sp-card-body">
-            <div class="sp-card-top">
-              <div class="sp-icon green"><i class="fa-brands fa-xbox"></i></div>
-              <div><h3 class="sp-title">Xbox Series</h3><div class="sp-subtitle">Console · Game Pass</div></div>
-              <div class="sp-badge badge-green">1 Unit</div>
-            </div>
-            <div class="sp-specs">
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Xbox Series Console</div>
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Xbox Controllers</div>
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Game Pass Ultimate</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Racing Simulators -->
-      <div class="sp-group-label" id="group-sim"><span>Racing Simulators</span></div>
-      <div class="sp-grid sp-grid-2 sp-grid-capped">
-        <div class="sp-card reveal">
-          <div class="sp-card-img tint-pink">
-            <img src="https://plus.unsplash.com/premium_photo-1744139468979-98d80748c5a5?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="PS5 Racing SIM" loading="lazy" />
-            <div class="sp-card-img-overlay"></div>
-          </div>
-          <div class="sp-card-body">
-            <div class="sp-card-top">
-              <div class="sp-icon pink"><i class="fa-solid fa-flag-checkered"></i></div>
-              <div><h3 class="sp-title">PS5 Racing SIM</h3><div class="sp-subtitle">Logitech G29 · Console</div></div>
-              <div class="sp-badge badge-pink">1 Pod</div>
-            </div>
-            <div class="sp-specs">
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Logitech G29 Wheel &amp; Pedals</div>
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> PlayStation 5</div>
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> GT7, WRC Generations &amp; more</div>
-            </div>
-          </div>
-        </div>
-        <div class="sp-card reveal">
-          <div class="sp-card-img tint-blue">
-            <img src="https://images.unsplash.com/photo-1760553121003-93afc4d88ae0?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="PC Racing SIM" loading="lazy" />
-            <div class="sp-card-img-overlay"></div>
-          </div>
-          <div class="sp-card-body">
-            <div class="sp-card-top">
-              <div class="sp-icon blue"><i class="fa-solid fa-flag-checkered"></i></div>
-              <div><h3 class="sp-title">PC Racing SIM</h3><div class="sp-subtitle">Cammus C5 · Sim Rig</div></div>
-              <div class="sp-badge badge-blue">1 Pod</div>
-            </div>
-            <div class="sp-specs">
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Cammus C5 Direct Drive Wheel</div>
-              <div class="sp-spec"><i class="fa-solid fa-microchip"></i> Ryzen 5 5600X · RTX 3060 Ti</div>
-              <div class="sp-spec"><i class="fa-solid fa-circle-check"></i> Assetto Corsa, Euro Truck &amp; more</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- LAN PCs -->
-      <div class="sp-group-label" id="group-lan"><span>LAN PCs</span></div>
-      <div class="sp-grid sp-grid-3">
-        <div class="sp-card reveal">
-          <div class="sp-card-img tint-blue">
-            <img src="https://images.unsplash.com/photo-1660855551740-4474188debdb?q=80&w=871&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Standard PC" loading="lazy" />
-            <div class="sp-card-img-overlay"></div>
-          </div>
-          <div class="sp-card-body">
-            <div class="sp-card-top">
-              <div class="sp-icon blue"><i class="fa-solid fa-computer"></i></div>
-              <div><h3 class="sp-title">Standard</h3><div class="sp-subtitle">Competitive · 10 stations</div></div>
-              <div class="sp-badge badge-blue">10 PCs</div>
-            </div>
-            <div class="sp-specs">
-              <div class="sp-spec"><i class="fa-solid fa-microchip"></i> Ryzen 5 5500</div>
-              <div class="sp-spec"><i class="fa-solid fa-memory"></i> 16 GB RAM · 512 GB SSD</div>
-              <div class="sp-spec"><i class="fa-solid fa-display"></i> AMD RX 5600 XT</div>
-              <div class="sp-spec"><i class="fa-solid fa-tv"></i> Gigabyte G24F2 — 165 Hz</div>
-            </div>
-          </div>
-        </div>
-        <div class="sp-card reveal">
-          <div class="sp-card-img tint-blue">
-            <img src="https://images.unsplash.com/photo-1632749042303-7f7a18ed6ff0?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Performance PC" loading="lazy" />
-            <div class="sp-card-img-overlay"></div>
-          </div>
-          <div class="sp-card-body">
-            <div class="sp-card-top">
-              <div class="sp-icon blue"><i class="fa-solid fa-computer"></i></div>
-              <div><h3 class="sp-title">Performance</h3><div class="sp-subtitle">High FPS · 5 stations</div></div>
-              <div class="sp-badge badge-blue">5 PCs</div>
-            </div>
-            <div class="sp-specs">
-              <div class="sp-spec"><i class="fa-solid fa-microchip"></i> Ryzen 5 5500</div>
-              <div class="sp-spec"><i class="fa-solid fa-memory"></i> 24 GB RAM · 1 TB SSD</div>
-              <div class="sp-spec"><i class="fa-solid fa-display"></i> Nvidia RTX 3060</div>
-              <div class="sp-spec"><i class="fa-solid fa-tv"></i> Zebronics N24A — 180 Hz</div>
-            </div>
-          </div>
-        </div>
-        <div class="sp-card reveal">
-          <div class="sp-card-img tint-pink">
-            <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Story PC" loading="lazy" />
-            <div class="sp-card-img-overlay"></div>
-          </div>
-          <div class="sp-card-body">
-            <div class="sp-card-top">
-              <div class="sp-icon pink"><i class="fa-solid fa-computer"></i></div>
-              <div><h3 class="sp-title">Story / Casual</h3><div class="sp-subtitle">Ultra · 1 station</div></div>
-              <div class="sp-badge badge-pink">1 PC</div>
-            </div>
-            <div class="sp-specs">
-              <div class="sp-spec"><i class="fa-solid fa-microchip"></i> Intel Core i7-12700K</div>
-              <div class="sp-spec"><i class="fa-solid fa-memory"></i> 32 GB RAM · 2 TB SSD</div>
-              <div class="sp-spec"><i class="fa-solid fa-display"></i> AMD RX 6900 XT</div>
-              <div class="sp-spec"><i class="fa-solid fa-tv"></i> Gigabyte G32QC — 165 Hz</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Calculator -->
       <div class="price-calculator reveal">
-        <div class="calc-header"><i class="fa-solid fa-calculator accent-blue"></i><span>Quick Price Calculator</span></div>
+        <div class="calc-header"><i class="fa-solid fa-calculator accent-blue"></i><span>Quick Price Calculator</span>
+        </div>
         <div class="calc-body">
           <div class="calc-row">
             <label>Station</label>
@@ -312,11 +366,56 @@
       </div>
       <div class="pricing-note">
         <i class="fa-solid fa-circle-info accent-blue"></i>
-        &nbsp;Billing starts when you sit, stops when you leave. Members get discounted rates. <a href="pages/membership.html">See plans →</a>
+        &nbsp;Billing starts when you sit, stops when you leave. Members get discounted rates. <a
+          href="pages/membership.html">See plans →</a>
       </div>
       <div class="tech-partner">
         <span class="tp-label">Tech Partner</span>
         <span class="tp-name"><i class="fa-solid fa-shield-halved accent-blue"></i> Geekboz PVT Ltd</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FIND US ── -->
+  <section id="find-us" class="section footer-section">
+    <div class="container" style="padding-bottom: 80px;">
+      <div class="section-header reveal">
+        <span class="section-tag"><i class="fa-solid fa-location-dot"></i> FIND US</span>
+        <h2 class="section-title">Come <span class="accent-green">Play</span></h2>
+        <p class="section-sub">Walk-ins welcome — no reservation needed</p>
+      </div>
+      <div class="contact-grid">
+        <div class="map-container reveal">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d984.8199!2d76.9591!3d8.5277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05bb618021720d%3A0x380591ea3505f507!2sLoginn!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Loginn Gaming Centre Location">
+          </iframe>
+        </div>
+        <div class="contact-info reveal">
+          <div class="walk-in-banner"><i class="fa-solid fa-person-walking"></i><span>WALK-INS WELCOME — NO BOOKING
+              REQUIRED</span></div>
+          <div class="info-block"><i class="fa-solid fa-location-dot accent-blue"></i>
+            <div><strong>Address</strong>
+              <p>Loginn Gaming Centre<br />Toll Junction, Ambalamukku<br />Thiruvananthapuram, Kerala 695003</p>
+            </div>
+          </div>
+          <div class="info-block"><i class="fa-solid fa-clock accent-pink"></i>
+            <div><strong>Opening Hours</strong>
+              <p>Every Day: 11 AM – 11 PM</p>
+            </div>
+          </div>
+          <div class="info-block"><i class="fa-solid fa-phone accent-green"></i>
+            <div><strong>Phone</strong>
+              <p><a href="tel:+918075707064">+91 80757 07064</a></p>
+            </div>
+          </div>
+          <div class="contact-ctas">
+            <a href="https://wa.me/918075707064?text=Hi!%20I%27d%20like%20to%20know%20more%20about%20Loginn"
+              target="_blank" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp</a>
+            <a href="tel:+918075707064" class="btn btn-outline-blue"><i class="fa-solid fa-phone"></i> Call Us</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -335,9 +434,12 @@
         <div class="game-pill reveal"><span class="pill-platform pc">PC</span> PUBG</div>
         <div class="game-pill reveal"><span class="pill-platform ps5">PS5</span> Spider-Man 2</div>
         <div class="game-pill reveal"><span class="pill-platform ps5">PS5</span> God of War Ragnarök</div>
-        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span class="pill-platform xbox">Xbox</span> EA FC 26</div>
-        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span class="pill-platform xbox">Xbox</span> Mortal Kombat 1</div>
-        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span class="pill-platform xbox">Xbox</span> It Takes Two</div>
+        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span
+            class="pill-platform xbox">Xbox</span> EA FC 26</div>
+        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span
+            class="pill-platform xbox">Xbox</span> Mortal Kombat 1</div>
+        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span
+            class="pill-platform xbox">Xbox</span> It Takes Two</div>
         <div class="game-pill reveal"><span class="pill-platform sim">SIM</span> Gran Turismo 7</div>
         <div class="game-pill reveal"><span class="pill-platform sim">SIM</span> Assetto Corsa</div>
       </div>
@@ -363,20 +465,23 @@
           <div class="member-tier tier-bronze"><i class="fa-solid fa-shield"></i> STARTER</div>
           <div class="member-price">₹<span>1500</span></div>
           <div class="member-hours"><strong>30</strong>&nbsp;hrs &nbsp;·&nbsp; 30-day validity</div>
-          <a href="https://wa.me/918075707064?text=I%27d%20like%20the%20Starter%20membership%20%E2%82%B91500" target="_blank" class="btn btn-outline-blue w-full">Get Starter</a>
+          <a href="https://wa.me/918075707064?text=I%27d%20like%20the%20Starter%20membership%20%E2%82%B91500"
+            target="_blank" class="btn btn-outline-blue w-full">Get Starter</a>
         </div>
         <div class="member-card member-featured reveal">
           <div class="member-popular-badge">⚡ BEST VALUE</div>
           <div class="member-tier tier-gold"><i class="fa-solid fa-crown"></i> PRO</div>
           <div class="member-price">₹<span>3000</span></div>
           <div class="member-hours"><strong>90</strong>&nbsp;hrs &nbsp;·&nbsp; 30-day validity</div>
-          <a href="https://wa.me/918075707064?text=I%27d%20like%20the%20Pro%20membership%20%E2%82%B93000" target="_blank" class="btn btn-primary w-full">Get Pro</a>
+          <a href="https://wa.me/918075707064?text=I%27d%20like%20the%20Pro%20membership%20%E2%82%B93000"
+            target="_blank" class="btn btn-primary w-full">Get Pro</a>
         </div>
         <div class="member-card reveal">
           <div class="member-tier tier-platinum"><i class="fa-solid fa-gem"></i> ELITE</div>
           <div class="member-price">₹<span>6000</span></div>
           <div class="member-hours"><strong>180</strong>&nbsp;hrs &nbsp;·&nbsp; 30-day validity</div>
-          <a href="https://wa.me/918075707064?text=I%27d%20like%20the%20Elite%20membership%20%E2%82%B96000" target="_blank" class="btn btn-outline-blue w-full">Get Elite</a>
+          <a href="https://wa.me/918075707064?text=I%27d%20like%20the%20Elite%20membership%20%E2%82%B96000"
+            target="_blank" class="btn btn-outline-blue w-full">Get Elite</a>
         </div>
       </div>
       <div class="membership-cta">
@@ -404,19 +509,23 @@
           <div class="whats-on-label label-tournament">🏆 TOURNAMENT</div>
           <div class="whats-on-date"><i class="fa-regular fa-calendar"></i> March 20, 2026 · Registration closes</div>
           <h3 class="whats-on-title">Monthly Valorant Tournament — ₹10,000 Prize Pool</h3>
-          <p class="whats-on-desc">5v5 format. Open to all members and walk-ins. Register your team of 5 before March 20th to secure your spot in the March bracket.</p>
-          <a href="https://wa.me/918075707064?text=I%27d%20like%20to%20register%20for%20the%20Valorant%20tournament" target="_blank" class="whats-on-cta">Register on WhatsApp <i class="fa-solid fa-arrow-right"></i></a>
+          <p class="whats-on-desc">5v5 format. Open to all members and walk-ins. Register your team of 5 before March
+            20th to secure your spot in the March bracket.</p>
+          <a href="https://wa.me/918075707064?text=I%27d%20like%20to%20register%20for%20the%20Valorant%20tournament"
+            target="_blank" class="whats-on-cta">Register on WhatsApp <i class="fa-solid fa-arrow-right"></i></a>
         </div>
         <div class="whats-on-card reveal">
           <div class="whats-on-label label-news">NEWS</div>
           <div class="whats-on-date"><i class="fa-regular fa-calendar"></i> February 1, 2026</div>
           <h3 class="whats-on-title">Extended Hours — Now Open Until 2 AM on Weekends</h3>
-          <p class="whats-on-desc">By popular demand, we're now staying open until 2 AM on Fridays and Saturdays. Perfect for late-night gaming marathons.</p>
+          <p class="whats-on-desc">By popular demand, we're now staying open until 2 AM on Fridays and Saturdays.
+            Perfect for late-night gaming marathons.</p>
           <a href="pages/news.html" class="whats-on-cta">See all news <i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </div>
       <div class="whats-on-footer">
-        <a href="pages/news.html" class="btn btn-ghost">View All News &amp; Events <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="pages/news.html" class="btn btn-ghost">View All News &amp; Events <i
+            class="fa-solid fa-arrow-right"></i></a>
       </div>
     </div>
   </section>
@@ -431,73 +540,53 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-item large reveal">
-          <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900&q=80" alt="Gaming setup overview" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=900&q=80" alt="Gaming setup overview"
+            loading="lazy" />
           <div class="gallery-overlay"><span>Main Arena</span></div>
         </div>
         <div class="gallery-item reveal">
-          <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&q=80" alt="PC Station" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&q=80" alt="PC Station"
+            loading="lazy" />
           <div class="gallery-overlay"><span>PC Station</span></div>
         </div>
         <div class="gallery-item reveal">
-          <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=600&q=80" alt="Console Zone" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=600&q=80" alt="Console Zone"
+            loading="lazy" />
           <div class="gallery-overlay"><span>Console Zone</span></div>
         </div>
         <div class="gallery-item reveal">
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Race Simulators" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" alt="Race Simulators"
+            loading="lazy" />
           <div class="gallery-overlay"><span>Race Simulators</span></div>
         </div>
         <div class="gallery-item reveal">
-          <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=600&q=80" alt="Chill Lounge" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=600&q=80" alt="Chill Lounge"
+            loading="lazy" />
           <div class="gallery-overlay"><span>Chill Lounge</span></div>
         </div>
         <div class="gallery-item reveal">
-          <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=600&q=80" alt="Night Vibes" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=600&q=80" alt="Night Vibes"
+            loading="lazy" />
           <div class="gallery-overlay"><span>Night Vibes</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── FIND US ── -->
-  <section id="find-us" class="section footer-section">
-    <div class="container" style="padding-bottom: 80px;">
-      <div class="section-header reveal">
-        <span class="section-tag"><i class="fa-solid fa-location-dot"></i> FIND US</span>
-        <h2 class="section-title">Come <span class="accent-green">Play</span></h2>
-        <p class="section-sub">Walk-ins welcome — no reservation needed</p>
-      </div>
-      <div class="contact-grid">
-        <div class="map-container reveal">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d984.8199!2d76.9591!3d8.5277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05bb618021720d%3A0x380591ea3505f507!2sLoginn!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade" title="Loginn Gaming Centre Location">
-          </iframe>
-        </div>
-        <div class="contact-info reveal">
-          <div class="walk-in-banner"><i class="fa-solid fa-person-walking"></i><span>WALK-INS WELCOME — NO BOOKING REQUIRED</span></div>
-          <div class="info-block"><i class="fa-solid fa-location-dot accent-blue"></i><div><strong>Address</strong><p>Loginn Gaming Centre<br />Toll Junction, Ambalamukku<br />Thiruvananthapuram, Kerala 695003</p></div></div>
-          <div class="info-block"><i class="fa-solid fa-clock accent-pink"></i><div><strong>Opening Hours</strong><p>Every Day: 11 AM – 11 PM</p></div></div>
-          <div class="info-block"><i class="fa-solid fa-phone accent-green"></i><div><strong>Phone</strong><p><a href="tel:+918075707064">+91 80757 07064</a></p></div></div>
-          <div class="contact-ctas">
-            <a href="https://wa.me/918075707064?text=Hi!%20I%27d%20like%20to%20know%20more%20about%20Loginn" target="_blank" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp</a>
-            <a href="tel:+918075707064" class="btn btn-outline-blue"><i class="fa-solid fa-phone"></i> Call Us</a>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="footer-bar">
-      <div class="footer-bar-inner">
-        <span class="footer-logo">LOGINN<span class="accent-blue">.</span></span>
-        <span class="footer-copy">© 2026 Loginn. All rights reserved.</span>
-        <div class="footer-socials">
-          <a href="https://www.instagram.com/loginnkerala/" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-        </div>
+
+
+  <div class="footer-bar">
+    <div class="footer-bar-inner">
+      <span class="footer-logo">LOGINN<span class="accent-blue">.</span></span>
+      <span class="footer-copy">© 2026 Loginn. All rights reserved.</span>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/loginnkerala/" aria-label="Instagram"><i
+            class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
       </div>
     </div>
-  </section>
+  </div>
 
   <a href="https://wa.me/918075707064" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
     <i class="fa-brands fa-whatsapp"></i>
@@ -506,4 +595,5 @@
   <script src="js/common.js"></script>
   <script src="js/index.js"></script>
 </body>
+
 </html>
