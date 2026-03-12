@@ -10,6 +10,16 @@
   padding: 24px 28px; margin-bottom: 48px;
   display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
 }
+.tournament-banner.no-live {
+  background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,212,255,0.03));
+  border: 1px solid rgba(0,212,255,0.2);
+}
+.tournament-banner.no-live .tb-icon {
+  background: var(--blue-dim); border-color: rgba(0,212,255,0.25);
+  color: var(--blue);
+}
+.tournament-banner.no-live .tb-label { color: var(--blue); }
+.tournament-banner.no-live .tb-desc { font-size: 0.88rem; color: var(--text-muted); }
 .tb-icon {
   width: 56px; height: 56px; flex-shrink: 0;
   background: var(--pink-dim); border: 1px solid rgba(255,45,120,0.3);

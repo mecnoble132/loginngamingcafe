@@ -4,6 +4,12 @@
 ============================================================ */
 
 /* ─── FEATURED GAME CARD ─────────────────────────────────── */
+.gp-featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
 .gp-featured-card {
   background: var(--bg-card); border: 1px solid rgba(0,255,170,0.25);
   border-radius: var(--r); padding: 32px;
@@ -21,11 +27,18 @@
   padding: 5px 14px; border-radius: 100px; margin-bottom: 20px;
 }
 .gp-featured-inner { display: flex; gap: 28px; align-items: flex-start; }
-.gp-game-icon {
-  width: 80px; height: 80px; flex-shrink: 0;
-  background: var(--green-dim); border: 1px solid rgba(0,255,170,0.3);
-  border-radius: 14px; display: flex; align-items: center; justify-content: center;
-  font-size: 2.2rem; color: var(--green);
+.gp-game-cover {
+  width: 130px; aspect-ratio: 2 / 3; flex-shrink: 0;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border: 1px solid rgba(0,255,170,0.2);
+}
+.gp-game-cover img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.4s;
+}
+.gp-featured-card:hover .gp-game-cover img {
+  transform: scale(1.05);
 }
 .gp-game-info { flex: 1; min-width: 0; }
 .gp-game-genre { font-family: var(--f-display); font-size: 0.58rem; letter-spacing: 0.14em; color: var(--green); margin-bottom: 6px; text-transform: uppercase; }
@@ -119,6 +132,7 @@
 
 /* ─── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 1024px) {
+  .gp-featured-grid { grid-template-columns: 1fr; }
   .gp-criteria-grid { grid-template-columns: repeat(3, 1fr); }
   .gp-steps-grid    { grid-template-columns: repeat(2, 1fr); }
   .gp-past-grid     { grid-template-columns: repeat(2, 1fr); }

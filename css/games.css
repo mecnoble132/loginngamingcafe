@@ -56,7 +56,7 @@
 .game-card {
   position: relative; overflow: hidden;
   background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 18px;
+  border-radius: var(--r); padding: 0;
   display: flex; flex-direction: column; gap: 0;
   transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
   cursor: default;
@@ -81,26 +81,17 @@
 }
 .game-card:hover .game-card-glow { opacity: 1; }
 
-/* Icon circle */
-.game-card-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  background: color-mix(in srgb, var(--glow, var(--blue)) 15%, transparent);
-  border: 1px solid color-mix(in srgb, var(--glow, var(--blue)) 30%, transparent);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--glow, var(--blue)); font-size: 1.1rem;
-  margin-bottom: 14px; flex-shrink: 0;
-  transition: background 0.2s;
-}
-.game-card:hover .game-card-icon {
-  background: color-mix(in srgb, var(--glow, var(--blue)) 25%, transparent);
-}
+/* Removed Image Container and fallbacks */
 
 /* Card body */
-.game-card-body { display: flex; flex-direction: column; flex: 1; }
+.game-card-body { 
+  display: flex; flex-direction: column; flex: 1; 
+  padding: 24px; 
+}
 
 .game-card-top {
   display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 8px; margin-bottom: 8px;
+  gap: 8px; margin-bottom: 6px;
 }
 .game-card-platform { display: flex; flex-wrap: wrap; gap: 4px; }
 
@@ -115,8 +106,9 @@
 
 /* Title */
 .game-card-title {
-  font-family: var(--f-heading); font-size: 1.9rem; font-weight: 700;
-  color: var(--text); line-height: 1.3; margin: 0 0 6px;
+  font-family: var(--f-heading); font-size: 1.1rem; font-weight: 700;
+  color: var(--text); line-height: 1.2; margin: 0 0 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 /* Genre */
@@ -142,10 +134,11 @@
 /* Availability badge */
 .game-card-avail {
   display: flex; align-items: center; gap: 6px;
-  margin-top: 14px; padding-top: 12px;
+  margin-top: auto; padding: 16px 24px;
   border-top: 1px solid var(--border);
-  font-family: var(--f-heading); font-size: 0.68rem; font-weight: 600;
-  letter-spacing: 0.06em; text-transform: uppercase; color: var(--green);
+  background: rgba(0, 0, 0, 0.15);
+  font-family: var(--f-heading); font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase; color: var(--green);
 }
 .avail-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -197,7 +190,8 @@
 }
 @media (max-width: 480px) {
   .games-list { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .game-card  { padding: 14px; }
+  .game-card-body  { padding: 18px; }
+  .game-card-avail { padding: 14px 18px; }
   .game-card-title { font-size: 0.82rem; }
 }
 @media (max-width: 360px) {
