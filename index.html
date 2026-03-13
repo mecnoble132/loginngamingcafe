@@ -421,6 +421,7 @@
   </section>
 
   <!-- ── GAMES TEASER ── -->
+<!-- REPLACE your existing <section id="games-teaser" ...> block with this -->
   <section id="games-teaser" class="section section-alt">
     <div class="container">
       <div class="section-header reveal">
@@ -428,23 +429,21 @@
         <h2 class="section-title">Popular <span class="accent-pink">Titles</span></h2>
         <p class="section-sub">A taste of what's available across all platforms</p>
       </div>
-      <div class="games-teaser-grid">
-        <div class="game-pill reveal"><span class="pill-platform pc">PC</span> Valorant</div>
-        <div class="game-pill reveal"><span class="pill-platform pc">PC</span> Counter-Strike 2</div>
-        <div class="game-pill reveal"><span class="pill-platform pc">PC</span> PUBG</div>
-        <div class="game-pill reveal"><span class="pill-platform ps5">PS5</span> Spider-Man 2</div>
-        <div class="game-pill reveal"><span class="pill-platform ps5">PS5</span> God of War Ragnarök</div>
-        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span
-            class="pill-platform xbox">Xbox</span> EA FC 26</div>
-        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span
-            class="pill-platform xbox">Xbox</span> Mortal Kombat 1</div>
-        <div class="game-pill reveal"><span class="pill-platform ps5 xbox">PS5</span><span
-            class="pill-platform xbox">Xbox</span> It Takes Two</div>
-        <div class="game-pill reveal"><span class="pill-platform sim">SIM</span> Gran Turismo 7</div>
-        <div class="game-pill reveal"><span class="pill-platform sim">SIM</span> Assetto Corsa</div>
+
+      <!-- Filter tabs -->
+      <div class="teaser-filter reveal">
+        <button class="teaser-filter-btn active" data-filter="all">All</button>
+        <button class="teaser-filter-btn" data-filter="pc"><i class="fa-solid fa-computer"></i> PC</button>
+        <button class="teaser-filter-btn" data-filter="ps5"><i class="fa-brands fa-playstation"></i> PS5</button>
+        <button class="teaser-filter-btn" data-filter="xbox"><i class="fa-brands fa-xbox"></i> Xbox</button>
+        <button class="teaser-filter-btn" data-filter="sim"><i class="fa-solid fa-flag-checkered"></i> SIM</button>
       </div>
-      <div class="games-teaser-cta">
-        <p class="games-count-note">Showing 10 of <strong>40+ titles</strong> available across all stations</p>
+
+      <!-- Cards grid -->
+      <div class="teaser-grid" id="teaserGrid"></div>
+
+      <div class="games-teaser-cta reveal">
+        <p class="games-count-note">Showing <span id="teaserCount">10</span> of <strong>45+ titles</strong> available across all stations</p>
         <a href="pages/games.html" class="btn btn-outline-blue">
           <i class="fa-solid fa-gamepad"></i> Browse Full Library
         </a>
@@ -590,6 +589,7 @@
   </a>
 
   <script src="js/common.js"></script>
+  <script src="js/games.js"></script>
   <script src="js/index.js"></script>
 </body>
 

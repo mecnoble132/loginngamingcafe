@@ -114,3 +114,81 @@ highlightNav();
 
   calcPrice();
 })();
+// ===== GAMES TEASER =====
+// Add this block to the bottom of your js/index.js
+// It reuses the GAMES array and helpers from games.js
+// Make sure games.js is loaded BEFORE index.js in index.html:
+//   <script src="js/games.js"></script>
+//   <script src="js/index.js"></script>
+
+(function () {
+  const grid     = document.getElementById('teaserGrid');
+  const countEl  = document.getElementById('teaserCount');
+  if (!grid || typeof GAMES === 'undefined') return;
+
+  // How many cards to show per filter (keeps the teaser compact)
+  const LIMIT = 5;
+
+  const genreIconMap = {
+    'Tactical Shooter': 'fa-crosshairs', 'Battle Royale': 'fa-parachute-box',
+    'MOBA': 'fa-chess-knight', 'Sports': 'fa-futbol', 'Fighting': 'fa-hand-fist',
+    'Racing': 'fa-flag-checkered', 'Racing Sim': 'fa-flag-checkered',
+    'Simulation': 'fa-truck', 'Co-op': 'fa-people-group', 'Party': 'fa-champagne-glasses',
+    'Action': 'fa-bolt', 'Adventure': 'fa-map', 'RPG': 'fa-hat-wizard', 'FPS': 'fa-gun',
+  };
+
+  function platformBadgesTeaser(platforms) {
+    return platforms.map(p => {
+      const map = { pc: ['PC','pc'], ps5: ['PS5','ps5'], xbox: ['XBOX','xbox'], sim: ['SIM','sim'] };
+      const [label, cls] = map[p] || [p, p];
+      return `<span class="pill-platform ${cls}">${label}</span>`;
+    }).join('');
+  }
+
+  function buildTeaserCard(g) {
+    const coverUrl = g.coverId
+      ? `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${g.coverId}.jpg`
+      : null;
+    const imgHtml = coverUrl
+      ? `<div class="teaser-card-img">
+           <img src="${coverUrl}" alt="${g.title} cover" loading="lazy"
+                onerror="this.parentElement.style.display='none'">
+         </div>`
+      : '';
+    const icon = genreIconMap[g.genre] || 'fa-gamepad';
+    return `
+      <div class="teaser-card reveal" style="--glow:${g.color}">
+        <div class="teaser-card-glow"></div>
+        ${imgHtml}
+        <div class="teaser-card-body">
+          <div class="teaser-card-platforms">${platformBadgesTeaser(g.platform)}</div>
+          <div class="teaser-card-title">${g.title}</div>
+          <div class="teaser-card-genre"><i class="fa-solid ${icon}"></i> ${g.genre}</div>
+        </div>
+        <div class="teaser-card-avail"><span class="teaser-avail-dot"></span> Available Now</div>
+      </div>`;
+  }
+
+  function renderTeaser(filter) {
+    const filtered = filter === 'all'
+      ? GAMES
+      : GAMES.filter(g => g.platform.includes(filter));
+    const shown = filtered.slice(0, LIMIT);
+    grid.innerHTML = shown.map(buildTeaserCard).join('');
+    if (countEl) countEl.textContent = shown.length;
+    document.querySelectorAll('.teaser-card.reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('revealed'), i * 40);
+    });
+  }
+
+  // Filter buttons
+  document.querySelectorAll('.teaser-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.teaser-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTeaser(btn.dataset.filter);
+    });
+  });
+
+  renderTeaser('all');
+})();
