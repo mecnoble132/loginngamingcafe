@@ -5,6 +5,17 @@
 
 'use strict';
 
+// ===== PAGE LOADER =====
+(function () {
+  const loader = document.getElementById('page-loader');
+  if (!loader) return;
+  // Hide after 500 ms (bar animation completes), then remove after fade
+  setTimeout(() => {
+    loader.classList.add('loader-hidden');
+    setTimeout(() => loader.remove(), 150);
+  }, 500);
+})();
+
 // ===== NAVBAR: Scrolled state =====
 const navbar = document.getElementById('navbar');
 const onScroll = () => {
