@@ -192,3 +192,37 @@ highlightNav();
 
   renderTeaser('all');
 })();
+
+// ===== STATUS BANNER TIMING =====
+(function() {
+  const banner = document.getElementById('statusBanner');
+  const dot = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  
+  if (!banner || !dot || !text) return;
+
+  function updateStatus() {
+    const now = new Date();
+    const hour = now.getHours(); // 0-23
+    
+    // Open from 11 AM (11) to 11 PM (23) -> meaning up to 22:59 it's open
+    const isOpen = hour >= 11 && hour < 23;
+    
+    if (isOpen) {
+      banner.classList.remove('closed');
+      banner.classList.add('open');
+      dot.classList.remove('pink');
+      dot.classList.add('green');
+      text.textContent = 'NOW OPEN · WALK IN & PLAY';
+    } else {
+      banner.classList.remove('open');
+      banner.classList.add('closed');
+      dot.classList.remove('green');
+      dot.classList.add('pink');
+      text.textContent = 'CLOSED · OPENS AT 11 AM';
+    }
+  }
+
+  updateStatus();
+  setInterval(updateStatus, 60000); // Check every minute
+})();

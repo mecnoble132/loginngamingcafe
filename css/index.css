@@ -20,26 +20,19 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  background-image: 
+    linear-gradient(to bottom, rgba(8, 8, 16, 0.82) 0%, rgba(8, 8, 16, 1) 100%),
+    url('../images/maintop.webp');
+  background-size: cover;
+  background-position: center;
 }
 
 .grid-overlay {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 212, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 212, 255, 0.06) 1px, transparent 1px);
-  background-size: 60px 60px;
-  transform: perspective(800px) rotateX(35deg) scaleX(1.4) translateY(-10%);
-  transform-origin: center bottom;
-  mask-image: linear-gradient(to top, transparent 0%, black 40%, transparent 90%);
-  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 40%, transparent 90%);
+  display: none;
 }
 
 .scanlines {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0, 0, 0, 0.07) 3px, rgba(0, 0, 0, 0.07) 4px);
+  display: none;
 }
 
 #hero::before {
@@ -79,11 +72,26 @@
   font-family: var(--f-display);
   font-size: 0.62rem;
   letter-spacing: 0.2em;
-  color: var(--green);
-  border: 1px solid rgba(0, 255, 170, 0.3);
-  padding: 5px 16px;
+  padding: 6px 18px;
   border-radius: 100px;
   margin-bottom: 22px;
+  transition: all 0.3s ease;
+}
+
+.hero-eyebrow.open {
+  color: #fff;
+  border: 1px solid rgba(0, 255, 170, 0.6);
+  background: rgba(0, 255, 170, 0.12);
+  box-shadow: 0 0 20px rgba(0, 255, 170, 0.25);
+  text-shadow: 0 0 8px rgba(0, 255, 170, 0.6);
+}
+
+.hero-eyebrow.closed {
+  color: #fff;
+  border: 1px solid rgba(255, 45, 120, 0.6);
+  background: rgba(255, 45, 120, 0.12);
+  box-shadow: 0 0 20px rgba(255, 45, 120, 0.25);
+  text-shadow: 0 0 8px rgba(255, 45, 120, 0.6);
 }
 
 .hero-headline {
