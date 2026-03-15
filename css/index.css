@@ -432,7 +432,7 @@
 .sp-card-img {
   position: relative;
   width: 100%;
-  height: 155px;
+  height: 220px;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -465,6 +465,30 @@
 
 .sp-card-img.tint-blue .sp-card-img-overlay {
   background: linear-gradient(to bottom, rgba(0, 212, 255, 0.16) 0%, rgba(8, 8, 16, 0.82) 100%);
+}
+
+.sp-card-split-top {
+  display: flex;
+  padding: 18px 20px 0;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.sp-card-split-top .sp-card-img {
+  width: 38%;
+  height: auto;
+  aspect-ratio: 4/5;
+  border-radius: var(--r-sm);
+  flex-shrink: 0;
+}
+
+.sp-card-split-top .sp-specs {
+  flex: 1;
+  justify-content: center;
+}
+
+.sp-card-split .sp-card-body {
+  padding-top: 18px;
 }
 
 .sp-card-body {
