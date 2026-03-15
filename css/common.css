@@ -853,6 +853,14 @@ button {
     bottom: 20px;
     right: 16px;
   }
+
+  .footer-container {
+    padding-bottom: 40px;
+  }
+
+  .footer-col:last-child {
+    padding-bottom: 8px;
+  }
 }
 
 

@@ -174,16 +174,13 @@
 
 /* ─── RESPONSIVE ─────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .games-list { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .games-list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 }
 @media (max-width: 480px) {
-  .games-list { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .games-list { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .game-card-body  { padding: 18px; }
   .game-card-avail { padding: 14px 18px; }
   .game-card-title { font-size: 0.82rem; }
-}
-@media (max-width: 360px) {
-  .games-list { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .games-filter {
