@@ -107,7 +107,7 @@
   width: 0%;
   background: linear-gradient(90deg, var(--blue), var(--green));
   border-radius: 2px;
-  animation: loaderBar 0.5s ease forwards;
+  animation: loaderBar 1.5s ease forwards;
 }
 
 @keyframes loaderPop {

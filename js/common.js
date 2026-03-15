@@ -9,11 +9,11 @@
 (function () {
   const loader = document.getElementById('page-loader');
   if (!loader) return;
-  // Hide after 500 ms (bar animation completes), then remove after fade
+  // Hide after 1500 ms (bar animation completes), then remove after fade
   setTimeout(() => {
     loader.classList.add('loader-hidden');
     setTimeout(() => loader.remove(), 150);
-  }, 500);
+  }, 1500);
 })();
 
 // ===== NAVBAR: Scrolled state =====
