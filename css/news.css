@@ -44,7 +44,6 @@
   padding: 24px; display: flex; flex-direction: column;
   transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
-.news-card:hover { transform: translateY(-5px); border-color: var(--border-hi); box-shadow: 0 14px 36px rgba(0,0,0,0.28); }
 .news-date { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
 .news-tag  { display: inline-block; font-family: var(--f-display); font-size: 0.56rem; font-weight: 700; letter-spacing: 0.12em; padding: 3px 10px; border-radius: 100px; margin-bottom: 12px; width: fit-content; }
 .tag-blue  { background: var(--blue-dim);  color: var(--blue);  border: 1px solid rgba(0,212,255,0.28); }
@@ -53,7 +52,6 @@
 .news-title { font-family: var(--f-heading); font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 9px; line-height: 1.3; }
 .news-desc  { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; flex: 1; margin-bottom: 16px; }
 .news-cta   { font-family: var(--f-heading); font-size: 0.82rem; font-weight: 600; color: var(--blue); letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px; transition: gap 0.2s, color 0.2s; width: fit-content; }
-.news-cta:hover { gap: 10px; color: #fff; }
 
 /* ─── PAST TOURNAMENT RESULTS ────────────────────────────── */
 .past-results { display: flex; flex-direction: column; gap: 12px; max-width: 720px; }
@@ -63,7 +61,6 @@
   border-radius: var(--r-sm); padding: 14px 18px;
   transition: border-color 0.2s;
 }
-.result-item:hover { border-color: var(--border-hi); }
 .result-game { font-family: var(--f-heading); font-size: 0.95rem; font-weight: 700; color: #fff; flex: 1; }
 .result-winner { font-size: 0.82rem; color: var(--text-muted); }
 .result-winner strong { color: var(--green); }
@@ -88,4 +85,11 @@
   .news-grid { grid-template-columns: 1fr; }
   .result-item { flex-wrap: wrap; gap: 8px; }
   .result-date { width: 100%; }
+}
+
+/* ─── HOVER — POINTER DEVICES ONLY ──────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .news-card:hover { transform: translateY(-5px); border-color: var(--border-hi); box-shadow: 0 14px 36px rgba(0,0,0,0.28); }
+  .news-cta:hover { gap: 10px; color: #fff; }
+  .result-item:hover { border-color: var(--border-hi); }
 }

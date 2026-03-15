@@ -40,7 +40,6 @@
   border: 1px solid var(--border); background: transparent; color: var(--text-muted);
   cursor: pointer; transition: all 0.2s; min-height: 44px; touch-action: manipulation;
 }
-.filter-btn:hover  { border-color: var(--blue); color: var(--blue); }
 .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #000; font-weight: 700; }
 
 /* ─── CARD GRID ──────────────────────────────────────────── */
@@ -67,19 +66,12 @@
 .game-card.revealed {
   opacity: 1; transform: translateY(0);
 }
-.game-card:hover {
-  border-color: color-mix(in srgb, var(--glow, var(--blue)) 60%, transparent);
-  box-shadow: 0 0 24px color-mix(in srgb, var(--glow, var(--blue)) 20%, transparent);
-  transform: translateY(-3px);
-}
-
 /* Glow strip at top */
 .game-card-glow {
   position: absolute; top: 0; left: 0; right: 0; height: 2px;
   background: var(--glow, var(--blue));
   opacity: 0.7;
 }
-.game-card:hover .game-card-glow { opacity: 1; }
 
 /* Removed Image Container and fallbacks */
 
@@ -125,10 +117,6 @@
   letter-spacing: 0.04em; padding: 3px 8px; border-radius: 4px;
   background: rgba(255,255,255,0.05); border: 1px solid var(--border);
   color: var(--text-muted); transition: color 0.2s, border-color 0.2s;
-}
-.game-card:hover .game-tag {
-  border-color: color-mix(in srgb, var(--glow, var(--blue)) 30%, transparent);
-  color: color-mix(in srgb, var(--glow, var(--blue)) 80%, var(--text-muted));
 }
 
 /* Availability badge */
@@ -226,6 +214,22 @@
   display: block;
   transition: transform 0.4s ease;
 }
-.game-card:hover .game-card-img img {
-  transform: scale(1.05);
+
+/* ─── HOVER — POINTER DEVICES ONLY ──────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+  .game-card:hover {
+    border-color: color-mix(in srgb, var(--glow, var(--blue)) 60%, transparent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--glow, var(--blue)) 20%, transparent);
+    transform: translateY(-3px);
+  }
+  .game-card:hover .game-card-glow { opacity: 1; }
+
+  .game-card:hover .game-tag {
+    border-color: color-mix(in srgb, var(--glow, var(--blue)) 30%, transparent);
+    color: color-mix(in srgb, var(--glow, var(--blue)) 80%, var(--text-muted));
+  }
+
+  .game-card:hover .game-card-img img { transform: scale(1.05); }
 }

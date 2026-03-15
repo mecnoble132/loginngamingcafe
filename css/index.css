@@ -285,14 +285,6 @@
   cursor: pointer;
 }
 
-.station-overview-item:hover {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.station-overview-item:hover .soi-name {
-  color: var(--blue);
-}
-
 .soi-icon {
   width: 30px;
   height: 30px;
@@ -339,10 +331,6 @@
 
 .soi-count {
   display: none;
-}
-
-.station-overview-item:hover .soi-count {
-  color: var(--blue);
 }
 
 .soi-divider {
@@ -431,12 +419,6 @@
   transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
-.sp-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(0, 212, 255, 0.22);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-}
-
 .sp-card-img {
   position: relative;
   width: 100%;
@@ -451,10 +433,6 @@
   object-fit: cover;
   transition: transform 0.5s ease;
   display: block;
-}
-
-.sp-card:hover .sp-card-img img {
-  transform: scale(1.07);
 }
 
 .sp-card-img-overlay {
@@ -829,10 +807,6 @@
   transition: color 0.2s;
 }
 
-.pricing-note a:hover {
-  color: #fff;
-}
-
 .tech-partner {
   display: flex;
   align-items: center;
@@ -887,12 +861,6 @@
   font-weight: 600;
   color: var(--text);
   transition: all 0.22s;
-}
-
-.game-pill:hover {
-  border-color: var(--border-hi);
-  transform: translateY(-2px);
-  background: var(--bg-card-h);
 }
 
 .pill-platform {
@@ -959,19 +927,11 @@
   transition: transform 0.3s;
 }
 
-.member-card:hover {
-  transform: translateY(-4px);
-}
-
 .member-featured {
   border-color: var(--blue);
   transform: scale(1.04);
   background: linear-gradient(160deg, rgba(0, 212, 255, 0.04), var(--bg-card));
   box-shadow: 0 0 44px rgba(0, 212, 255, 0.1), 0 18px 52px rgba(0, 0, 0, 0.38);
-}
-
-.member-featured:hover {
-  transform: scale(1.04) translateY(-4px);
 }
 
 .member-popular-badge {
@@ -1106,11 +1066,6 @@
   transition: transform 0.3s, border-color 0.3s;
 }
 
-.whats-on-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-hi);
-}
-
 .whats-on-card.tournament {
   border-color: rgba(255, 45, 120, 0.25);
 }
@@ -1177,11 +1132,6 @@
   width: fit-content;
 }
 
-.whats-on-cta:hover {
-  gap: 10px;
-  color: #fff;
-}
-
 .whats-on-card.tournament .whats-on-cta {
   color: var(--pink);
 }
@@ -1217,10 +1167,6 @@
   transition: transform 0.5s;
 }
 
-.gallery-item:hover img {
-  transform: scale(1.07);
-}
-
 .gallery-overlay {
   position: absolute;
   inset: 0;
@@ -1230,10 +1176,6 @@
   padding: 14px;
   opacity: 0;
   transition: opacity 0.3s;
-}
-
-.gallery-item:hover .gallery-overlay {
-  opacity: 1;
 }
 
 .gallery-overlay span {
@@ -1354,10 +1296,6 @@
   transition: color 0.2s;
 }
 
-.info-block a:hover {
-  color: #fff;
-}
-
 .contact-ctas {
   display: flex;
   gap: 12px;
@@ -1409,10 +1347,6 @@
 
   .member-featured {
     transform: none;
-  }
-
-  .member-featured:hover {
-    transform: translateY(-4px);
   }
 
   .contact-grid {
@@ -1745,7 +1679,7 @@
   border: 1px solid var(--border); background: transparent; color: var(--text-muted);
   cursor: pointer; transition: all 0.2s; min-height: 40px;
 }
-.teaser-filter-btn:hover  { border-color: var(--blue); color: var(--blue); }
+
 .teaser-filter-btn.active { background: var(--blue); border-color: var(--blue); color: #000; font-weight: 700; }
 
 /* ─── Card grid ──────────────────────────────────────────── */
@@ -1769,18 +1703,11 @@
 .teaser-card.revealed {
   opacity: 1; transform: translateY(0);
 }
-.teaser-card:hover {
-  border-color: color-mix(in srgb, var(--glow, var(--blue)) 60%, transparent);
-  box-shadow: 0 0 24px color-mix(in srgb, var(--glow, var(--blue)) 20%, transparent);
-  transform: translateY(-4px);
-}
-
 /* Glow strip */
 .teaser-card-glow {
   position: absolute; top: 0; left: 0; right: 0; height: 2px;
   background: var(--glow, var(--blue)); opacity: 0.7; z-index: 1;
 }
-.teaser-card:hover .teaser-card-glow { opacity: 1; }
 
 /* Cover image */
 .teaser-card-img {
@@ -1794,9 +1721,6 @@
   width: 100%; height: 100%;
   object-fit: cover; display: block;
   transition: transform 0.4s ease;
-}
-.teaser-card:hover .teaser-card-img img {
-  transform: scale(1.05);
 }
 
 /* Card body */
@@ -1846,4 +1770,63 @@
   }
   .teaser-filter::-webkit-scrollbar { display: none; }
   .teaser-filter-btn { flex-shrink: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HOVER / ANIMATION — POINTER DEVICES ONLY
+   (touch screens skip all :hover effects & non-essential animations)
+═══════════════════════════════════════════════════════════ */
+@media (hover: hover) and (pointer: fine) {
+  /* Station overview */
+  .station-overview-item:hover { background: rgba(255, 255, 255, 0.03); }
+  .station-overview-item:hover .soi-name { color: var(--blue); }
+
+  /* Pricing cards */
+  .sp-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 212, 255, 0.22);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  }
+  .sp-card:hover .sp-card-img img { transform: scale(1.07); }
+
+  /* Pricing note link */
+  .pricing-note a:hover { color: #fff; }
+
+  /* Info block link */
+  .info-block a:hover { color: #fff; }
+
+  /* Calculator buttons */
+  .calc-opt:hover { border-color: var(--blue); color: var(--blue); }
+  .step-btn:hover { background: rgba(0, 212, 255, 0.14); color: var(--blue); }
+
+  /* Game pills */
+  .game-pill:hover {
+    border-color: var(--border-hi);
+    transform: translateY(-2px);
+    background: var(--bg-card-h);
+  }
+
+  /* Membership snapshot cards */
+  .member-card:hover { transform: translateY(-4px); }
+  .member-featured:hover { transform: scale(1.04) translateY(-4px); }
+
+  /* What's On cards */
+  .whats-on-card:hover { transform: translateY(-4px); border-color: var(--border-hi); }
+  .whats-on-cta:hover { gap: 10px; color: #fff; }
+
+  /* Gallery */
+  .gallery-item:hover img { transform: scale(1.07); }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+  /* Teaser filter buttons */
+  .teaser-filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* Teaser cards */
+  .teaser-card:hover {
+    border-color: color-mix(in srgb, var(--glow, var(--blue)) 60%, transparent);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--glow, var(--blue)) 20%, transparent);
+    transform: translateY(-4px);
+  }
+  .teaser-card:hover .teaser-card-glow { opacity: 1; }
+  .teaser-card:hover .teaser-card-img img { transform: scale(1.05); }
 }

@@ -192,7 +192,6 @@
     grid-template-columns: repeat(3, 1fr);
     max-width: 900px;
   }
-  .hiw-step:hover { border-color: rgba(0,212,255,0.2); transform: translateY(-3px); }
 }
 
 /* ─── DESKTOP (900px+) ───────────────────────────────────── */
@@ -204,8 +203,6 @@
   .member-card {
     padding: 28px 24px;
   }
-  .member-card:hover { transform: translateY(-4px); }
-  .member-featured:hover { transform: translateY(-6px); }
 
   /* Restore stacked price/validity on desktop — they have room */
   .member-price-row {
@@ -214,4 +211,11 @@
     gap: 4px;
     margin-bottom: 16px;
   }
+}
+
+/* ─── HOVER — POINTER DEVICES ONLY ──────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .hiw-step:hover { border-color: rgba(0,212,255,0.2); transform: translateY(-3px); }
+  .member-card:hover { transform: translateY(-4px); }
+  .member-featured:hover { transform: translateY(-6px); }
 }

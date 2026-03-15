@@ -37,9 +37,6 @@
   width: 100%; height: 100%; object-fit: cover;
   transition: transform 0.4s;
 }
-.gp-featured-card:hover .gp-game-cover img {
-  transform: scale(1.05);
-}
 .gp-game-info { flex: 1; min-width: 0; }
 .gp-game-genre { font-family: var(--f-display); font-size: 0.58rem; letter-spacing: 0.14em; color: var(--green); margin-bottom: 6px; text-transform: uppercase; }
 .gp-game-title { font-family: var(--f-display); font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 900; color: #fff; margin-bottom: 10px; line-height: 1.05; }
@@ -58,7 +55,6 @@
 .gp-member-perk i { font-size: 1rem; color: var(--green); flex-shrink: 0; margin-top: 1px; }
 .gp-member-perk strong { color: var(--text); }
 .gp-member-perk a { color: var(--green); transition: color 0.2s; }
-.gp-member-perk a:hover { color: #fff; }
 
 /* ─── HOW IT WORKS ───────────────────────────────────────── */
 .gp-steps-grid {
@@ -70,7 +66,6 @@
   border-radius: var(--r); padding: 22px 18px;
   transition: border-color 0.2s, transform 0.3s;
 }
-.gp-step-card:hover { border-color: rgba(0,212,255,0.2); transform: translateY(-3px); }
 .gp-step-num  { font-family: var(--f-display); font-size: 1.6rem; font-weight: 900; color: var(--text-dim); line-height: 1; margin-bottom: 10px; }
 .gp-step-title { font-family: var(--f-heading); font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
 .gp-step-desc  { font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; }
@@ -86,9 +81,7 @@
   border: 1px solid var(--border); border-radius: var(--r-sm);
   transition: border-color 0.2s, background 0.2s;
 }
-.gp-criterion:hover { border-color: rgba(0,212,255,0.22); background: rgba(0,212,255,0.04); }
 .gp-criterion-verdict { border-color: rgba(0,255,170,0.2); background: rgba(0,255,170,0.04); }
-.gp-criterion-verdict:hover { border-color: rgba(0,255,170,0.38); }
 .gp-criterion-num  { font-family: var(--f-display); font-size: 0.72rem; font-weight: 900; color: var(--text-dim); line-height: 1; }
 .gp-criterion-name { font-family: var(--f-heading); font-size: 1rem; font-weight: 700; color: #fff; }
 .gp-criterion-verdict .gp-criterion-name { color: var(--green); }
@@ -106,7 +99,6 @@
   transition: border-color 0.2s, transform 0.3s;
   text-decoration: none;
 }
-.gp-past-card:hover { border-color: rgba(0,255,170,0.25); transform: translateY(-3px); }
 .gp-past-icon {
   width: 44px; height: 44px; flex-shrink: 0;
   background: var(--green-dim); border-radius: 9px;
@@ -117,7 +109,6 @@
 .gp-past-title { font-family: var(--f-heading); font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
 .gp-past-date  { font-size: 0.72rem; color: var(--text-dim); }
 .gp-past-yt    { color: var(--text-dim); font-size: 0.85rem; transition: color 0.2s; flex-shrink: 0; }
-.gp-past-card:hover .gp-past-yt { color: #ff0000; }
 
 /* ─── APPLY CTA ──────────────────────────────────────────── */
 .gp-apply-cta {
@@ -153,4 +144,15 @@
 }
 @media (max-width: 380px) {
   .gp-criteria-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── HOVER — POINTER DEVICES ONLY ──────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .gp-featured-card:hover .gp-game-cover img { transform: scale(1.05); }
+  .gp-member-perk a:hover { color: #fff; }
+  .gp-step-card:hover { border-color: rgba(0,212,255,0.2); transform: translateY(-3px); }
+  .gp-criterion:hover { border-color: rgba(0,212,255,0.22); background: rgba(0,212,255,0.04); }
+  .gp-criterion-verdict:hover { border-color: rgba(0,255,170,0.38); }
+  .gp-past-card:hover { border-color: rgba(0,255,170,0.25); transform: translateY(-3px); }
+  .gp-past-card:hover .gp-past-yt { color: #ff0000; }
 }

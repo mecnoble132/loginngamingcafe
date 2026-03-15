@@ -824,3 +824,62 @@ button {
     height: 24px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   HOVER / ANIMATION — POINTER DEVICES ONLY
+   (touch screens skip all :hover effects & non-essential animations)
+═══════════════════════════════════════════════════════════ */
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--blue);
+    box-shadow: 0 0 22px rgba(0, 212, 255, 0.3);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+
+  .btn-outline-blue:hover {
+    background: var(--blue);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.25);
+  }
+
+  .btn-outline-pink:hover {
+    background: var(--pink);
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 45, 120, 0.25);
+  }
+
+  .btn-whatsapp:hover {
+    background: transparent;
+    color: #25d366;
+    box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+  }
+
+  .nav-link:hover {
+    color: #fff;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .footer-links a:hover {
+    color: var(--blue);
+  }
+
+  .footer-socials a:hover {
+    color: var(--blue);
+    background: var(--blue-dim);
+    border-color: rgba(0, 212, 255, 0.2);
+    transform: translateY(-3px);
+  }
+
+  .whatsapp-float:hover {
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+  }
+}
