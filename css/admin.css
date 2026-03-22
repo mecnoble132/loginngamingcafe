@@ -1,0 +1,450 @@
+/* ============================================================
+   LOGINN GAMING CAFE — css/admin.css
+============================================================ */
+
+/* ── LOGIN ───────────────────────────────────────────────── */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 20px;
+}
+
+.login-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--f-display);
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin-bottom: 24px;
+}
+
+.login-logo img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.login-title {
+  font-family: var(--f-heading);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.login-form { display: flex; flex-direction: column; gap: 18px; }
+
+.lf-field { display: flex; flex-direction: column; gap: 8px; }
+
+.lf-field label {
+  font-family: var(--f-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.lf-input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.lf-input:focus { border-color: var(--blue); }
+
+/* Fix browser autofill overriding dark background */
+.lf-input:-webkit-autofill,
+.lf-input:-webkit-autofill:hover,
+.lf-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg) inset !important;
+  -webkit-text-fill-color: var(--text) !important;
+  caret-color: var(--text);
+  border-color: var(--blue) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.login-error {
+  background: rgba(255,45,120,0.1);
+  border: 1px solid rgba(255,45,120,0.3);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  color: var(--pink);
+  font-size: 0.85rem;
+}
+
+/* ── ADMIN NAV ───────────────────────────────────────────── */
+.admin-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,8,16,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  height: 64px;
+}
+
+.admin-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 28px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.admin-badge {
+  font-size: 0.55rem;
+  background: var(--pink-dim);
+  color: var(--pink);
+  border: 1px solid rgba(255,45,120,0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+  letter-spacing: 0.1em;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.admin-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-email {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.78rem;
+  min-height: 36px;
+}
+
+/* ── MAIN LAYOUT ─────────────────────────────────────────── */
+.admin-main {
+  padding: 32px 0 80px;
+  min-height: calc(100vh - 64px);
+}
+
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+/* ── STATS ───────────────────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.stat-card-icon.blue  { background: var(--blue-dim);  color: var(--blue);  }
+.stat-card-icon.green { background: var(--green-dim); color: var(--green); }
+.stat-card-icon.pink  { background: var(--pink-dim);  color: var(--pink);  }
+
+.stat-card-num {
+  font-family: var(--f-display);
+  font-size: 1.8rem;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-card-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ── ADMIN GRID ──────────────────────────────────────────── */
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .admin-grid { grid-template-columns: 1fr; }
+}
+
+/* ── PANELS ──────────────────────────────────────────────── */
+.admin-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.panel-title {
+  font-family: var(--f-display);
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 8px 12px;
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.2s;
+  color-scheme: dark;
+}
+
+.filter-input:focus { border-color: var(--blue); }
+
+/* ── TABLE ───────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.admin-table th {
+  font-family: var(--f-heading);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--bg-card);
+}
+
+.admin-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.admin-table tbody tr:last-child td { border-bottom: none; }
+
+.admin-table tbody tr:hover td { background: var(--bg-card-h); }
+
+.admin-table tr.row-completed td { opacity: 0.45; }
+
+.table-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 32px;
+  font-size: 0.88rem;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-family: var(--f-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-booked    { background: var(--blue-dim);  color: var(--blue);  border: 1px solid rgba(0,212,255,0.3); }
+.status-completed { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,255,170,0.3); }
+
+/* Action buttons in table */
+.action-btn {
+  padding: 5px 12px;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  font-family: var(--f-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.action-complete {
+  background: var(--green-dim);
+  color: var(--green);
+  border-color: rgba(0,255,170,0.3);
+}
+
+.action-complete:hover {
+  background: var(--green);
+  color: #000;
+}
+
+.action-undo {
+  background: var(--blue-dim);
+  color: var(--blue);
+  border-color: rgba(0,212,255,0.3);
+}
+
+.action-undo:hover {
+  background: var(--blue);
+  color: #000;
+}
+
+/* ── WALK-IN FORM ────────────────────────────────────────── */
+.walkin-form {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.wf-title {
+  font-family: var(--f-heading);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.wf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.wf-field { display: flex; flex-direction: column; gap: 6px; }
+
+.wf-field label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.wf-field .filter-input { width: 100%; }
+
+/* ── WALK-IN CARDS ───────────────────────────────────────── */
+.walkin-list {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wi-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.wi-card.completed { opacity: 0.45; }
+
+.wi-info { flex: 1; min-width: 0; }
+
+.wi-station {
+  font-family: var(--f-heading);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.wi-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ── WALK-IN HISTORY ─────────────────────────────────────── */
+.walkin-history {
+  border-top: 1px solid var(--border);
+}
+
+.walkin-history summary {
+  padding: 14px 24px;
+  font-family: var(--f-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  list-style: none;
+  transition: color 0.2s;
+}
+
+.walkin-history summary:hover { color: var(--text); }
+.walkin-history summary::marker { display: none; }

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Loginn Gaming Cafe</title>
+  <link rel="icon" type="image/png" sizes="48x48" href="../loginnfavicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <img src="../images/loginnlogo.png" alt="Loginn logo" />
+        <span>LOGINN<span class="accent-blue">.</span></span>
+      </div>
+      <div class="login-title">Admin Login</div>
+      <div class="login-form">
+        <div class="lf-field">
+          <label>Email</label>
+          <input type="email" id="loginEmail" class="lf-input" placeholder="admin@loginn.in" autocomplete="email"/>
+        </div>
+        <div class="lf-field">
+          <label>Password</label>
+          <input type="password" id="loginPass" class="lf-input" placeholder="••••••••" autocomplete="current-password"/>
+        </div>
+        <div class="login-error" id="loginError" style="display:none"></div>
+        <button class="btn btn-primary w-full" id="loginBtn">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none">
+
+    <!-- ADMIN NAV -->
+    <nav class="admin-nav">
+      <div class="admin-nav-inner">
+        <a href="../index.html" class="nav-logo">
+          <span class="logo-icon"><img src="../images/loginnlogo.png" alt="logo"></span>
+          <span class="logo-text">LOGINN<span class="accent-blue">.</span> <span class="admin-badge">ADMIN</span></span>
+        </a>
+        <div class="admin-nav-right">
+          <span class="admin-email" id="adminEmail"></span>
+          <button class="btn btn-ghost btn-sm" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="admin-main">
+      <div class="admin-container">
+
+        <!-- STATS ROW -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-card-icon blue"><i class="fa-solid fa-calendar-check"></i></div>
+            <div class="stat-card-body">
+              <div class="stat-card-num" id="statTotal">—</div>
+              <div class="stat-card-label">Today's Bookings</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon green"><i class="fa-solid fa-person-walking"></i></div>
+            <div class="stat-card-body">
+              <div class="stat-card-num" id="statWalkins">—</div>
+              <div class="stat-card-label">Active Walk-ins</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon pink"><i class="fa-solid fa-computer"></i></div>
+            <div class="stat-card-body">
+              <div class="stat-card-num" id="statOccupied">—</div>
+              <div class="stat-card-label">Stations Occupied Now</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GRID: Bookings + Walk-ins side by side on large screens -->
+        <div class="admin-grid">
+
+          <!-- ── ONLINE BOOKINGS ───────────────────────────── -->
+          <section class="admin-panel">
+            <div class="panel-header">
+              <h2 class="panel-title"><i class="fa-solid fa-calendar-check accent-blue"></i> Online Bookings</h2>
+              <div class="panel-filters">
+                <input type="date" id="filterDate" class="filter-input" title="Filter by date"/>
+                <select id="filterStation" class="filter-input">
+                  <option value="">All Stations</option>
+                  <option value="standard-pc">Standard PC</option>
+                  <option value="performance-pc">Performance PC</option>
+                  <option value="story-pc">Story PC</option>
+                  <option value="ps5">PS5</option>
+                  <option value="xbox">Xbox</option>
+                  <option value="ps5-sim">PS5 SIM</option>
+                  <option value="pc-sim">PC SIM</option>
+                </select>
+                <button class="btn btn-ghost btn-sm" id="clearFilters">Clear</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table class="admin-table" id="bookingsTable">
+                <thead>
+                  <tr>
+                    <th>Ref</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Station</th>
+                    <th>Units</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Dur</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsTbody">
+                  <tr><td colspan="11" class="table-empty">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ── WALK-INS ──────────────────────────────────── -->
+          <section class="admin-panel">
+            <div class="panel-header">
+              <h2 class="panel-title"><i class="fa-solid fa-person-walking accent-green"></i> Walk-ins</h2>
+            </div>
+
+            <!-- Log walk-in form -->
+            <div class="walkin-form">
+              <div class="wf-title">Log a Walk-in</div>
+              <div class="wf-grid">
+                <div class="wf-field">
+                  <label>Station</label>
+                  <select id="wiStation" class="filter-input">
+                    <option value="standard-pc">Standard PC</option>
+                    <option value="performance-pc">Performance PC</option>
+                    <option value="story-pc">Story PC</option>
+                    <option value="ps5">PS5</option>
+                    <option value="xbox">Xbox</option>
+                    <option value="ps5-sim">PS5 SIM</option>
+                    <option value="pc-sim">PC SIM</option>
+                  </select>
+                </div>
+                <div class="wf-field" id="wiUnitsField">
+                  <label>Units / Players</label>
+                  <input type="number" id="wiUnits" class="filter-input" min="1" max="10" value="1" />
+                </div>
+                <div class="wf-field">
+                  <label>Start Time</label>
+                  <input type="time" id="wiTime" class="filter-input" step="600"/>
+                </div>
+              </div>
+              <button class="btn btn-outline-blue w-full" id="logWalkinBtn">
+                <i class="fa-solid fa-plus"></i> Log Walk-in
+              </button>
+            </div>
+
+            <!-- Active walk-ins -->
+            <div class="walkin-list" id="activeWalkins">
+              <div class="table-empty">No active walk-ins.</div>
+            </div>
+
+            <!-- Completed walk-ins toggle -->
+            <details class="walkin-history">
+              <summary>Completed Walk-ins Today</summary>
+              <div class="walkin-list" id="completedWalkins">
+                <div class="table-empty">None yet.</div>
+              </div>
+            </details>
+          </section>
+
+        </div><!-- /admin-grid -->
+      </div>
+    </main>
+  </div><!-- /dashboard -->
+
+  <script type="module" src="../js/admin.js"></script>
+</body>
+</html>

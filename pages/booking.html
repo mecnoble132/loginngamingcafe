@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Station — Loginn Gaming Cafe</title>
+  <link rel="icon" type="image/png" sizes="48x48" href="../loginnfavicon.png">
+  <meta name="description" content="Book your gaming session at Loginn Gaming Cafe, Thiruvananthapuram." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="../css/booking.css" />
+</head>
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader" aria-hidden="true">
+    <div class="loader-logo-wrap">
+      <div class="loader-logo-icon"><img src="../images/loginnlogo.png" alt="Loginn logo" /></div>
+      <div class="loader-logo-name">LOGINN<span>.</span></div>
+    </div>
+    <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <span class="logo-icon"><img src="../images/loginnlogo.png" alt="logo"></span>
+        <span class="logo-text">LOGINN<span class="accent-blue">.</span></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html#pricing" class="nav-link">Stations &amp; Pricing</a></li>
+        <li><a href="../index.html#find-us" class="nav-link">Contact</a></li>
+        <li><a href="games.html" class="nav-link">Games</a></li>
+        <li><a href="membership.html" class="nav-link">Membership</a></li>
+        <li><a href="booking.html" class="nav-link active">Book Now</a></li>
+        <li><a href="gamepass.html" class="nav-link">Review a Game</a></li>
+        <li><a href="news.html" class="nav-link">News</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="page-hero-tag"><i class="fa-solid fa-calendar-check"></i> BOOKING</div>
+      <h1 class="page-hero-title">Book a <span class="accent-blue">Station</span></h1>
+      <p class="page-hero-sub">Reserve your session online. Walk in and play — your seat will be ready.</p>
+    </div>
+  </section>
+
+  <!-- BOOKING FORM -->
+  <section class="booking-section">
+    <div class="container">
+      <div class="booking-wrap">
+
+        <!-- STEP INDICATOR -->
+        <div class="step-indicator">
+          <div class="step-item active" data-step="1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Station</div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step-item" data-step="2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Units</div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step-item" data-step="3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Date &amp; Time</div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step-item" data-step="4">
+            <div class="step-circle">4</div>
+            <div class="step-label">Details</div>
+          </div>
+        </div>
+
+        <!-- STEP 1 — STATION TYPE -->
+        <div class="booking-step active" id="step1">
+          <h2 class="step-title">Choose Your <span class="accent-blue">Station</span></h2>
+          <p class="step-sub">Select the type of gaming station you want to book</p>
+          <div class="station-grid">
+
+            <button class="station-card" data-station="standard-pc">
+              <div class="sc-icon blue"><i class="fa-solid fa-computer"></i></div>
+              <div class="sc-body">
+                <div class="sc-name">Standard PC</div>
+                <div class="sc-specs">Ryzen 5 5500 · RX 5600 XT · 165 Hz</div>
+                <div class="sc-units">10 units available</div>
+              </div>
+              <div class="sc-price">₹150<span>/hr</span></div>
+            </button>
+
+            <button class="station-card" data-station="performance-pc">
+              <div class="sc-icon blue"><i class="fa-solid fa-computer"></i></div>
+              <div class="sc-body">
+                <div class="sc-name">Performance PC</div>
+                <div class="sc-specs">Ryzen 5 5500 · RTX 3060 · 180 Hz</div>
+                <div class="sc-units">5 units available</div>
+              </div>
+              <div class="sc-price">₹150<span>/hr</span></div>
+            </button>
+
+            <button class="station-card" data-station="story-pc">
+              <div class="sc-icon pink"><i class="fa-solid fa-computer"></i></div>
+              <div class="sc-body">
+                <div class="sc-name">Story / Casual PC</div>
+                <div class="sc-specs">i7-12700K · RX 6900 XT · 165 Hz QHD</div>
+                <div class="sc-units">1 unit available</div>
+              </div>
+              <div class="sc-price">₹150<span>/hr</span></div>
+            </button>
+
+            <button class="station-card" data-station="ps5">
+              <div class="sc-icon pink"><i class="fa-brands fa-playstation"></i></div>
+              <div class="sc-body">
+                <div class="sc-name">PlayStation 5</div>
+                <div class="sc-specs">DualSense · 4K Display · 3 units</div>
+                <div class="sc-units">+₹50/hr per extra player</div>
+              </div>
+              <div class="sc-price">₹150<span>/hr</span></div>
+            </button>
+
+            <button class="station-card" data-station="xbox">
+              <div class="sc-icon green"><i class="fa-brands fa-xbox"></i></div>
+              <div class="sc-body">
+                <div class="sc-name">Xbox Series</div>
+                <div class="sc-specs">Game Pass Ultimate · Xbox Controllers</div>
+                <div class="sc-units">+₹50/hr per extra player</div>
+              </div>
+              <div class="sc-price">₹150<span>/hr</span></div>
+            </button>
+
+            <button class="station-card" data-station="ps5-sim">
+              <div class="sc-icon yellow"><i class="fa-solid fa-flag-checkered"></i></div>
+              <div class="sc-body">
+                <div class="sc-name">PS5 Racing SIM</div>
+                <div class="sc-specs">Logitech G29 · PlayStation 5 · GT7</div>
+                <div class="sc-units">1 pod · Single player</div>
+              </div>
+              <div class="sc-price">₹150<span>/hr</span></div>
+            </button>
+
+            <button class="station-card" data-station="pc-sim">
+              <div class="sc-icon blue"><i class="fa-solid fa-flag-checkered"></i></div>
+              <div class="sc-body">
+                <div class="sc-name">PC Racing SIM</div>
+                <div class="sc-specs">Cammus C5 · RTX 3060 Ti · Assetto Corsa</div>
+                <div class="sc-units">1 pod · Single player</div>
+              </div>
+              <div class="sc-price">₹150<span>/hr</span></div>
+            </button>
+
+          </div>
+          <div class="step-nav">
+            <span></span>
+            <button class="btn btn-primary" id="step1Next" disabled>Next <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 2 — UNITS / PLAYERS -->
+        <div class="booking-step" id="step2">
+          <h2 class="step-title">How Many <span class="accent-pink">Players</span>?</h2>
+          <p class="step-sub" id="step2Sub">Select the number of PCs or players</p>
+
+          <div class="units-wrap" id="unitsWrap">
+            <!-- Dynamically rendered based on station choice -->
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-ghost" id="step2Back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <button class="btn btn-primary" id="step2Next">Next <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 3 — DATE, TIME, DURATION -->
+        <div class="booking-step" id="step3">
+          <h2 class="step-title">Pick Your <span class="accent-green">Slot</span></h2>
+          <p class="step-sub">Choose a date, start time and how long you'll play</p>
+
+          <div class="slot-grid">
+            <!-- Date -->
+            <div class="slot-field">
+              <label class="slot-label"><i class="fa-regular fa-calendar"></i> Date</label>
+              <input type="date" id="bookingDate" class="slot-input" />
+            </div>
+
+            <!-- Duration -->
+            <div class="slot-field">
+              <label class="slot-label"><i class="fa-regular fa-clock"></i> Duration</label>
+              <div class="stepper">
+                <button class="step-btn" id="durDown">−</button>
+                <span id="durDisplay">1 hr</span>
+                <button class="step-btn" id="durUp">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Time Slots -->
+          <div class="time-section">
+            <label class="slot-label"><i class="fa-solid fa-hourglass-start"></i> Start Time <span class="slot-hint" id="slotHint"></span></label>
+            <div class="time-grid" id="timeGrid">
+              <div class="time-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading available slots…</div>
+            </div>
+          </div>
+
+          <!-- Live price -->
+          <div class="price-live" id="priceLive" style="display:none">
+            <div class="pl-label">Estimated Total</div>
+            <div class="pl-amount" id="priceLiveAmount">₹0</div>
+            <div class="pl-breakdown" id="priceLiveBreakdown"></div>
+          </div>
+
+          <div class="step-nav">
+            <button class="btn btn-ghost" id="step3Back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <button class="btn btn-primary" id="step3Next" disabled>Next <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 4 — DETAILS -->
+        <div class="booking-step" id="step4">
+          <h2 class="step-title">Your <span class="accent-blue">Details</span></h2>
+          <p class="step-sub">We'll send your booking confirmation to your email</p>
+
+          <div class="details-form">
+            <div class="form-field">
+              <label class="form-label">Full Name <span class="req">*</span></label>
+              <input type="text" id="custName" class="form-input" placeholder="Your name" autocomplete="name" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Phone Number <span class="req">*</span></label>
+              <input type="tel" id="custPhone" class="form-input" placeholder="+91 XXXXX XXXXX" autocomplete="tel" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Email Address <span class="req">*</span></label>
+              <input type="email" id="custEmail" class="form-input" placeholder="you@example.com" autocomplete="email" />
+            </div>
+            <div class="form-field">
+              <label class="form-label">Notes <span class="opt">(optional)</span></label>
+              <textarea id="custNotes" class="form-input form-textarea" placeholder="Birthday visit? Special request? Let us know…" rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Summary Card -->
+          <div class="summary-card" id="summaryCard">
+            <div class="summary-title"><i class="fa-solid fa-receipt"></i> Booking Summary</div>
+            <div class="summary-rows" id="summaryRows"></div>
+            <div class="summary-total">
+              <span>Estimated Total</span>
+              <span id="summaryTotal" class="accent-blue">₹0</span>
+            </div>
+          </div>
+
+          <p class="booking-note"><i class="fa-solid fa-circle-info accent-blue"></i> &nbsp;Walk-ins billed by actual time. Online bookings hold your seat. To cancel, call <a href="tel:+918075707064">+91 80757 07064</a>.</p>
+
+          <div class="step-nav">
+            <button class="btn btn-ghost" id="step4Back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <button class="btn btn-primary" id="submitBtn">
+              <i class="fa-solid fa-calendar-check"></i> Confirm Booking
+            </button>
+          </div>
+        </div>
+
+        <!-- SUCCESS SCREEN -->
+        <div class="booking-step" id="stepSuccess">
+          <div class="success-wrap">
+            <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <h2 class="success-title">Booking <span class="accent-green">Confirmed!</span></h2>
+            <p class="success-sub">Check your email for the confirmation. See you at Loginn!</p>
+            <div class="success-ref">Ref: <strong id="successRef">—</strong></div>
+            <div class="success-actions">
+              <a href="../index.html" class="btn btn-outline-blue">Back to Home</a>
+              <a href="booking.html" class="btn btn-primary">Book Another</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <div class="container footer-container">
+      <div class="footer-col footer-brand">
+        <a href="../index.html" class="nav-logo">
+          <span class="logo-icon"><img src="../images/loginnlogo.png" alt="logo"></span>
+          <span class="logo-text">LOGINN<span class="accent-blue">.</span></span>
+        </a>
+        <p class="footer-desc">Premium gaming PCs. Zero Lag. Ice-cold vibes.</p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/loginnkerala/" aria-label="Instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="../index.html#pricing">Stations &amp; Pricing</a></li>
+          <li><a href="games.html">Games Library</a></li>
+          <li><a href="membership.html">Membership</a></li>
+          <li><a href="booking.html">Book a Station</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-contact">
+        <h4>Contact Us</h4>
+        <ul>
+          <li><i class="fa-solid fa-phone"></i><span><a href="tel:+918075707064">+91 80757 07064</a></span></li>
+          <li><i class="fa-solid fa-clock"></i><span>Every Day: 11 AM – 11 PM</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <span class="footer-copy">© 2026 Loginn. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/918075707064" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="module" src="../js/booking.js"></script>
+  <script src="../js/common.js"></script>
+</body>
+</html>
