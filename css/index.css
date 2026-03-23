@@ -542,6 +542,26 @@
   border-radius: 100px;
 }
 
+/* ─── STATION CARD BOOK NOW BUTTON ──────────────────────── */
+.sp-book-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 10px 16px;
+  font-size: 0.78rem;
+  min-height: 40px;
+  margin-top: 4px;
+  transition: all 0.2s ease;
+}
+
+.sp-book-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 212, 255, 0.2);
+}
+
+.sp-card:has(.sp-icon.pink) .sp-book-btn:hover {
+  box-shadow: 0 6px 18px rgba(255, 45, 120, 0.2);
+}
+
 .sp-specs {
   display: flex;
   flex-direction: column;

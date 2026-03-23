@@ -27,6 +27,20 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  cursor: default;
+}
+
+.step-item.done {
+  cursor: pointer;
+}
+
+.step-item.done:hover .step-circle {
+  box-shadow: 0 0 14px rgba(0, 255, 170, 0.3);
+  transform: scale(1.08);
+}
+
+.step-item.done:hover .step-label {
+  color: #fff;
 }
 
 .step-circle {
@@ -182,11 +196,24 @@
   color: var(--blue);
   white-space: nowrap;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
 }
 
 .sc-price span {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.sc-price small {
+  font-size: 0.58rem;
+  color: var(--text-dim);
+  font-family: var(--f-body);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 /* ── UNITS / PLAYERS ─────────────────────────────────────── */

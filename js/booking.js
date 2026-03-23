@@ -73,6 +73,17 @@ function goTo(n) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// -- STEP INDICATOR CLICK (backwards navigation only) ----------
+document.querySelectorAll('.step-item').forEach(el => {
+  el.addEventListener('click', () => {
+    const target = +el.dataset.step;
+    // Only allow jumping to a step we've already completed (done), not forward
+    if (target < currentStep) {
+      goTo(target);
+    }
+  });
+});
+
 // -- STEP 1 -- STATION -----------------------------------------
 const step1Next = document.getElementById('step1Next');
 
@@ -87,7 +98,29 @@ document.querySelectorAll('.station-card').forEach(card => {
 
 step1Next.addEventListener('click', () => { buildStep2(); goTo(2); });
 
-// -- STEP 2 -- UNITS / PLAYERS ---------------------------------
+// -- URL PARAM PRE-SELECTION -----------------------------------
+// Reads ?station=xxx from the URL and auto-selects that station card
+(function autoSelectStation() {
+  const params  = new URLSearchParams(window.location.search);
+  const preset  = params.get('station');
+  if (!preset || !STATIONS[preset]) return;
+
+  const target = document.querySelector(`.station-card[data-station="${preset}"]`);
+  if (!target) return;
+
+  // Deselect all, select target
+  document.querySelectorAll('.station-card').forEach(c => c.classList.remove('selected'));
+  target.classList.add('selected');
+  state.station = preset;
+  step1Next.disabled = false;
+
+  // Scroll the card into view smoothly after page load
+  requestAnimationFrame(() => {
+    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+})();
+
+
 function buildStep2() {
   const cfg  = STATIONS[state.station];
   const wrap = document.getElementById('unitsWrap');
