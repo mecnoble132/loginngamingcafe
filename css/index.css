@@ -562,6 +562,10 @@
   box-shadow: 0 6px 18px rgba(255, 45, 120, 0.2);
 }
 
+.sp-card:has(.sp-icon.green) .sp-book-btn:hover {
+  box-shadow: 0 6px 18px rgba(0, 255, 170, 0.2);
+}
+
 .sp-specs {
   display: flex;
   flex-direction: column;
