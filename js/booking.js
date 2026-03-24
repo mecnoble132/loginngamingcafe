@@ -1,460 +1,197 @@
-/* ============================================================
-   LOGINN GAMING CAFE -- js/booking.js
-   Fixes: (1) past slots blocked, (2) Firestore permissions graceful,
-          (3) EmailJS to_email explicit per send call
-============================================================ */
-'use strict';
 
-import { db, EMAILJS_PUBLIC_KEY, EMAILJS_SERVICE_ID,
-         EMAILJS_CUSTOMER_TMPL, EMAILJS_ADMIN_TMPL,
-         ADMIN_NOTIFY_EMAIL }
-  from './firebase-config.js';
+import { db } from '../js/firebase-config.js';
+import { collection, addDoc, getDocs, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-import { collection, addDoc, getDocs, query,
-         where, serverTimestamp }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-// -- STATION CONFIG --------------------------------------------
 const STATIONS = {
-  'standard-pc':    { name: 'Standard PC',       type: 'pc',      capacity: 10, maxUnits: 10, hasPluralUnits: true  },
-  'performance-pc': { name: 'Performance PC',    type: 'pc',      capacity: 5,  maxUnits: 5,  hasPluralUnits: true  },
-  'story-pc':       { name: 'Story / Casual PC', type: 'pc',      capacity: 1,  maxUnits: 1,  hasPluralUnits: false },
-  'ps5':            { name: 'PlayStation 5',     type: 'console', capacity: 3,  maxPlayers: 4, hasPlayers: true },
-  'xbox':           { name: 'Xbox Series',       type: 'console', capacity: 1,  maxPlayers: 4, hasPlayers: true },
-  'ps5-sim':        { name: 'PS5 Racing SIM',    type: 'sim',     capacity: 1,  maxUnits: 1,  hasPluralUnits: false },
-  'pc-sim':         { name: 'PC Racing SIM',     type: 'sim',     capacity: 1,  maxUnits: 1,  hasPluralUnits: false },
+  'standard-pc': { name: 'Standard PC', type: 'pc', capacity: 10, maxUnits: 10, hasPlayers: false },
+  'performance-pc': { name: 'Performance PC', type: 'pc', capacity: 5, maxUnits: 5, hasPlayers: false },
+  'story-pc': { name: 'Story / Casual PC', type: 'pc', capacity: 1, maxUnits: 1, hasPlayers: false },
+  'ps5': { name: 'PlayStation 5', type: 'console', capacity: 3, maxPlayers: 4, hasPlayers: true },
+  'xbox': { name: 'Xbox Series', type: 'console', capacity: 1, maxPlayers: 4, hasPlayers: true },
+  'ps5-sim': { name: 'PS5 Racing SIM', type: 'sim', capacity: 1, maxUnits: 1, hasPlayers: false },
+  'pc-sim': { name: 'PC Racing SIM', type: 'sim', capacity: 1, maxUnits: 1, hasPlayers: false },
 };
+const FIRST_HR = 150, EXTRA_HR = 100, CTRL_FEE = 50, PC_DAY_CAP = 600;
 
-// -- PRICING ---------------------------------------------------
-const FIRST_HR   = 150;
-const EXTRA_HR   = 100;
-const CTRL_FEE   = 50;
-const PC_DAY_CAP = 600;
-
-function calcPrice(station, units, players, hours) {
-  const cfg = STATIONS[station];
-  let total = 0, breakdown = '';
-
+function calcPrice(id, units, players, hours) {
+  const cfg = STATIONS[id];
   if (cfg.type === 'pc') {
-    const perUnit = Math.min(FIRST_HR + Math.max(0, hours - 1) * EXTRA_HR, PC_DAY_CAP);
-    total         = perUnit * units;
-    const capped  = (FIRST_HR + Math.max(0, hours - 1) * EXTRA_HR) > PC_DAY_CAP;
-    breakdown     = capped
-      ? `${units} PC${units > 1 ? 's' : ''} x Rs.${PC_DAY_CAP} (day cap)`
-      : `${units} PC${units > 1 ? 's' : ''} x (Rs.${FIRST_HR} + Rs.${EXTRA_HR}x${Math.max(0, hours - 1)}hr${hours > 2 ? 's' : ''})`;
+    return { total: Math.min(FIRST_HR + Math.max(0, hours - 1) * EXTRA_HR, PC_DAY_CAP) * units };
   } else {
-    const extraCtrl  = Math.max(0, players - 1);
-    const firstHrAmt = FIRST_HR + extraCtrl * CTRL_FEE;
-    const laterHrAmt = EXTRA_HR  + extraCtrl * CTRL_FEE;
-    total            = firstHrAmt + Math.max(0, hours - 1) * laterHrAmt;
-    breakdown        = hours === 1
-      ? `Rs.${firstHrAmt} for 1st hr - ${players} player${players > 1 ? 's' : ''}`
-      : `Rs.${firstHrAmt} + Rs.${laterHrAmt}x${hours - 1}hr${hours > 2 ? 's' : ''} - ${players} players`;
+    const extra = Math.max(0, players - 1);
+    return { total: (FIRST_HR + extra * CTRL_FEE) + Math.max(0, hours - 1) * (EXTRA_HR + extra * CTRL_FEE) };
   }
-  return { total, breakdown };
 }
 
-// -- STATE -----------------------------------------------------
-let state = { station: null, units: 1, players: 1, date: null, time: null, duration: 1 };
-
-// -- STEP NAVIGATION -------------------------------------------
-const steps = [null, 'step1', 'step2', 'step3', 'step4', 'stepSuccess'];
+const state = { station: null, units: 1, players: 1, date: null, time: null, duration: 1 };
 let currentStep = 1;
+let occupiedMins = new Set();
 
-function goTo(n) {
-  document.getElementById(steps[currentStep])?.classList.remove('active');
-  currentStep = n;
-  document.getElementById(steps[currentStep])?.classList.add('active');
-  document.querySelectorAll('.step-item').forEach(el => {
-    const s = +el.dataset.step;
-    el.classList.toggle('active', s === n);
-    el.classList.toggle('done',   s < n);
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// -- STEP INDICATOR CLICK (backwards navigation only) ----------
-document.querySelectorAll('.step-item').forEach(el => {
-  el.addEventListener('click', () => {
-    const target = +el.dataset.step;
-    // Only allow jumping to a step we've already completed (done), not forward
-    if (target < currentStep) {
-      goTo(target);
-    }
-  });
-});
-
-// -- STEP 1 -- STATION -----------------------------------------
-const step1Next = document.getElementById('step1Next');
-
-document.querySelectorAll('.station-card').forEach(card => {
-  card.addEventListener('click', () => {
-    document.querySelectorAll('.station-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    state.station  = card.dataset.station;
-    step1Next.disabled = false;
-  });
-});
-
-step1Next.addEventListener('click', () => { buildStep2(); goTo(2); });
-
-// -- URL PARAM PRE-SELECTION -----------------------------------
-// Reads ?station=xxx from the URL and auto-selects that station card
-(function autoSelectStation() {
-  const params  = new URLSearchParams(window.location.search);
-  const preset  = params.get('station');
-  if (!preset || !STATIONS[preset]) return;
-
-  const target = document.querySelector(`.station-card[data-station="${preset}"]`);
-  if (!target) return;
-
-  // Deselect all, select target
-  document.querySelectorAll('.station-card').forEach(c => c.classList.remove('selected'));
-  target.classList.add('selected');
-  state.station = preset;
-  step1Next.disabled = false;
-
-  // Scroll the card into view smoothly after page load
-  requestAnimationFrame(() => {
-    target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
-})();
-
-
-function buildStep2() {
-  const cfg  = STATIONS[state.station];
-  const wrap = document.getElementById('unitsWrap');
-  const sub  = document.getElementById('step2Sub');
-  wrap.innerHTML = '';
-
-  if (!cfg.hasPluralUnits && !cfg.hasPlayers) {
-    state.units = 1; state.players = 1;
-    wrap.innerHTML = `<div class="units-fixed-note"><i class="fa-solid fa-circle-check"></i><span>Single pod - 1 player only.</span></div>`;
-    sub.textContent = 'This is a single-unit station.';
-    return;
-  }
-
-  if (cfg.hasPlayers) {
-    sub.textContent = 'Select how many players. Extra controllers are Rs.50/hr each beyond the 1st.';
-    wrap.innerHTML  = `<div class="units-label">Number of Players</div><div class="units-options" id="playerOpts"></div><div class="units-price-note" id="ctrlNote"></div>`;
-    const opts = document.getElementById('playerOpts');
-    for (let i = 1; i <= cfg.maxPlayers; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'unit-btn' + (i === 1 ? ' active' : '');
-      btn.textContent = i;
-      btn.addEventListener('click', () => {
-        opts.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.players = i;
-        updateCtrlNote();
-      });
-      opts.appendChild(btn);
-    }
-    state.players = 1;
-    updateCtrlNote();
-  } else {
-    sub.textContent = 'Select how many PCs you need. Each PC is billed separately.';
-    wrap.innerHTML  = `<div class="units-label">Number of PCs</div><div class="units-options" id="unitOpts"></div><div class="units-price-note">Each PC billed independently - Day cap Rs.600/PC</div>`;
-    const opts = document.getElementById('unitOpts');
-    for (let i = 1; i <= cfg.maxUnits; i++) {
-      const btn = document.createElement('button');
-      btn.className = 'unit-btn' + (i === 1 ? ' active' : '');
-      btn.textContent = i;
-      btn.addEventListener('click', () => {
-        opts.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.units = i;
-      });
-      opts.appendChild(btn);
-    }
-    state.units = 1;
-  }
-}
-
-function updateCtrlNote() {
-  const note  = document.getElementById('ctrlNote');
-  if (!note) return;
-  const extra = state.players - 1;
-  note.textContent = extra > 0
-    ? `+Rs.${extra * CTRL_FEE}/hr for ${extra} extra controller${extra > 1 ? 's' : ''}`
-    : 'No extra controller charge for 1 player.';
-}
-
-document.getElementById('step2Back').addEventListener('click', () => goTo(1));
-document.getElementById('step2Next').addEventListener('click', () => { buildTimeGrid(); goTo(3); });
-
-// -- STEP 3 -- DATE / TIME / DURATION --------------------------
-const dateInput  = document.getElementById('bookingDate');
-const durDisplay = document.getElementById('durDisplay');
-const timeGrid   = document.getElementById('timeGrid');
-const slotHint   = document.getElementById('slotHint');
-
-// Use local date string (not UTC) — fixes IST timezone mismatch
-function getLocalDateStr() {
-  const d = new Date();
-  return d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0');
-}
-
-const todayStr  = getLocalDateStr();
-dateInput.min   = todayStr;
-dateInput.value = todayStr;
-state.date      = todayStr;
-
-document.getElementById('durUp').addEventListener('click', () => {
-  if (state.duration < 12) {
-    state.duration++;
-    durDisplay.textContent = `${state.duration} hr${state.duration > 1 ? 's' : ''}`;
-    state.time = null;
-    document.getElementById('step3Next').disabled = true;
-    rebuildSlots();
-  }
-});
-document.getElementById('durDown').addEventListener('click', () => {
-  if (state.duration > 1) {
-    state.duration--;
-    durDisplay.textContent = `${state.duration} hr${state.duration > 1 ? 's' : ''}`;
-    state.time = null;
-    document.getElementById('step3Next').disabled = true;
-    rebuildSlots();
-  }
-});
-
-dateInput.addEventListener('change', () => {
-  state.date = dateInput.value;
-  state.time = null;
-  document.getElementById('step3Next').disabled = true;
-  buildTimeGrid();
-});
-
-function buildTimeGrid() {
-  timeGrid.innerHTML = '<div class="time-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading available slots...</div>';
-  updatePriceLive();
-  fetchOccupied().then(rebuildSlots);
-}
-
-function latestStartMinutes() { return 23 * 60 - state.duration * 60; }
-
-let occupiedRanges = [];
-
-async function fetchOccupied() {
-  occupiedRanges = [];
-  if (!state.station || !state.date) return;
-  const cfg = STATIONS[state.station];
-
-  try {
-    const bSnap = await getDocs(query(
-      collection(db, 'bookings'),
-      where('station', '==', state.station),
-      where('date',    '==', state.date)
-    ));
-    const wSnap = await getDocs(query(
-      collection(db, 'walkins'),
-      where('station', '==', state.station),
-      where('status',  '==', 'active')
-    ));
-
-    const slotCount = {};
-    function markRange(startMin, endMin, count) {
-      for (let m = startMin; m < endMin; m += 10) slotCount[m] = (slotCount[m] || 0) + count;
-    }
-
-    bSnap.forEach(d => {
-      const data     = d.data();
-      const [h, min] = data.time.split(':').map(Number);
-      markRange(h * 60 + min, h * 60 + min + data.duration * 60, data.units || 1);
-    });
-    wSnap.forEach(d => {
-      const data = d.data();
-      markRange(data.startMinutes, 23 * 60, data.units || 1);
-    });
-
-    const cap = cfg.capacity;
-    for (let m = 11 * 60; m < 23 * 60; m += 10) {
-      if ((slotCount[m] || 0) >= cap) occupiedRanges.push({ start: m, end: m + 10 });
-    }
-  } catch (e) {
-    // FIX 2: If Firestore rules block public reads, silently proceed
-    // Update Firestore rules to allow public reads on bookings + walkins
-    console.warn('fetchOccupied warning:', e.message);
-  }
-}
-
-function isBlocked(startMin) {
-  const endMin = startMin + state.duration * 60;
-  for (let m = startMin; m < endMin; m += 10) {
-    if (occupiedRanges.some(r => m >= r.start && m < r.end)) return true;
-  }
-  return false;
-}
-
-function rebuildSlots() {
-  const latest = latestStartMinutes();
-  slotHint.textContent = 'Sessions must finish by 11 PM';
-  timeGrid.innerHTML   = '';
-
-  // FIX 1: Block past time slots when today is selected
-  // Compare against local date (not UTC) to handle IST correctly
-  const isToday    = state.date === getLocalDateStr();
-  const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
-
-  let anyAvailable = false;
-  for (let m = 11 * 60; m <= latest; m += 10) {
-    const isPast  = isToday && m <= nowMinutes;
-    const blocked = isPast || isBlocked(m);
-    if (!blocked) anyAvailable = true;
-
-    const label = `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-    const btn   = document.createElement('button');
-    btn.className   = 'time-slot' + (blocked ? ' blocked' : '');
-    btn.textContent = label;
-    btn.disabled    = blocked;
-
-    if (!blocked) {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        state.time = label;
-        document.getElementById('step3Next').disabled = false;
-        updatePriceLive();
-      });
-    }
-    if (state.time === label && !blocked) btn.classList.add('selected');
-    timeGrid.appendChild(btn);
-  }
-
-  if (!anyAvailable) {
-    timeGrid.innerHTML = '<div class="time-loading">No slots available for this date. Try another date or duration.</div>';
-  }
-}
-
-function updatePriceLive() {
-  const live = document.getElementById('priceLive');
-  if (!state.station || !state.duration) { live.style.display = 'none'; return; }
-  const { total, breakdown } = calcPrice(state.station, state.units, state.players, state.duration);
-  document.getElementById('priceLiveAmount').textContent    = `Rs.${total}`;
-  document.getElementById('priceLiveBreakdown').textContent = breakdown;
-  live.style.display = '';
-}
-
-document.getElementById('step3Back').addEventListener('click', () => goTo(2));
-document.getElementById('step3Next').addEventListener('click', () => { buildSummary(); goTo(4); });
-
-// -- STEP 4 -- DETAILS + SUBMIT --------------------------------
-function buildSummary() {
-  const cfg = STATIONS[state.station];
-  const { total } = calcPrice(state.station, state.units, state.players, state.duration);
-
-  const unitsLabel = cfg.hasPlayers
-    ? `${state.players} player${state.players > 1 ? 's' : ''}`
-    : cfg.hasPluralUnits ? `${state.units} PC${state.units > 1 ? 's' : ''}` : '1 unit';
-
-  const rows = [
-    ['Station',  cfg.name],
-    ['Units',    unitsLabel],
-    ['Date',     formatDate(state.date)],
-    ['Time',     state.time],
-    ['Duration', `${state.duration} hr${state.duration > 1 ? 's' : ''}`],
-  ];
-
-  document.getElementById('summaryRows').innerHTML =
-    rows.map(([k, v]) => `<div class="summary-row"><span>${k}</span><span>${v}</span></div>`).join('');
-  document.getElementById('summaryTotal').textContent = `Rs.${total}`;
+function getLocalDateStr(offset = 0) {
+  const d = new Date(); d.setDate(d.getDate() + offset);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
 function formatDate(d) {
-  if (!d) return '';
+  if (!d) return '—';
   const [y, m, day] = d.split('-');
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return `${+day} ${months[+m - 1]} ${y}`;
+  return `${+day} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+m - 1]}`;
 }
 
-document.getElementById('step4Back').addEventListener('click', () => goTo(3));
-
-document.getElementById('submitBtn').addEventListener('click', async () => {
-  const name  = document.getElementById('custName').value.trim();
-  const phone = document.getElementById('custPhone').value.trim();
-  const email = document.getElementById('custEmail').value.trim();
-  const notes = document.getElementById('custNotes').value.trim();
-
-  let valid = true;
-  [['custName', name], ['custPhone', phone], ['custEmail', email]].forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (!val) { el.classList.add('error'); valid = false; }
-    else el.classList.remove('error');
+function goTo(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  const panels = [null, 'step1', 'step2', 'step3', 'step4', 'step5', 'stepSuccess'];
+  document.getElementById(panels[n])?.classList.add('active');
+  document.querySelectorAll('.step-tab').forEach(tab => {
+    const s = +tab.dataset.step;
+    tab.classList.toggle('active', s === n); tab.classList.toggle('done', s < n);
   });
-  if (!valid) return;
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  updateBottomBar();
+}
 
-  const btn = document.getElementById('submitBtn');
-  btn.disabled  = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Booking...';
+const btnNext = document.getElementById('btnNext');
+const btnBack = document.getElementById('btnBack');
+const bottomLabel = document.getElementById('bottomLabel');
+const bottomVal = document.getElementById('bottomVal');
+const bottomBar = document.getElementById('bottomBar');
 
-  const cfg = STATIONS[state.station];
-  const { total, breakdown } = calcPrice(state.station, state.units, state.players, state.duration);
-  const refId = 'LGN' + Date.now().toString(36).toUpperCase();
+function updateBottomBar() {
+  bottomBar.style.display = currentStep === 6 ? 'none' : '';
+  btnBack.style.display = currentStep > 1 && currentStep < 6 ? '' : 'none';
+  const cfg = state.station ? STATIONS[state.station] : null;
+  const labels = ['', 'Select a station', 'Select players', 'Choose a date', 'Pick a time slot', 'Review your booking'];
+  bottomLabel.textContent = labels[currentStep] || '';
+  if (currentStep === 1) { bottomVal.textContent = cfg?.name || '—'; btnNext.disabled = !state.station; btnNext.innerHTML = 'Next <i class="fa-solid fa-arrow-right"></i>'; }
+  else if (currentStep === 2) { bottomVal.textContent = `${cfg.name} · ${cfg.hasPlayers ? state.players + ' player' + (state.players > 1 ? 's' : '') : state.units + ' unit' + (state.units > 1 ? 's' : '')}`; btnNext.disabled = false; btnNext.innerHTML = 'Next <i class="fa-solid fa-arrow-right"></i>'; }
+  else if (currentStep === 3) { bottomVal.textContent = state.date ? formatDate(state.date) + ` · ${state.duration} hr${state.duration > 1 ? 's' : ''}` : '—'; btnNext.disabled = !state.date; btnNext.innerHTML = 'Find Slots <i class="fa-solid fa-arrow-right"></i>'; }
+  else if (currentStep === 4) { bottomVal.textContent = state.time ? `${state.time} · ${state.duration} hr${state.duration > 1 ? 's' : ''}` : 'No slot selected'; btnNext.disabled = !state.time; btnNext.innerHTML = 'Review <i class="fa-solid fa-arrow-right"></i>'; }
+  else if (currentStep === 5) { const { total } = calcPrice(state.station, state.units, state.players, state.duration); bottomVal.textContent = `₹${total} estimated`; btnNext.disabled = false; btnNext.innerHTML = '<i class="fa-solid fa-lock"></i> Block Slot'; }
+}
 
-  const unitsLabel = cfg.hasPlayers
-    ? `${state.players} player${state.players > 1 ? 's' : ''}`
-    : cfg.hasPluralUnits ? `${state.units} PC${state.units > 1 ? 's' : ''}` : '1 unit';
-
-  try {
-    // 1. Save to Firestore
-    await addDoc(collection(db, 'bookings'), {
-      ref: refId, name, phone, email, notes,
-      station:     state.station,
-      stationName: cfg.name,
-      units:       state.units,
-      players:     state.players,
-      unitsLabel,
-      date:        state.date,
-      time:        state.time,
-      duration:    state.duration,
-      totalPrice:  total,
-      status:      'booked',
-      createdAt:   serverTimestamp(),
-    });
-
-    // 2. FIX 3: Explicitly set to_email for each send call separately
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-
-    const baseParams = {
-      to_name:     name,
-      phone,
-      ref_id:      refId,
-      station:     cfg.name,
-      units_label: unitsLabel,
-      date:        formatDate(state.date),
-      time:        state.time,
-      duration:    `${state.duration} hr${state.duration > 1 ? 's' : ''}`,
-      total_price: `Rs.${total}`,
-      breakdown,
-      notes:       notes || 'None',
-    };
-
-    // Customer confirmation — to_email is the customer's address
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CUSTOMER_TMPL, {
-      ...baseParams,
-      to_email: email,
-    });
-
-    // Admin notification — to_email is the fixed admin address
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TMPL, {
-      ...baseParams,
-      to_email: ADMIN_NOTIFY_EMAIL,
-    });
-
-    // 3. Show success screen
-    document.getElementById('successRef').textContent = refId;
-    goTo(5);
-
-  } catch (err) {
-    console.error('Booking error', err);
-    btn.disabled  = false;
-    btn.innerHTML = '<i class="fa-solid fa-calendar-check"></i> Confirm Booking';
-    alert('Something went wrong. Please try again or call us at +91 80757 07064.');
-  }
+document.querySelectorAll('.stn-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.stn-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected'); state.station = card.dataset.station; updateBottomBar();
+  });
 });
 
-// -- INIT ------------------------------------------------------
-buildTimeGrid();
+function buildStep2() {
+  const cfg = STATIONS[state.station];
+  document.getElementById('step2Sub').textContent = cfg.hasPlayers ? 'Extra controllers: +₹50/hr each beyond 1st player' : cfg.maxUnits > 1 ? 'Select the number of PCs you need' : 'Single unit — 1 player only';
+  const content = document.getElementById('step2Content'); content.innerHTML = '';
+  if (!cfg.hasPlayers && cfg.maxUnits === 1) { content.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--green);font-family:var(--f-heading);font-size:1.1rem;"><i class="fa-solid fa-circle-check" style="font-size:2rem;display:block;margin-bottom:12px;"></i>Single pod — all set!</div>`; state.units = 1; state.players = 1; return; }
+  const max = cfg.hasPlayers ? cfg.maxPlayers : cfg.maxUnits;
+  const grid = document.createElement('div'); grid.className = 'players-grid';
+  for (let i = 1; i <= max; i++) {
+    const btn = document.createElement('button'); btn.className = 'player-btn' + (i === 1 ? ' active' : '');
+    btn.innerHTML = `${i}<small>${cfg.hasPlayers ? 'player' + (i > 1 ? 's' : '') : 'PC' + (i > 1 ? 's' : '')}</small>`;
+    btn.addEventListener('click', () => { grid.querySelectorAll('.player-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); cfg.hasPlayers ? state.players = i : state.units = i; updateBottomBar(); });
+    grid.appendChild(btn);
+  }
+  content.appendChild(grid);
+  if (cfg.hasPlayers) state.players = 1; else state.units = 1;
+}
+
+function buildDateStrip() {
+  const strip = document.getElementById('dateStrip'); strip.innerHTML = '';
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  for (let i = 0; i < 7; i++) {
+    const dateStr = getLocalDateStr(i); const d = new Date(dateStr + 'T00:00:00');
+    const chip = document.createElement('div'); chip.className = 'date-chip' + (i === 0 ? ' active' : '');
+    chip.innerHTML = `<span class="day-name">${days[d.getDay()]}</span><span class="day-num">${d.getDate()}</span>`;
+    chip.addEventListener('click', () => { document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active')); chip.classList.add('active'); state.date = dateStr; state.time = null; updateBottomBar(); });
+    strip.appendChild(chip);
+  }
+  state.date = getLocalDateStr(0);
+}
+
+document.querySelectorAll('.dur-chip').forEach(chip => {
+  chip.addEventListener('click', () => { document.querySelectorAll('.dur-chip').forEach(c => c.classList.remove('active')); chip.classList.add('active'); state.duration = +chip.dataset.dur; state.time = null; updateBottomBar(); });
+});
+
+async function buildSlots() {
+  ['slotsMorning', 'slotsAfternoon', 'slotsEvening'].forEach(id => { document.getElementById(id).innerHTML = `<div class="slots-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>`; });
+  document.getElementById('step4Sub').textContent = `${formatDate(state.date)} · ${state.duration} hr${state.duration > 1 ? 's' : ''}`;
+  await fetchOccupied();
+  const isToday = state.date === getLocalDateStr(0);
+  const now = new Date(); const nowMins = now.getHours() * 60 + now.getMinutes();
+  const latest = 23 * 60 - state.duration * 60;
+  const morning = [], afternoon = [], evening = [];
+  for (let m = 11 * 60; m <= latest; m += 10) {
+    const isPast = isToday && m <= nowMins; const isBooked = isSlotBlocked(m);
+    const hh = String(Math.floor(m / 60)).padStart(2, '0'); const mm = String(m % 60).padStart(2, '0');
+    const slot = { m, label: `${hh}:${mm}`, isPast, isBooked };
+    if (m < 14 * 60) morning.push(slot); else if (m < 18 * 60) afternoon.push(slot); else evening.push(slot);
+  }
+  renderSlots('slotsMorning', morning); renderSlots('slotsAfternoon', afternoon); renderSlots('slotsEvening', evening);
+}
+
+function renderSlots(id, slots) {
+  const el = document.getElementById(id); el.innerHTML = '';
+  if (!slots.length) { el.innerHTML = `<div class="slots-loading" style="grid-column:1/-1;font-size:0.72rem;padding:12px;">None in this period</div>`; return; }
+  slots.forEach(({ m, label, isPast, isBooked }) => {
+    const btn = document.createElement('button'); btn.className = 'slot-btn'; btn.textContent = label;
+    if (isPast || isBooked) { btn.disabled = true; if (isBooked) btn.classList.add('booked'); }
+    else { btn.addEventListener('click', () => { document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); state.time = label; updateBottomBar(); }); }
+    if (state.time === label && !isPast && !isBooked) btn.classList.add('selected');
+    el.appendChild(btn);
+  });
+}
+
+async function fetchOccupied() {
+  occupiedMins = new Set();
+  if (!state.station || !state.date) return;
+  const cfg = STATIONS[state.station];
+  try {
+    const [bSnap, wSnap] = await Promise.all([
+      getDocs(query(collection(db, 'bookings'), where('station', '==', state.station), where('date', '==', state.date))),
+      getDocs(query(collection(db, 'walkins'), where('station', '==', state.station), where('status', '==', 'active')))
+    ]);
+    const slotCount = {};
+    function mark(s, e, c) { for (let m = s; m < e; m += 10)slotCount[m] = (slotCount[m] || 0) + c; }
+    bSnap.forEach(d => { const data = d.data(); if (data.status === 'cancelled') return; const [h, min] = data.time.split(':').map(Number); mark(h * 60 + min, h * 60 + min + data.duration * 60, data.units || 1); });
+    wSnap.forEach(d => { const data = d.data(); mark(data.startMinutes, 23 * 60, data.units || 1); });
+    for (let m = 11 * 60; m < 23 * 60; m += 10) { if ((slotCount[m] || 0) >= cfg.capacity) occupiedMins.add(m); }
+  } catch (e) { console.warn('fetchOccupied:', e.message); }
+}
+
+function isSlotBlocked(startM) {
+  for (let m = startM; m < startM + state.duration * 60; m += 10) { if (occupiedMins.has(m)) return true; } return false;
+}
+
+function buildConfirm() {
+  const cfg = STATIONS[state.station];
+  const { total } = calcPrice(state.station, state.units, state.players, state.duration);
+  const unitsLabel = cfg.hasPlayers ? `${state.players} player${state.players > 1 ? 's' : ''}` : `${state.units} unit${state.units > 1 ? 's' : ''}`;
+  const rows = [['Station', cfg.name], ['Players/Units', unitsLabel], ['Date', formatDate(state.date)], ['Time', state.time], ['Duration', `${state.duration} hr${state.duration > 1 ? 's' : ''}`]];
+  document.getElementById('confirmRows').innerHTML = rows.map(([k, v]) => `<div class="confirm-row"><span class="confirm-row-label">${k}</span><span class="confirm-row-val">${v}</span></div>`).join('');
+  document.getElementById('confirmTotal').textContent = `₹${total}`;
+}
+
+async function submitBooking() {
+  btnNext.disabled = true; btnNext.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Blocking…';
+  const cfg = STATIONS[state.station];
+  const { total } = calcPrice(state.station, state.units, state.players, state.duration);
+  const refId = 'LGN' + Date.now().toString(36).toUpperCase();
+  try {
+    await addDoc(collection(db, 'bookings'), { ref: refId, station: state.station, stationName: cfg.name, units: state.units, players: state.players, date: state.date, time: state.time, duration: state.duration, totalPrice: total, status: 'booked', createdAt: serverTimestamp() });
+    document.getElementById('successRef').textContent = refId;
+    goTo(6);
+  } catch (err) {
+    console.error(err); btnNext.disabled = false; btnNext.innerHTML = '<i class="fa-solid fa-lock"></i> Block Slot';
+    alert('Something went wrong. Please try again or call us: +91 80757 07064');
+  }
+}
+
+btnNext.addEventListener('click', async () => {
+  if (currentStep === 1 && state.station) { buildStep2(); goTo(2); }
+  else if (currentStep === 2) { buildDateStrip(); goTo(3); }
+  else if (currentStep === 3 && state.date) { await buildSlots(); goTo(4); }
+  else if (currentStep === 4 && state.time) { buildConfirm(); goTo(5); }
+  else if (currentStep === 5) { await submitBooking(); }
+});
+btnBack.addEventListener('click', () => { if (currentStep > 1) goTo(currentStep - 1); });
+
+updateBottomBar();

@@ -20,12 +20,18 @@
       padding: 0;
     }
 
+    html {
+      overflow-x: hidden;
+    }
+
     body {
       background: var(--bg);
       color: var(--text);
       font-family: var(--f-body);
       min-height: 100dvh;
       overscroll-behavior: none;
+      overflow-x: hidden;
+      width: 100%;
     }
 
     .app-bar {
@@ -186,6 +192,8 @@
       padding-bottom: 100px;
       min-height: calc(100dvh - 56px - 52px);
       animation: slideIn 0.22s ease both;
+      overflow-x: hidden;
+      max-width: 100%;
     }
 
     .step-panel.active {
@@ -312,6 +320,7 @@
       font-size: 1rem;
       font-weight: 700;
       letter-spacing: 0.02em;
+      color: #fff;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -540,6 +549,12 @@
       margin-bottom: 16px;
     }
 
+    @media (max-width: 380px) {
+      .slot-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
     .slot-btn {
       padding: 10px 4px;
       border-radius: 10px;
@@ -636,7 +651,7 @@
 
     .confirm-row-val {
       font-weight: 600;
-      color: var(--text);
+      color: #fff;
       text-align: right;
     }
 
@@ -1038,6 +1053,12 @@
       <button class="dur-chip" data-dur="4">4 hrs</button>
       <button class="dur-chip" data-dur="5">5 hrs</button>
       <button class="dur-chip" data-dur="6">6 hrs</button>
+      <button class="dur-chip" data-dur="7">7 hrs</button>
+      <button class="dur-chip" data-dur="8">8 hrs</button>
+      <button class="dur-chip" data-dur="9">9 hrs</button>
+      <button class="dur-chip" data-dur="10">10 hrs</button>
+      <button class="dur-chip" data-dur="11">11 hrs</button>
+      <button class="dur-chip" data-dur="12">12 hrs</button>
     </div>
   </div>
 
@@ -1222,7 +1243,7 @@
       const now = new Date(); const nowMins = now.getHours() * 60 + now.getMinutes();
       const latest = 23 * 60 - state.duration * 60;
       const morning = [], afternoon = [], evening = [];
-      for (let m = 11 * 60; m <= latest; m += 30) {
+      for (let m = 11 * 60; m <= latest; m += 10) {
         const isPast = isToday && m <= nowMins; const isBooked = isSlotBlocked(m);
         const hh = String(Math.floor(m / 60)).padStart(2, '0'); const mm = String(m % 60).padStart(2, '0');
         const slot = { m, label: `${hh}:${mm}`, isPast, isBooked };
@@ -1247,17 +1268,72 @@
       occupiedMins = new Set();
       if (!state.station || !state.date) return;
       const cfg = STATIONS[state.station];
+
+      // Fetch bookings and walk-ins separately so one failure doesn't silently
+      // wipe out the other, and we can show a warning if walk-ins can't be read.
+      let bSnap = null, wSnap = null;
+
       try {
-        const [bSnap, wSnap] = await Promise.all([
-          getDocs(query(collection(db, 'bookings'), where('station', '==', state.station), where('date', '==', state.date))),
-          getDocs(query(collection(db, 'walkins'), where('station', '==', state.station), where('status', '==', 'active')))
-        ]);
-        const slotCount = {};
-        function mark(s, e, c) { for (let m = s; m < e; m += 10)slotCount[m] = (slotCount[m] || 0) + c; }
-        bSnap.forEach(d => { const data = d.data(); if (data.status === 'cancelled') return; const [h, min] = data.time.split(':').map(Number); mark(h * 60 + min, h * 60 + min + data.duration * 60, data.units || 1); });
-        wSnap.forEach(d => { const data = d.data(); mark(data.startMinutes, 23 * 60, data.units || 1); });
-        for (let m = 11 * 60; m < 23 * 60; m += 10) { if ((slotCount[m] || 0) >= cfg.capacity) occupiedMins.add(m); }
-      } catch (e) { console.warn('fetchOccupied:', e.message); }
+        bSnap = await getDocs(query(
+          collection(db, 'bookings'),
+          where('station', '==', state.station),
+          where('date', '==', state.date)
+        ));
+      } catch (e) { console.warn('fetchOccupied bookings:', e.message); }
+
+      try {
+        // FIXED: added date filter so only today's active walk-ins block slots.
+        // Walk-ins store startMinutes as minutes-since-midnight for the logged day,
+        // so we must only consider walk-ins on the same date as the booking.
+        wSnap = await getDocs(query(
+          collection(db, 'walkins'),
+          where('station', '==', state.station),
+          where('status', '==', 'active'),
+          where('date', '==', state.date)
+        ));
+      } catch (e) {
+        // If walkins query fails (e.g. missing Firestore index or permissions),
+        // show a visible warning banner so staff know availability may be stale.
+        console.error('fetchOccupied walkins FAILED — slots may show as available even if a walk-in is active:', e.message);
+        showAvailWarning();
+      }
+
+      const slotCount = {};
+      function mark(s, e, c) { for (let m = s; m < e; m += 10) slotCount[m] = (slotCount[m] || 0) + c; }
+
+      if (bSnap) {
+        bSnap.forEach(d => {
+          const data = d.data();
+          if (data.status === 'cancelled') return;
+          const [h, min] = data.time.split(':').map(Number);
+          mark(h * 60 + min, h * 60 + min + data.duration * 60, data.units || 1);
+        });
+      }
+      if (wSnap) {
+        wSnap.forEach(d => {
+          const data = d.data();
+          mark(data.startMinutes, 23 * 60, data.units || 1);
+        });
+      }
+
+      for (let m = 11 * 60; m < 23 * 60; m += 10) {
+        if ((slotCount[m] || 0) >= cfg.capacity) occupiedMins.add(m);
+      }
+    }
+
+    function showAvailWarning() {
+      if (document.getElementById('availWarning')) return;
+      const el = document.createElement('div');
+      el.id = 'availWarning';
+      el.style.cssText = `position:fixed;top:108px;left:12px;right:12px;z-index:999;
+        background:rgba(255,45,120,0.12);border:1px solid rgba(255,45,120,0.4);
+        border-radius:10px;padding:10px 14px;font-size:0.75rem;color:#ff2d78;
+        display:flex;gap:8px;align-items:center;`;
+      el.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Could not load walk-in data — some slots may appear available incorrectly.
+        Check Firestore rules or console for details.</span>`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 8000);
     }
 
     function isSlotBlocked(startM) {
