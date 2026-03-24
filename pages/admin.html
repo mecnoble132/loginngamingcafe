@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,182 +13,1181 @@
   <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/common.css" />
-  <link rel="stylesheet" href="../css/admin.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--f-body);
+      min-height: 100dvh;
+    }
+
+    /* LOGIN */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--f-display);
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+    }
+
+    .login-logo img {
+      width: 36px;
+      height: 36px;
+    }
+
+    .login-title {
+      font-family: var(--f-heading);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .lf-field {
+      margin-bottom: 14px;
+    }
+
+    .lf-field label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .lf-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-family: var(--f-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .lf-input:focus {
+      border-color: var(--blue);
+    }
+
+    .login-error {
+      color: var(--pink);
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+    }
+
+    .accent-blue {
+      color: var(--blue);
+    }
+
+    /* APP BAR */
+    .admin-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8, 8, 16, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-bar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--f-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .admin-bar-logo img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .admin-badge {
+      background: rgba(255, 45, 120, 0.15);
+      border: 1px solid rgba(255, 45, 120, 0.3);
+      color: var(--pink);
+      font-family: var(--f-body);
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 50px;
+      letter-spacing: 0.08em;
+    }
+
+    .admin-email {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    @media(min-width:480px) {
+      .admin-email {
+        display: block;
+      }
+    }
+
+    /* NAV TABS */
+    .admin-tabs {
+      display: flex;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .admin-tab {
+      flex: 1;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+
+    .admin-tab i {
+      font-size: 1rem;
+    }
+
+    .admin-tab.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+    }
+
+    /* MAIN */
+    .admin-main {
+      padding: 16px;
+      padding-bottom: 80px;
+    }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 12px;
+    }
+
+    .stat-num {
+      font-family: var(--f-heading);
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-num.blue {
+      color: var(--blue);
+    }
+
+    .stat-num.green {
+      color: var(--green);
+    }
+
+    .stat-num.pink {
+      color: var(--pink);
+    }
+
+    .stat-label {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    /* SECTION */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--f-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* TAB PANELS */
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* ── SLOT BOARD ── */
+    .slot-board {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .station-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .station-block-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sb-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .sb-icon.blue {
+      background: rgba(0, 212, 255, 0.12);
+      color: var(--blue);
+    }
+
+    .sb-icon.pink {
+      background: rgba(255, 45, 120, 0.12);
+      color: var(--pink);
+    }
+
+    .sb-icon.green {
+      background: rgba(0, 255, 170, 0.12);
+      color: var(--green);
+    }
+
+    .sb-icon.yellow {
+      background: rgba(255, 200, 0, 0.12);
+      color: #ffc800;
+    }
+
+    .sb-name {
+      font-family: var(--f-heading);
+      font-size: 0.95rem;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .sb-cap {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .sb-occupancy {
+      font-family: var(--f-heading);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .station-slots {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slot-empty {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 12px;
+    }
+
+    .active-slot {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .active-slot.is-booking {
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    .active-slot.is-walkin {
+      border-color: rgba(0, 255, 170, 0.3);
+    }
+
+    .slot-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .slot-dot.booking {
+      background: var(--blue);
+      box-shadow: 0 0 6px var(--blue);
+      animation: pulseDot 2s infinite;
+    }
+
+    .slot-dot.walkin {
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green);
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    .slot-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .slot-type {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .slot-type.booking {
+      color: var(--blue);
+    }
+
+    .slot-type.walkin {
+      color: var(--green);
+    }
+
+    .slot-detail {
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .slot-meta {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .slot-ref {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      font-family: monospace;
+    }
+
+    .slot-close-btn {
+      flex-shrink: 0;
+      background: rgba(255, 45, 120, 0.1);
+      border: 1px solid rgba(255, 45, 120, 0.25);
+      color: var(--pink);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .slot-close-btn:hover {
+      background: rgba(255, 45, 120, 0.2);
+    }
+
+    /* ── WALK-IN LOGGER ── */
+    .walkin-form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .wf-title {
+      font-family: var(--f-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .wf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .wf-field label {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .wf-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-family: var(--f-body);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .wf-input:focus {
+      border-color: var(--blue);
+    }
+
+    .wf-full {
+      grid-column: 1/-1;
+    }
+
+    /* ── BOOKINGS TABLE ── */
+    .bookings-filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      padding: 7px 14px;
+      border-radius: 50px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-chip.active {
+      background: rgba(0, 212, 255, 0.1);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .filter-input {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: var(--text);
+      font-family: var(--f-body);
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    .filter-input:focus {
+      border-color: var(--blue);
+    }
+
+    .booking-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .booking-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .booking-card.completed {
+      opacity: 0.55;
+    }
+
+    .bc-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .bc-station {
+      font-family: var(--f-heading);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .bc-ref {
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      font-family: monospace;
+      margin-top: 2px;
+    }
+
+    .bc-status-badge {
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+
+    .bc-status-badge.booked {
+      background: rgba(0, 212, 255, 0.12);
+      color: var(--blue);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .bc-status-badge.completed {
+      background: rgba(0, 255, 170, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(0, 255, 170, 0.25);
+    }
+
+    .bc-status-badge.cancelled {
+      background: rgba(255, 45, 120, 0.1);
+      color: var(--pink);
+      border: 1px solid rgba(255, 45, 120, 0.25);
+    }
+
+    .bc-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .bc-tag {
+      font-size: 0.68rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bc-tag i {
+      font-size: 0.6rem;
+    }
+
+    .bc-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .bc-btn {
+      flex: 1;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--f-body);
+      cursor: pointer;
+      transition: all 0.15s;
+      border: 1.5px solid;
+      text-align: center;
+    }
+
+    .bc-btn.complete {
+      background: rgba(0, 212, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.3);
+      color: var(--blue);
+    }
+
+    .bc-btn.complete:hover {
+      background: rgba(0, 212, 255, 0.16);
+    }
+
+    .bc-btn.cancel {
+      background: rgba(255, 45, 120, 0.08);
+      border-color: rgba(255, 45, 120, 0.25);
+      color: var(--pink);
+    }
+
+    .bc-btn.cancel:hover {
+      background: rgba(255, 45, 120, 0.16);
+    }
+
+    .bc-btn.undo {
+      background: var(--bg);
+      border-color: var(--border);
+      color: var(--text-muted);
+    }
+
+    .table-empty {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 32px 16px;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--f-body);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #000;
+      padding: 13px 24px;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary:hover {
+      background: #33ddff;
+    }
+
+    .btn-ghost {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 16px;
+      font-size: 0.85rem;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-green {
+      background: rgba(0, 255, 170, 0.1);
+      border: 1.5px solid rgba(0, 255, 170, 0.3);
+      color: var(--green);
+      padding: 12px 16px;
+      font-size: 0.85rem;
+    }
+
+    .btn-green:hover {
+      background: rgba(0, 255, 170, 0.18);
+    }
+  </style>
 </head>
+
 <body>
 
-  <!-- LOGIN SCREEN -->
+  <!-- LOGIN -->
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
-      <div class="login-logo">
-        <img src="../images/loginnlogo.png" alt="Loginn logo" />
-        <span>LOGINN<span class="accent-blue">.</span></span>
+      <div class="login-logo"><img src="../images/loginnlogo.png" alt="Loginn">LOGINN<span class="accent-blue">.</span>
       </div>
       <div class="login-title">Admin Login</div>
-      <div class="login-form">
-        <div class="lf-field">
-          <label>Email</label>
-          <input type="email" id="loginEmail" class="lf-input" placeholder="Enter your email" autocomplete="email"/>
-        </div>
-        <div class="lf-field">
-          <label>Password</label>
-          <input type="password" id="loginPass" class="lf-input" placeholder="••••••••" autocomplete="current-password"/>
-        </div>
-        <div class="login-error" id="loginError" style="display:none"></div>
-        <button class="btn btn-primary w-full" id="loginBtn">
-          <i class="fa-solid fa-right-to-bracket"></i> Sign In
-        </button>
-      </div>
+      <div class="lf-field"><label>Email</label><input type="email" id="loginEmail" class="lf-input"
+          placeholder="Enter your email" autocomplete="email" /></div>
+      <div class="lf-field"><label>Password</label><input type="password" id="loginPass" class="lf-input"
+          placeholder="••••••••" autocomplete="current-password" /></div>
+      <div class="login-error" id="loginError" style="display:none"></div>
+      <button class="btn btn-primary btn-full" id="loginBtn"><i class="fa-solid fa-right-to-bracket"></i> Sign
+        In</button>
     </div>
   </div>
 
   <!-- DASHBOARD -->
   <div id="dashboard" style="display:none">
 
-    <!-- ADMIN NAV -->
-    <nav class="admin-nav">
-      <div class="admin-nav-inner">
-        <a href="../index.html" class="nav-logo">
-          <span class="logo-icon"><img src="../images/loginnlogo.png" alt="logo"></span>
-          <span class="logo-text">LOGINN<span class="accent-blue">.</span> <span class="admin-badge">ADMIN</span></span>
-        </a>
-        <div class="admin-nav-right">
-          <span class="admin-email" id="adminEmail"></span>
-          <button class="btn btn-ghost btn-sm" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-        </div>
-      </div>
+    <nav class="admin-bar">
+      <a href="../index.html" class="admin-bar-logo">
+        <img src="../images/loginnlogo.png" alt="logo">
+        LOGINN<span class="accent-blue">.</span>&nbsp;<span class="admin-badge">ADMIN</span>
+      </a>
+      <span class="admin-email" id="adminEmail"></span>
+      <button class="btn btn-ghost" id="logoutBtn" style="padding:8px 14px;font-size:0.8rem;"><i
+          class="fa-solid fa-right-from-bracket"></i></button>
     </nav>
 
-    <main class="admin-main">
-      <div class="admin-container">
+    <div class="admin-tabs">
+      <div class="admin-tab active" data-tab="board"><i class="fa-solid fa-table-cells"></i>Live Board</div>
+      <div class="admin-tab" data-tab="walkin"><i class="fa-solid fa-person-walking"></i>Walk-in</div>
+      <div class="admin-tab" data-tab="bookings"><i class="fa-solid fa-calendar-check"></i>Bookings</div>
+    </div>
 
-        <!-- STATS ROW -->
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-card-icon blue"><i class="fa-solid fa-calendar-check"></i></div>
-            <div class="stat-card-body">
-              <div class="stat-card-num" id="statTotal">—</div>
-              <div class="stat-card-label">Today's Bookings</div>
+    <main class="admin-main">
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num blue" id="statOccupied">—</div>
+          <div class="stat-label">Active Now</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num green" id="statWalkins">—</div>
+          <div class="stat-label">Walk-ins</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num pink" id="statBookings">—</div>
+          <div class="stat-label">Today's Slots</div>
+        </div>
+      </div>
+
+      <!-- LIVE BOARD TAB -->
+      <div class="tab-panel active" id="tab-board">
+        <div class="section-head">
+          <div class="section-title"><i class="fa-solid fa-circle"
+              style="color:var(--green);font-size:0.6rem;animation:pulseDot 1.5s infinite;"></i> Live Slot Board</div>
+        </div>
+        <div class="slot-board" id="slotBoard">
+          <div class="table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>
+        </div>
+      </div>
+
+      <!-- WALK-IN TAB -->
+      <div class="tab-panel" id="tab-walkin">
+        <div class="walkin-form-card">
+          <div class="wf-title"><i class="fa-solid fa-plus" style="color:var(--blue);"></i> Log a Walk-in</div>
+          <div class="wf-grid">
+            <div class="wf-field wf-full">
+              <label>Station</label>
+              <select id="wiStation" class="wf-input">
+                <option value="standard-pc">Standard PC</option>
+                <option value="performance-pc">Performance PC</option>
+                <option value="story-pc">Story PC</option>
+                <option value="ps5">PlayStation 5</option>
+                <option value="xbox">Xbox Series</option>
+                <option value="ps5-sim">PS5 Racing SIM</option>
+                <option value="pc-sim">PC Racing SIM</option>
+              </select>
+            </div>
+            <div class="wf-field">
+              <label>Units / Players</label>
+              <input type="number" id="wiUnits" class="wf-input" min="1" max="10" value="1" />
+            </div>
+            <div class="wf-field">
+              <label>Start Time</label>
+              <input type="time" id="wiTime" class="wf-input" step="600" />
             </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-card-icon green"><i class="fa-solid fa-person-walking"></i></div>
-            <div class="stat-card-body">
-              <div class="stat-card-num" id="statWalkins">—</div>
-              <div class="stat-card-label">Active Walk-ins</div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-icon pink"><i class="fa-solid fa-computer"></i></div>
-            <div class="stat-card-body">
-              <div class="stat-card-num" id="statOccupied">—</div>
-              <div class="stat-card-label">Stations Occupied Now</div>
-            </div>
-          </div>
+          <button class="btn btn-green btn-full" id="logWalkinBtn"><i class="fa-solid fa-plus"></i> Log Walk-in</button>
         </div>
 
-        <!-- GRID: Bookings + Walk-ins side by side on large screens -->
-        <div class="admin-grid">
+        <div class="section-head">
+          <div class="section-title">Active Walk-ins</div>
+        </div>
+        <div id="activeWalkinsPanel" class="booking-cards"></div>
 
-          <!-- ── ONLINE BOOKINGS ───────────────────────────── -->
-          <section class="admin-panel">
-            <div class="panel-header">
-              <h2 class="panel-title"><i class="fa-solid fa-calendar-check accent-blue"></i> Online Bookings</h2>
-              <div class="panel-filters">
-                <input type="date" id="filterDate" class="filter-input" title="Filter by date"/>
-                <select id="filterStation" class="filter-input">
-                  <option value="">All Stations</option>
-                  <option value="standard-pc">Standard PC</option>
-                  <option value="performance-pc">Performance PC</option>
-                  <option value="story-pc">Story PC</option>
-                  <option value="ps5">PS5</option>
-                  <option value="xbox">Xbox</option>
-                  <option value="ps5-sim">PS5 SIM</option>
-                  <option value="pc-sim">PC SIM</option>
-                </select>
-                <button class="btn btn-ghost btn-sm" id="clearFilters">Clear</button>
-              </div>
-            </div>
-
-            <div class="table-wrap">
-              <table class="admin-table" id="bookingsTable">
-                <thead>
-                  <tr>
-                    <th>Ref</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Station</th>
-                    <th>Units</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Dur</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="bookingsTbody">
-                  <tr><td colspan="11" class="table-empty">Loading…</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <!-- ── WALK-INS ──────────────────────────────────── -->
-          <section class="admin-panel">
-            <div class="panel-header">
-              <h2 class="panel-title"><i class="fa-solid fa-person-walking accent-green"></i> Walk-ins</h2>
-            </div>
-
-            <!-- Log walk-in form -->
-            <div class="walkin-form">
-              <div class="wf-title">Log a Walk-in</div>
-              <div class="wf-grid">
-                <div class="wf-field">
-                  <label>Station</label>
-                  <select id="wiStation" class="filter-input">
-                    <option value="standard-pc">Standard PC</option>
-                    <option value="performance-pc">Performance PC</option>
-                    <option value="story-pc">Story PC</option>
-                    <option value="ps5">PS5</option>
-                    <option value="xbox">Xbox</option>
-                    <option value="ps5-sim">PS5 SIM</option>
-                    <option value="pc-sim">PC SIM</option>
-                  </select>
-                </div>
-                <div class="wf-field" id="wiUnitsField">
-                  <label>Units / Players</label>
-                  <input type="number" id="wiUnits" class="filter-input" min="1" max="10" value="1" />
-                </div>
-                <div class="wf-field">
-                  <label>Start Time</label>
-                  <input type="time" id="wiTime" class="filter-input" step="600"/>
-                </div>
-              </div>
-              <button class="btn btn-outline-blue w-full" id="logWalkinBtn">
-                <i class="fa-solid fa-plus"></i> Log Walk-in
-              </button>
-            </div>
-
-            <!-- Active walk-ins -->
-            <div class="walkin-list" id="activeWalkins">
-              <div class="table-empty">No active walk-ins.</div>
-            </div>
-
-            <!-- Completed walk-ins toggle -->
-            <details class="walkin-history">
-              <summary>Completed Walk-ins Today</summary>
-              <div class="walkin-list" id="completedWalkins">
-                <div class="table-empty">None yet.</div>
-              </div>
-            </details>
-          </section>
-
-        </div><!-- /admin-grid -->
+        <details style="margin-top:16px;">
+          <summary style="font-size:0.78rem;color:var(--text-muted);cursor:pointer;padding:8px 0;">Completed Today
+          </summary>
+          <div id="completedWalkinsPanel" class="booking-cards" style="margin-top:10px;"></div>
+        </details>
       </div>
-    </main>
-  </div><!-- /dashboard -->
 
-  <script type="module" src="../js/admin.js"></script>
+      <!-- BOOKINGS TAB -->
+      <div class="tab-panel" id="tab-bookings">
+        <div class="bookings-filter-row">
+          <input type="date" id="filterDate" class="filter-input" />
+          <select id="filterStation" class="filter-input">
+            <option value="">All Stations</option>
+            <option value="standard-pc">Standard PC</option>
+            <option value="performance-pc">Performance PC</option>
+            <option value="story-pc">Story PC</option>
+            <option value="ps5">PS5</option>
+            <option value="xbox">Xbox</option>
+            <option value="ps5-sim">PS5 SIM</option>
+            <option value="pc-sim">PC SIM</option>
+          </select>
+          <button class="btn btn-ghost" id="clearFilters" style="padding:8px 14px;font-size:0.78rem;">Clear</button>
+        </div>
+        <div class="booking-cards" id="bookingCards">
+          <div class="table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script type="module">
+    import { db, auth } from '../js/firebase-config.js';
+    import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { collection, onSnapshot, query, where, orderBy, doc, updateDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const STATIONS = {
+      'standard-pc': { name: 'Standard PC', icon: 'fa-solid fa-computer', color: 'blue', capacity: 10 },
+      'performance-pc': { name: 'Performance PC', icon: 'fa-solid fa-computer', color: 'blue', capacity: 5 },
+      'story-pc': { name: 'Story / Casual PC', icon: 'fa-solid fa-computer', color: 'pink', capacity: 1 },
+      'ps5': { name: 'PlayStation 5', icon: 'fa-brands fa-playstation', color: 'pink', capacity: 3 },
+      'xbox': { name: 'Xbox Series', icon: 'fa-brands fa-xbox', color: 'green', capacity: 1 },
+      'ps5-sim': { name: 'PS5 Racing SIM', icon: 'fa-solid fa-flag-checkered', color: 'yellow', capacity: 1 },
+      'pc-sim': { name: 'PC Racing SIM', icon: 'fa-solid fa-flag-checkered', color: 'blue', capacity: 1 },
+    };
+
+    function todayStr() {
+      const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+    function fmtDate(d) {
+      if (!d) return '—'; const [y, m, day] = d.split('-'); return `${+day} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+m - 1]}`;
+    }
+    function nowMin() { const n = new Date(); return n.getHours() * 60 + n.getMinutes(); }
+
+    // ── AUTH
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = '';
+        document.getElementById('adminEmail').textContent = user.email;
+        init();
+      } else {
+        document.getElementById('loginScreen').style.display = '';
+        document.getElementById('dashboard').style.display = 'none';
+      }
+    });
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      const err = document.getElementById('loginError'); err.style.display = 'none';
+      try { await signInWithEmailAndPassword(auth, email, pass); }
+      catch (e) { err.textContent = 'Invalid email or password.'; err.style.display = ''; }
+    });
+    document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('loginBtn').click(); });
+    document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
+
+    // ── TABS
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // ── DATA
+    let allBookings = [], allWalkins = [];
+
+    function init() {
+      // Bookings
+      onSnapshot(query(collection(db, 'bookings'), orderBy('date', 'desc')), snap => {
+        allBookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderBoard(); renderBookingCards(); updateStats();
+      });
+      // Walkins
+      onSnapshot(query(collection(db, 'walkins'), orderBy('loggedAt', 'desc')), snap => {
+        allWalkins = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderBoard(); renderWalkins(); updateStats();
+      });
+      setupWalkinForm();
+      setupFilters();
+    }
+
+    // ── STATS
+    function updateStats() {
+      const today = todayStr(); const nm = nowMin();
+      const active = allWalkins.filter(w => w.status === 'active');
+      const todayBookings = allBookings.filter(b => b.date === today && b.status === 'booked');
+      let occupied = 0;
+      active.forEach(w => occupied += (w.units || 1));
+      todayBookings.forEach(b => {
+        const [h, m] = (b.time || '0:0').split(':').map(Number);
+        const s = h * 60 + m, e = s + (b.duration || 1) * 60;
+        if (nm >= s && nm < e) occupied += (b.units || 1);
+      });
+      document.getElementById('statOccupied').textContent = occupied;
+      document.getElementById('statWalkins').textContent = active.length;
+      document.getElementById('statBookings').textContent = allBookings.filter(b => b.date === today).length;
+    }
+
+    // ── LIVE BOARD
+    function renderBoard() {
+      const today = todayStr(); const nm = nowMin();
+      const board = document.getElementById('slotBoard');
+      board.innerHTML = '';
+
+      Object.entries(STATIONS).forEach(([stationId, cfg]) => {
+        // Active walk-ins for this station
+        const activeWi = allWalkins.filter(w => w.station === stationId && w.status === 'active');
+        // Current + upcoming booked slots today
+        const activeBookings = allBookings.filter(b => {
+          if (b.station !== stationId || b.date !== today || b.status === 'cancelled' || b.status === 'completed') return false;
+          const [h, m] = (b.time || '0:0').split(':').map(Number);
+          const s = h * 60 + m, e = s + (b.duration || 1) * 60;
+          return e > nm; // still upcoming or active
+        });
+
+        const totalOcc = activeWi.reduce((a, w) => a + (w.units || 1), 0) + activeBookings.reduce((a, b) => {
+          const [h, m] = (b.time || '0:0').split(':').map(Number);
+          const s = h * 60 + m, e = s + (b.duration || 1) * 60;
+          return nm >= s && nm < e ? a + (b.units || 1) : a;
+        }, 0);
+
+        const block = document.createElement('div'); block.className = 'station-block';
+
+        const occColor = totalOcc >= cfg.capacity ? 'var(--pink)' : totalOcc > 0 ? 'var(--blue)' : 'var(--text-muted)';
+        block.innerHTML = `
+          <div class="station-block-header">
+            <div class="sb-icon ${cfg.color}"><i class="${cfg.icon}"></i></div>
+            <div class="sb-name">${cfg.name}</div>
+            <div class="sb-cap">${cfg.capacity} unit${cfg.capacity > 1 ? 's' : ''}</div>
+            <div class="sb-occupancy" style="color:${occColor}">${totalOcc}/${cfg.capacity}</div>
+          </div>
+          <div class="station-slots" id="slots-${stationId}"></div>
+        `;
+        board.appendChild(block);
+
+        const slotsEl = block.querySelector(`#slots-${stationId}`);
+        const items = [];
+
+        activeWi.forEach(w => {
+          items.push({ type: 'walkin', data: w, sortKey: w.startMinutes || 0 });
+        });
+        activeBookings.forEach(b => {
+          const [h, m] = (b.time || '0:0').split(':').map(Number); items.push({ type: 'booking', data: b, sortKey: h * 60 + m });
+        });
+        items.sort((a, b) => a.sortKey - b.sortKey);
+
+        if (!items.length) {
+          slotsEl.innerHTML = '<div class="slot-empty">No active or upcoming slots</div>';
+          return;
+        }
+
+        items.forEach(({ type, data }) => {
+          const card = document.createElement('div');
+          card.className = `active-slot ${type === 'booking' ? 'is-booking' : 'is-walkin'}`;
+
+          if (type === 'walkin') {
+            const unitsLabel = `${data.units || 1} unit${(data.units || 1) > 1 ? 's' : ''}`;
+            card.innerHTML = `
+              <div class="slot-dot walkin"></div>
+              <div class="slot-info">
+                <div class="slot-type walkin">Walk-in</div>
+                <div class="slot-detail">${unitsLabel} · Since ${data.startTime || '—'}</div>
+                <div class="slot-meta">Session ongoing</div>
+              </div>
+              <button class="slot-close-btn" data-id="${data.id}" data-type="walkin"><i class="fa-solid fa-xmark"></i> End</button>
+            `;
+          } else {
+            const [h, m] = (data.time || '0:0').split(':').map(Number);
+            const s = h * 60 + m, e = s + (data.duration || 1) * 60;
+            const isNow = nm >= s && nm < e;
+            const unitsLabel = data.players > 1 ? `${data.players} players` : `${data.units || 1} unit${(data.units || 1) > 1 ? 's' : ''}`;
+            card.innerHTML = `
+              <div class="slot-dot booking"></div>
+              <div class="slot-info">
+                <div class="slot-type booking">${isNow ? '● Active' : 'Upcoming'}</div>
+                <div class="slot-detail">${data.time} – ${Math.floor(e / 60).toString().padStart(2, '0')}:${String(e % 60).padStart(2, '0')} · ${unitsLabel}</div>
+                <div class="slot-ref">${data.ref || ''}</div>
+              </div>
+              <button class="slot-close-btn" data-id="${data.id}" data-type="booking" data-action="${isNow ? 'complete' : 'cancel'}">
+                <i class="fa-solid fa-xmark"></i> ${isNow ? 'End' : 'Cancel'}
+              </button>
+            `;
+          }
+          slotsEl.appendChild(card);
+
+          card.querySelector('.slot-close-btn').addEventListener('click', async btn => {
+            const el = card.querySelector('.slot-close-btn');
+            const id = el.dataset.id; const type = el.dataset.type;
+            if (!confirm(type === 'walkin' ? 'End this walk-in session?' : `${el.dataset.action === 'cancel' ? 'Cancel this upcoming booking?' : 'Mark session as completed?'}`)) return;
+            if (type === 'walkin') {
+              await updateDoc(doc(db, 'walkins', id), { status: 'completed', completedAt: serverTimestamp() });
+            } else {
+              const action = el.dataset.action;
+              await updateDoc(doc(db, 'bookings', id), { status: action === 'cancel' ? 'cancelled' : 'completed' });
+            }
+          });
+        });
+      });
+    }
+
+    // ── WALK-INS PANEL
+    function renderWalkins() {
+      const active = allWalkins.filter(w => w.status === 'active');
+      const completed = allWalkins.filter(w => w.status === 'completed');
+
+      const ap = document.getElementById('activeWalkinsPanel');
+      if (!active.length) { ap.innerHTML = '<div class="table-empty">No active walk-ins</div>'; }
+      else {
+        ap.innerHTML = active.map(w => `
+          <div class="booking-card">
+            <div class="bc-top"><div><div class="bc-station">${STATIONS[w.station]?.name || w.station}</div></div><span class="bc-status-badge booked">Active</span></div>
+            <div class="bc-meta">
+              <div class="bc-tag"><i class="fa-solid fa-users"></i>${w.units || 1} unit${(w.units || 1) > 1 ? 's' : ''}</div>
+              <div class="bc-tag"><i class="fa-solid fa-clock"></i>Since ${w.startTime || '—'}</div>
+            </div>
+            <div class="bc-actions">
+              <button class="bc-btn complete wi-checkout" data-id="${w.id}"><i class="fa-solid fa-check"></i> Check Out</button>
+            </div>
+          </div>`).join('');
+        ap.querySelectorAll('.wi-checkout').forEach(btn => {
+          btn.addEventListener('click', async () => { await updateDoc(doc(db, 'walkins', btn.dataset.id), { status: 'completed', completedAt: serverTimestamp() }); });
+        });
+      }
+
+      const cp = document.getElementById('completedWalkinsPanel');
+      if (!completed.length) { cp.innerHTML = '<div class="table-empty">None yet</div>'; }
+      else {
+        cp.innerHTML = completed.map(w => `
+          <div class="booking-card completed">
+            <div class="bc-top"><div><div class="bc-station">${STATIONS[w.station]?.name || w.station}</div></div><span class="bc-status-badge completed">Done</span></div>
+            <div class="bc-meta">
+              <div class="bc-tag"><i class="fa-solid fa-clock"></i>${w.startTime || '—'}</div>
+              <div class="bc-tag"><i class="fa-solid fa-users"></i>${w.units || 1} unit${(w.units || 1) > 1 ? 's' : ''}</div>
+            </div>
+            <div class="bc-actions">
+              <button class="bc-btn undo wi-undo" data-id="${w.id}">↩ Undo</button>
+            </div>
+          </div>`).join('');
+        cp.querySelectorAll('.wi-undo').forEach(btn => {
+          btn.addEventListener('click', async () => { await updateDoc(doc(db, 'walkins', btn.dataset.id), { status: 'active', completedAt: null }); });
+        });
+      }
+    }
+
+    // ── WALKIN FORM
+    function setupWalkinForm() {
+      const now = new Date(); const h = now.getHours(); const m = Math.floor(now.getMinutes() / 10) * 10;
+      document.getElementById('wiTime').value = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+      document.getElementById('logWalkinBtn').addEventListener('click', async () => {
+        const station = document.getElementById('wiStation').value;
+        const units = parseInt(document.getElementById('wiUnits').value) || 1;
+        const timeVal = document.getElementById('wiTime').value;
+        if (!timeVal) { alert('Please enter a start time.'); return; }
+        const [th, tm] = timeVal.split(':').map(Number);
+        await addDoc(collection(db, 'walkins'), { station, units, startTime: timeVal, startMinutes: th * 60 + tm, status: 'active', loggedAt: serverTimestamp(), completedAt: null });
+        document.getElementById('wiUnits').value = '1';
+      });
+    }
+
+    // ── BOOKINGS
+    let filterDateVal = '', filterStationVal = '';
+
+    function setupFilters() {
+      const dateEl = document.getElementById('filterDate');
+      const stEl = document.getElementById('filterStation');
+      dateEl.value = todayStr(); filterDateVal = todayStr();
+      dateEl.addEventListener('change', () => { filterDateVal = dateEl.value; renderBookingCards(); });
+      stEl.addEventListener('change', () => { filterStationVal = stEl.value; renderBookingCards(); });
+      document.getElementById('clearFilters').addEventListener('click', () => {
+        dateEl.value = ''; filterDateVal = ''; stEl.value = ''; filterStationVal = ''; renderBookingCards();
+      });
+    }
+
+    function renderBookingCards() {
+      let list = allBookings;
+      if (filterDateVal) list = list.filter(b => b.date === filterDateVal);
+      if (filterStationVal) list = list.filter(b => b.station === filterStationVal);
+      list = [...list].sort((a, b) => {
+        if (a.status === 'completed' && b.status !== 'completed') return 1;
+        if (b.status === 'completed' && a.status !== 'completed') return -1;
+        return (a.date + a.time) > (b.date + b.time) ? 1 : -1;
+      });
+
+      const el = document.getElementById('bookingCards');
+      if (!list.length) { el.innerHTML = '<div class="table-empty">No bookings found</div>'; return; }
+
+      el.innerHTML = list.map(b => {
+        const isComp = b.status === 'completed'; const isCan = b.status === 'cancelled';
+        const badge = isComp ? 'completed' : isCan ? 'cancelled' : 'booked';
+        const badgeLabel = isComp ? 'Completed' : isCan ? 'Cancelled' : 'Booked';
+        const unitsLabel = b.players > 1 ? `${b.players} players` : `${b.units || 1} unit${(b.units || 1) > 1 ? 's' : ''}`;
+        const actions = isComp || isCan
+          ? `<button class="bc-btn undo bk-undo" data-id="${b.id}">↩ Restore</button>`
+          : `<button class="bc-btn complete bk-complete" data-id="${b.id}">✓ Done</button><button class="bc-btn cancel bk-cancel" data-id="${b.id}">✕ Cancel</button>`;
+        return `
+          <div class="booking-card ${isComp || isCan ? 'completed' : ''}">
+            <div class="bc-top">
+              <div><div class="bc-station">${STATIONS[b.station]?.name || b.station}</div><div class="bc-ref">${b.ref || ''}</div></div>
+              <span class="bc-status-badge ${badge}">${badgeLabel}</span>
+            </div>
+            <div class="bc-meta">
+              <div class="bc-tag"><i class="fa-regular fa-calendar"></i>${fmtDate(b.date)}</div>
+              <div class="bc-tag"><i class="fa-solid fa-clock"></i>${b.time || '—'} · ${b.duration || 1}h</div>
+              <div class="bc-tag"><i class="fa-solid fa-users"></i>${unitsLabel}</div>
+              <div class="bc-tag"><i class="fa-solid fa-indian-rupee-sign"></i>${b.totalPrice || '—'}</div>
+            </div>
+            <div class="bc-actions">${actions}</div>
+          </div>`;
+      }).join('');
+
+      el.querySelectorAll('.bk-complete').forEach(btn => { btn.addEventListener('click', async () => { await updateDoc(doc(db, 'bookings', btn.dataset.id), { status: 'completed' }); }); });
+      el.querySelectorAll('.bk-cancel').forEach(btn => { btn.addEventListener('click', async () => { if (confirm('Cancel this booking?')) await updateDoc(doc(db, 'bookings', btn.dataset.id), { status: 'cancelled' }); }); });
+      el.querySelectorAll('.bk-undo').forEach(btn => { btn.addEventListener('click', async () => { await updateDoc(doc(db, 'bookings', btn.dataset.id), { status: 'booked' }); }); });
+    }
+
+    // Refresh board every minute to update "active" status
+    setInterval(() => { renderBoard(); updateStats(); }, 60000);
+  </script>
 </body>
+
 </html>

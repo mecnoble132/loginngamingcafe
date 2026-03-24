@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Book a Station — Loginn Gaming Cafe</title>
+  <title>Book a Slot — Loginn Gaming Cafe</title>
   <link rel="icon" type="image/png" sizes="48x48" href="../loginnfavicon.png">
-  <meta name="description" content="Book your gaming session at Loginn Gaming Cafe, Thiruvananthapuram." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -13,342 +13,1292 @@
   <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="../css/common.css" />
-  <link rel="stylesheet" href="../css/booking.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--f-body);
+      min-height: 100dvh;
+      overscroll-behavior: none;
+    }
+
+    .app-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8, 8, 16, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-bar-back {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 14px;
+      text-decoration: none;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .app-bar-back:hover {
+      background: var(--bg-card-h);
+    }
+
+    .app-bar-title {
+      font-family: var(--f-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      flex: 1;
+    }
+
+    .app-bar-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--f-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .app-bar-logo img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .app-bar-logo .dot {
+      color: var(--blue);
+    }
+
+    .step-tabs {
+      display: flex;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .step-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .step-tab {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-family: var(--f-body);
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      position: relative;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+
+    .step-tab .tab-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .step-tab.active {
+      color: var(--blue);
+    }
+
+    .step-tab.active .tab-num {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #000;
+    }
+
+    .step-tab.done {
+      color: var(--green);
+    }
+
+    .step-tab.done .tab-num {
+      background: var(--green);
+      border-color: var(--green);
+      color: #000;
+    }
+
+    .step-tab.done .tab-num::after {
+      content: '✓';
+      font-size: 0.7rem;
+    }
+
+    .step-tab.done .tab-num span {
+      display: none;
+    }
+
+    .step-tab::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--blue);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+
+    .step-tab.active::after {
+      transform: scaleX(1);
+    }
+
+    .step-panel {
+      display: none;
+      padding: 16px;
+      padding-bottom: 100px;
+      min-height: calc(100dvh - 56px - 52px);
+      animation: slideIn 0.22s ease both;
+    }
+
+    .step-panel.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .panel-title {
+      font-family: var(--f-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      letter-spacing: 0.02em;
+    }
+
+    .panel-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .accent-blue {
+      color: var(--blue);
+    }
+
+    .accent-pink {
+      color: var(--pink);
+    }
+
+    .accent-green {
+      color: var(--green);
+    }
+
+    .station-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .stn-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.18s;
+      width: 100%;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stn-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .stn-card:hover::before,
+    .stn-card.selected::before {
+      opacity: 1;
+    }
+
+    .stn-card.selected {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 1px var(--blue), 0 4px 20px rgba(0, 212, 255, 0.15);
+    }
+
+    .stn-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .stn-icon.blue {
+      background: rgba(0, 212, 255, 0.12);
+      color: var(--blue);
+    }
+
+    .stn-icon.pink {
+      background: rgba(255, 45, 120, 0.12);
+      color: var(--pink);
+    }
+
+    .stn-icon.green {
+      background: rgba(0, 255, 170, 0.12);
+      color: var(--green);
+    }
+
+    .stn-icon.yellow {
+      background: rgba(255, 200, 0, 0.12);
+      color: #ffc800;
+    }
+
+    .stn-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .stn-name {
+      font-family: var(--f-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stn-specs {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stn-avail {
+      font-size: 0.65rem;
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .avail-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+      }
+    }
+
+    .stn-price {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .stn-price .price-main {
+      font-family: var(--f-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .stn-price .price-sub {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .stn-check {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: #000;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.18s;
+    }
+
+    .stn-card.selected .stn-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .stn-card.selected .stn-price {
+      padding-right: 20px;
+    }
+
+    .date-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+      margin-bottom: 16px;
+    }
+
+    .date-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .date-chip {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      transition: all 0.18s;
+      min-width: 56px;
+    }
+
+    .date-chip .day-name {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+
+    .date-chip .day-num {
+      font-family: var(--f-heading);
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .date-chip.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #000;
+    }
+
+    .date-chip.active .day-name {
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .dur-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dur-chip {
+      padding: 7px 16px;
+      border-radius: 50px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .dur-chip.active {
+      background: rgba(0, 212, 255, 0.12);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .slots-section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .slots-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .slot-legend {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .legend-dot.available {
+      background: rgba(0, 212, 255, 0.3);
+      border: 1px solid var(--blue);
+    }
+
+    .legend-dot.booked {
+      background: rgba(255, 45, 120, 0.25);
+      border: 1px solid var(--pink);
+    }
+
+    .legend-dot.selected-d {
+      background: var(--blue);
+    }
+
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .slot-btn {
+      padding: 10px 4px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--f-body);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .slot-btn:hover:not(:disabled):not(.booked) {
+      border-color: var(--blue);
+      background: rgba(0, 212, 255, 0.08);
+      color: var(--blue);
+    }
+
+    .slot-btn.selected {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .slot-btn.booked {
+      background: rgba(255, 45, 120, 0.08);
+      border-color: rgba(255, 45, 120, 0.2);
+      color: rgba(255, 45, 120, 0.5);
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+
+    .slot-btn:disabled:not(.booked) {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .slots-loading {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .confirm-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .confirm-card-header {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 212, 255, 0.03));
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--f-heading);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .confirm-rows {
+      padding: 0 16px;
+    }
+
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+
+    .confirm-row:last-child {
+      border-bottom: none;
+    }
+
+    .confirm-row-label {
+      color: var(--text-muted);
+    }
+
+    .confirm-row-val {
+      font-weight: 600;
+      color: var(--text);
+      text-align: right;
+    }
+
+    .confirm-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: rgba(0, 212, 255, 0.06);
+      border-top: 1px solid var(--border);
+    }
+
+    .confirm-total-label {
+      font-family: var(--f-heading);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .confirm-total-amt {
+      font-family: var(--f-heading);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .confirm-note {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+
+    .confirm-note i {
+      color: var(--blue);
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .success-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: calc(100dvh - 108px);
+      padding: 32px 16px;
+    }
+
+    .success-icon-wrap {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(0, 255, 170, 0.12);
+      border: 2px solid var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--green);
+      margin-bottom: 20px;
+      animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .success-title {
+      font-family: var(--f-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .success-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .success-ref {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .success-ref strong {
+      color: var(--blue);
+      font-family: var(--f-display);
+      font-size: 0.9rem;
+    }
+
+    .success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 90;
+      background: rgba(8, 8, 16, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .bottom-bar-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bottom-bar-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .bottom-bar-val {
+      font-family: var(--f-heading);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--blue);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--f-body);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #000;
+      padding: 13px 24px;
+      font-size: 0.9rem;
+    }
+
+    .btn-primary:hover {
+      background: #33ddff;
+    }
+
+    .btn-primary:disabled {
+      background: rgba(0, 212, 255, 0.2);
+      color: rgba(0, 212, 255, 0.4);
+      cursor: not-allowed;
+    }
+
+    .btn-ghost {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 13px 18px;
+      font-size: 0.9rem;
+    }
+
+    .btn-ghost:hover {
+      background: var(--bg-card-h);
+    }
+
+    .btn-outline-green {
+      background: rgba(0, 255, 170, 0.08);
+      border: 1.5px solid var(--green);
+      color: var(--green);
+      padding: 13px 24px;
+      font-size: 0.9rem;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .player-btn {
+      padding: 14px 8px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: var(--f-heading);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .player-btn small {
+      display: block;
+      font-size: 0.6rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .player-btn.active {
+      background: rgba(0, 212, 255, 0.12);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .player-btn.active small {
+      color: rgba(0, 212, 255, 0.7);
+    }
+  </style>
 </head>
+
 <body>
 
-  <!-- PAGE LOADER -->
-  <div id="page-loader" aria-hidden="true">
-    <div class="loader-logo-wrap">
-      <div class="loader-logo-icon"><img src="../images/loginnlogo.png" alt="Loginn logo" /></div>
-      <div class="loader-logo-name">LOGINN<span>.</span></div>
+  <header class="app-bar">
+    <a href="../index.html" class="app-bar-back"><i class="fa-solid fa-arrow-left"></i></a>
+    <div class="app-bar-title">Book a <span class="accent-blue">Slot</span></div>
+    <a href="../index.html" class="app-bar-logo">
+      <img src="../images/loginnlogo.png" alt="Loginn">
+      LOGINN<span class="dot">.</span>
+    </a>
+  </header>
+
+  <div class="step-tabs" id="stepTabs">
+    <div class="step-tab active" data-step="1">
+      <div class="tab-num"><span>1</span></div>Station
     </div>
-    <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+    <div class="step-tab" data-step="2">
+      <div class="tab-num"><span>2</span></div>Players
+    </div>
+    <div class="step-tab" data-step="3">
+      <div class="tab-num"><span>3</span></div>Date
+    </div>
+    <div class="step-tab" data-step="4">
+      <div class="tab-num"><span>4</span></div>Slot
+    </div>
+    <div class="step-tab" data-step="5">
+      <div class="tab-num"><span>5</span></div>Confirm
+    </div>
   </div>
 
-  <!-- NAVBAR -->
-  <nav id="navbar">
-    <div class="nav-inner">
-      <a href="../index.html" class="nav-logo">
-        <span class="logo-icon"><img src="../images/loginnlogo.png" alt="logo"></span>
-        <span class="logo-text">LOGINN<span class="accent-blue">.</span></span>
-      </a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="../index.html#pricing" class="nav-link">Stations &amp; Pricing</a></li>
-        <li><a href="../index.html#find-us" class="nav-link">Contact</a></li>
-        <li><a href="games.html" class="nav-link">Games</a></li>
-        <li><a href="membership.html" class="nav-link">Membership</a></li>
-        <li><a href="gamepass.html" class="nav-link">Review a Game</a></li>
-        <li><a href="news.html" class="nav-link">News</a></li>
-        <li class="nav-cta-item"><a href="booking.html" class="btn btn-primary nav-cta-btn active"><i class="fa-solid fa-calendar-check"></i> Book Now</a></li>
-      </ul>
-      <a href="booking.html" class="btn btn-primary nav-cta-btn nav-cta-mobile"><i class="fa-solid fa-calendar-check"></i> Book Now</a>
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
+  <!-- STEP 1 -->
+  <div class="step-panel active" id="step1">
+    <p class="panel-title">Choose a <span class="accent-blue">Station</span></p>
+    <p class="panel-sub">Select the type of gaming setup you want</p>
+    <div class="station-list">
+      <button class="stn-card" data-station="standard-pc">
+        <div class="stn-icon blue"><i class="fa-solid fa-computer"></i></div>
+        <div class="stn-info">
+          <div class="stn-name">Standard PC</div>
+          <div class="stn-specs">Ryzen 5 5500 · RX 5600 XT · 165 Hz</div>
+          <div class="stn-avail"><span class="avail-dot"></span><span style="color:var(--green);font-size:0.65rem;">10
+              units</span></div>
+        </div>
+        <div class="stn-price">
+          <div class="price-main">₹150</div><span class="price-sub">1st hr</span>
+        </div>
+        <div class="stn-check"><i class="fa-solid fa-check"></i></div>
+      </button>
+      <button class="stn-card" data-station="performance-pc">
+        <div class="stn-icon blue"><i class="fa-solid fa-computer"></i></div>
+        <div class="stn-info">
+          <div class="stn-name">Performance PC</div>
+          <div class="stn-specs">Ryzen 5 5500 · RTX 3060 · 180 Hz</div>
+          <div class="stn-avail"><span class="avail-dot"></span><span style="color:var(--green);font-size:0.65rem;">5
+              units</span></div>
+        </div>
+        <div class="stn-price">
+          <div class="price-main">₹150</div><span class="price-sub">1st hr</span>
+        </div>
+        <div class="stn-check"><i class="fa-solid fa-check"></i></div>
+      </button>
+      <button class="stn-card" data-station="story-pc">
+        <div class="stn-icon pink"><i class="fa-solid fa-computer"></i></div>
+        <div class="stn-info">
+          <div class="stn-name">Story / Casual PC</div>
+          <div class="stn-specs">i7-12700K · RX 6900 XT · 165Hz QHD</div>
+          <div class="stn-avail"><span class="avail-dot"></span><span style="color:var(--green);font-size:0.65rem;">1
+              unit</span></div>
+        </div>
+        <div class="stn-price">
+          <div class="price-main">₹150</div><span class="price-sub">1st hr</span>
+        </div>
+        <div class="stn-check"><i class="fa-solid fa-check"></i></div>
+      </button>
+      <button class="stn-card" data-station="ps5">
+        <div class="stn-icon pink"><i class="fa-brands fa-playstation"></i></div>
+        <div class="stn-info">
+          <div class="stn-name">PlayStation 5</div>
+          <div class="stn-specs">DualSense · 4K Display · 3 pods</div>
+          <div class="stn-avail"><span class="avail-dot"></span><span style="color:var(--green);font-size:0.65rem;">3
+              units</span></div>
+        </div>
+        <div class="stn-price">
+          <div class="price-main">₹150</div><span class="price-sub">1st hr</span>
+        </div>
+        <div class="stn-check"><i class="fa-solid fa-check"></i></div>
+      </button>
+      <button class="stn-card" data-station="xbox">
+        <div class="stn-icon green"><i class="fa-brands fa-xbox"></i></div>
+        <div class="stn-info">
+          <div class="stn-name">Xbox Series</div>
+          <div class="stn-specs">Game Pass Ultimate · Xbox Controllers</div>
+          <div class="stn-avail"><span class="avail-dot"></span><span style="color:var(--green);font-size:0.65rem;">1
+              unit</span></div>
+        </div>
+        <div class="stn-price">
+          <div class="price-main">₹150</div><span class="price-sub">1st hr</span>
+        </div>
+        <div class="stn-check"><i class="fa-solid fa-check"></i></div>
+      </button>
+      <button class="stn-card" data-station="ps5-sim">
+        <div class="stn-icon yellow"><i class="fa-solid fa-flag-checkered"></i></div>
+        <div class="stn-info">
+          <div class="stn-name">PS5 Racing SIM</div>
+          <div class="stn-specs">Logitech G29 · PlayStation 5 · GT7</div>
+          <div class="stn-avail"><span class="avail-dot"></span><span style="color:var(--green);font-size:0.65rem;">1
+              pod</span></div>
+        </div>
+        <div class="stn-price">
+          <div class="price-main">₹150</div><span class="price-sub">1st hr</span>
+        </div>
+        <div class="stn-check"><i class="fa-solid fa-check"></i></div>
+      </button>
+      <button class="stn-card" data-station="pc-sim">
+        <div class="stn-icon blue"><i class="fa-solid fa-flag-checkered"></i></div>
+        <div class="stn-info">
+          <div class="stn-name">PC Racing SIM</div>
+          <div class="stn-specs">Cammus C5 · RTX 3060 Ti · Assetto Corsa</div>
+          <div class="stn-avail"><span class="avail-dot"></span><span style="color:var(--green);font-size:0.65rem;">1
+              pod</span></div>
+        </div>
+        <div class="stn-price">
+          <div class="price-main">₹150</div><span class="price-sub">1st hr</span>
+        </div>
+        <div class="stn-check"><i class="fa-solid fa-check"></i></div>
       </button>
     </div>
-  </nav>
+  </div>
 
-  <!-- PAGE HERO -->
-  <section class="page-hero">
-    <div class="container page-hero-inner">
-      <div class="page-hero-tag"><i class="fa-solid fa-calendar-check"></i> BOOKING</div>
-      <h1 class="page-hero-title">Book a <span class="accent-blue">Station</span></h1>
-      <p class="page-hero-sub">Reserve your session online. Walk in and play — your seat will be ready.</p>
+  <!-- STEP 2 -->
+  <div class="step-panel" id="step2">
+    <p class="panel-title">How Many <span class="accent-pink">Players</span>?</p>
+    <p class="panel-sub" id="step2Sub">Select the number of players or units</p>
+    <div id="step2Content"></div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-panel" id="step3">
+    <p class="panel-title">Pick a <span class="accent-green">Date</span></p>
+    <p class="panel-sub">Select when you want to play</p>
+    <div class="date-strip" id="dateStrip"></div>
+    <p class="panel-title" style="font-size:1rem;margin-bottom:8px;">Duration</p>
+    <div class="dur-row" id="durRow">
+      <button class="dur-chip active" data-dur="1">1 hr</button>
+      <button class="dur-chip" data-dur="2">2 hrs</button>
+      <button class="dur-chip" data-dur="3">3 hrs</button>
+      <button class="dur-chip" data-dur="4">4 hrs</button>
+      <button class="dur-chip" data-dur="5">5 hrs</button>
+      <button class="dur-chip" data-dur="6">6 hrs</button>
     </div>
-  </section>
+  </div>
 
-  <!-- BOOKING FORM -->
-  <section class="booking-section">
-    <div class="container">
-      <div class="booking-wrap">
+  <!-- STEP 4 -->
+  <div class="step-panel" id="step4">
+    <p class="panel-title">Pick a <span class="accent-blue">Time Slot</span></p>
+    <p class="panel-sub" id="step4Sub">Loading…</p>
+    <div class="slot-legend">
+      <div class="legend-item"><span class="legend-dot available"></span> Available</div>
+      <div class="legend-item"><span class="legend-dot booked"></span> Booked</div>
+      <div class="legend-item"><span class="legend-dot selected-d"></span> Your pick</div>
+    </div>
+    <div class="slots-section-label">Morning</div>
+    <div class="slot-grid" id="slotsMorning"></div>
+    <div class="slots-section-label">Afternoon</div>
+    <div class="slot-grid" id="slotsAfternoon"></div>
+    <div class="slots-section-label">Evening</div>
+    <div class="slot-grid" id="slotsEvening"></div>
+  </div>
 
-        <!-- STEP INDICATOR -->
-        <div class="step-indicator">
-          <div class="step-item active" data-step="1">
-            <div class="step-circle">1</div>
-            <div class="step-label">Station</div>
-          </div>
-          <div class="step-line"></div>
-          <div class="step-item" data-step="2">
-            <div class="step-circle">2</div>
-            <div class="step-label">Units</div>
-          </div>
-          <div class="step-line"></div>
-          <div class="step-item" data-step="3">
-            <div class="step-circle">3</div>
-            <div class="step-label">Date &amp; Time</div>
-          </div>
-          <div class="step-line"></div>
-          <div class="step-item" data-step="4">
-            <div class="step-circle">4</div>
-            <div class="step-label">Details</div>
-          </div>
-        </div>
-
-        <!-- STEP 1 — STATION TYPE -->
-        <div class="booking-step active" id="step1">
-          <h2 class="step-title">Choose Your <span class="accent-blue">Station</span></h2>
-          <p class="step-sub">Select the type of gaming station you want to book</p>
-          <div class="station-grid">
-
-            <button class="station-card" data-station="standard-pc">
-              <div class="sc-icon blue"><i class="fa-solid fa-computer"></i></div>
-              <div class="sc-body">
-                <div class="sc-name">Standard PC</div>
-                <div class="sc-specs">Ryzen 5 5500 · RX 5600 XT · 165 Hz</div>
-                <div class="sc-units">10 units available</div>
-              </div>
-              <div class="sc-price">₹150<span>1st hr</span><small>₹100/hr after</small></div>
-            </button>
-
-            <button class="station-card" data-station="performance-pc">
-              <div class="sc-icon blue"><i class="fa-solid fa-computer"></i></div>
-              <div class="sc-body">
-                <div class="sc-name">Performance PC</div>
-                <div class="sc-specs">Ryzen 5 5500 · RTX 3060 · 180 Hz</div>
-                <div class="sc-units">5 units available</div>
-              </div>
-              <div class="sc-price">₹150<span>1st hr</span><small>₹100/hr after</small></div>
-            </button>
-
-            <button class="station-card" data-station="story-pc">
-              <div class="sc-icon pink"><i class="fa-solid fa-computer"></i></div>
-              <div class="sc-body">
-                <div class="sc-name">Story / Casual PC</div>
-                <div class="sc-specs">i7-12700K · RX 6900 XT · 165 Hz QHD</div>
-                <div class="sc-units">1 unit available</div>
-              </div>
-              <div class="sc-price">₹150<span>1st hr</span><small>₹100/hr after</small></div>
-            </button>
-
-            <button class="station-card" data-station="ps5">
-              <div class="sc-icon pink"><i class="fa-brands fa-playstation"></i></div>
-              <div class="sc-body">
-                <div class="sc-name">PlayStation 5</div>
-                <div class="sc-specs">DualSense · 4K Display · 3 units</div>
-                <div class="sc-units">+₹50/hr per extra player</div>
-              </div>
-              <div class="sc-price">₹150<span>1st hr</span><small>₹100/hr after</small></div>
-            </button>
-
-            <button class="station-card" data-station="xbox">
-              <div class="sc-icon green"><i class="fa-brands fa-xbox"></i></div>
-              <div class="sc-body">
-                <div class="sc-name">Xbox Series</div>
-                <div class="sc-specs">Game Pass Ultimate · Xbox Controllers</div>
-                <div class="sc-units">+₹50/hr per extra player</div>
-              </div>
-              <div class="sc-price">₹150<span>1st hr</span><small>₹100/hr after</small></div>
-            </button>
-
-            <button class="station-card" data-station="ps5-sim">
-              <div class="sc-icon yellow"><i class="fa-solid fa-flag-checkered"></i></div>
-              <div class="sc-body">
-                <div class="sc-name">PS5 Racing SIM</div>
-                <div class="sc-specs">Logitech G29 · PlayStation 5 · GT7</div>
-                <div class="sc-units">1 pod · Single player</div>
-              </div>
-              <div class="sc-price">₹150<span>1st hr</span><small>₹100/hr after</small></div>
-            </button>
-
-            <button class="station-card" data-station="pc-sim">
-              <div class="sc-icon blue"><i class="fa-solid fa-flag-checkered"></i></div>
-              <div class="sc-body">
-                <div class="sc-name">PC Racing SIM</div>
-                <div class="sc-specs">Cammus C5 · RTX 3060 Ti · Assetto Corsa</div>
-                <div class="sc-units">1 pod · Single player</div>
-              </div>
-              <div class="sc-price">₹150<span>1st hr</span><small>₹100/hr after</small></div>
-            </button>
-
-          </div>
-          <div class="step-nav">
-            <span></span>
-            <button class="btn btn-primary" id="step1Next" disabled>Next <i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </div>
-
-        <!-- STEP 2 — UNITS / PLAYERS -->
-        <div class="booking-step" id="step2">
-          <h2 class="step-title">How Many <span class="accent-pink">Players</span>?</h2>
-          <p class="step-sub" id="step2Sub">Select the number of PCs or players</p>
-
-          <div class="units-wrap" id="unitsWrap">
-            <!-- Dynamically rendered based on station choice -->
-          </div>
-
-          <div class="step-nav">
-            <button class="btn btn-ghost" id="step2Back"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <button class="btn btn-primary" id="step2Next">Next <i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </div>
-
-        <!-- STEP 3 — DATE, TIME, DURATION -->
-        <div class="booking-step" id="step3">
-          <h2 class="step-title">Pick Your <span class="accent-green">Slot</span></h2>
-          <p class="step-sub">Choose a date, start time and how long you'll play</p>
-
-          <div class="slot-grid">
-            <!-- Date -->
-            <div class="slot-field">
-              <label class="slot-label"><i class="fa-regular fa-calendar"></i> Date</label>
-              <input type="date" id="bookingDate" class="slot-input" />
-            </div>
-
-            <!-- Duration -->
-            <div class="slot-field">
-              <label class="slot-label"><i class="fa-regular fa-clock"></i> Duration</label>
-              <div class="stepper">
-                <button class="step-btn" id="durDown">−</button>
-                <span id="durDisplay">1 hr</span>
-                <button class="step-btn" id="durUp">+</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Time Slots -->
-          <div class="time-section">
-            <label class="slot-label"><i class="fa-solid fa-hourglass-start"></i> Start Time <span class="slot-hint" id="slotHint"></span></label>
-            <div class="time-grid" id="timeGrid">
-              <div class="time-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading available slots…</div>
-            </div>
-          </div>
-
-          <!-- Live price -->
-          <div class="price-live" id="priceLive" style="display:none">
-            <div class="pl-label">Estimated Total</div>
-            <div class="pl-amount" id="priceLiveAmount">₹0</div>
-            <div class="pl-breakdown" id="priceLiveBreakdown"></div>
-          </div>
-
-          <div class="step-nav">
-            <button class="btn btn-ghost" id="step3Back"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <button class="btn btn-primary" id="step3Next" disabled>Next <i class="fa-solid fa-arrow-right"></i></button>
-          </div>
-        </div>
-
-        <!-- STEP 4 — DETAILS -->
-        <div class="booking-step" id="step4">
-          <h2 class="step-title">Your <span class="accent-blue">Details</span></h2>
-          <p class="step-sub">We'll send your booking confirmation to your email</p>
-
-          <div class="details-form">
-            <div class="form-field">
-              <label class="form-label">Full Name <span class="req">*</span></label>
-              <input type="text" id="custName" class="form-input" placeholder="Your name" autocomplete="name" />
-            </div>
-            <div class="form-field">
-              <label class="form-label">Phone Number <span class="req">*</span></label>
-              <input type="tel" id="custPhone" class="form-input" placeholder="+91 XXXXX XXXXX" autocomplete="tel" />
-            </div>
-            <div class="form-field">
-              <label class="form-label">Email Address <span class="req">*</span></label>
-              <input type="email" id="custEmail" class="form-input" placeholder="you@example.com" autocomplete="email" />
-            </div>
-            <div class="form-field">
-              <label class="form-label">Notes <span class="opt">(optional)</span></label>
-              <textarea id="custNotes" class="form-input form-textarea" placeholder="Birthday visit? Special request? Let us know…" rows="3"></textarea>
-            </div>
-          </div>
-
-          <!-- Summary Card -->
-          <div class="summary-card" id="summaryCard">
-            <div class="summary-title"><i class="fa-solid fa-receipt"></i> Booking Summary</div>
-            <div class="summary-rows" id="summaryRows"></div>
-            <div class="summary-total">
-              <span>Estimated Total</span>
-              <span id="summaryTotal" class="accent-blue">₹0</span>
-            </div>
-          </div>
-
-          <p class="booking-note"><i class="fa-solid fa-circle-info accent-blue"></i> &nbsp;Walk-ins billed by actual time. Online bookings hold your seat. To cancel, call <a href="tel:+918075707064">+91 80757 07064</a>.</p>
-
-          <div class="step-nav">
-            <button class="btn btn-ghost" id="step4Back"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <button class="btn btn-primary" id="submitBtn">
-              <i class="fa-solid fa-calendar-check"></i> Confirm Booking
-            </button>
-          </div>
-        </div>
-
-        <!-- SUCCESS SCREEN -->
-        <div class="booking-step" id="stepSuccess">
-          <div class="success-wrap">
-            <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
-            <h2 class="success-title">Booking <span class="accent-green">Confirmed!</span></h2>
-            <p class="success-sub">Check your email for the confirmation. See you at Loginn!</p>
-            <div class="success-ref">Ref: <strong id="successRef">—</strong></div>
-            <div class="success-actions">
-              <a href="../index.html" class="btn btn-outline-blue">Back to Home</a>
-              <a href="booking.html" class="btn btn-primary">Book Another</a>
-            </div>
-          </div>
-        </div>
-
+  <!-- STEP 5 -->
+  <div class="step-panel" id="step5">
+    <p class="panel-title">Confirm <span class="accent-blue">Booking</span></p>
+    <p class="panel-sub">Review your slot before blocking it</p>
+    <div class="confirm-card">
+      <div class="confirm-card-header"><i class="fa-solid fa-receipt accent-blue"></i> Booking Summary</div>
+      <div class="confirm-rows" id="confirmRows"></div>
+      <div class="confirm-total">
+        <div class="confirm-total-label">Estimated Total</div>
+        <div class="confirm-total-amt" id="confirmTotal">₹0</div>
       </div>
     </div>
-  </section>
+    <div class="confirm-note">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>No payment now. Walk in, play, and pay at the cafe. To cancel, call <a href="tel:+918075707064"
+          style="color:var(--blue);">+91 80757 07064</a>. Unclaimed slots may be released after 15 min.</span>
+    </div>
+  </div>
 
-  <!-- FOOTER -->
-  <footer class="main-footer">
-    <div class="container footer-container">
-      <div class="footer-col footer-brand">
-        <a href="../index.html" class="nav-logo">
-          <span class="logo-icon"><img src="../images/loginnlogo.png" alt="logo"></span>
-          <span class="logo-text">LOGINN<span class="accent-blue">.</span></span>
-        </a>
-        <p class="footer-desc">Premium gaming PCs. Zero Lag. Ice-cold vibes.<br>Your ultimate gaming destination in Thiruvananthapuram.</p>
-        <div class="footer-socials">
-          <a href="https://www.instagram.com/loginnkerala/" aria-label="Instagram" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-        </div>
-      </div>
-
-      <div class="footer-col footer-links">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="../index.html#pricing">Stations &amp; Pricing</a></li>
-          <li><a href="games.html">Games Library</a></li>
-          <li><a href="membership.html">Membership</a></li>
-          <li><a href="gamepass.html">Review a Game</a></li>
-          <li><a href="news.html">News &amp; Events</a></li>
-          <li><a href="admin.html">Management Login</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col footer-contact">
-        <h4>Contact Us</h4>
-        <ul>
-          <li>
-            <i class="fa-solid fa-location-dot"></i>
-            <span>Loginn Gaming Centre<br>Toll Junction, Ambalamukku<br>Thiruvananthapuram, Kerala 695003</span>
-          </li>
-          <li>
-            <i class="fa-solid fa-phone"></i>
-            <span><a href="tel:+918075707064">+91 80757 07064</a></span>
-          </li>
-          <li>
-            <i class="fa-solid fa-clock"></i>
-            <span>Every Day: 11 AM – 11 PM</span>
-          </li>
-        </ul>
+  <!-- SUCCESS -->
+  <div class="step-panel" id="stepSuccess">
+    <div class="success-screen">
+      <div class="success-icon-wrap"><i class="fa-solid fa-circle-check"></i></div>
+      <h2 class="success-title">Slot <span class="accent-green">Blocked!</span></h2>
+      <p class="success-sub">Your slot is reserved. Walk in and tell the staff your reference number. See you at Loginn!
+      </p>
+      <div class="success-ref">Ref: <strong id="successRef">—</strong></div>
+      <div class="success-actions">
+        <a href="../index.html" class="btn btn-ghost btn-full">Back to Home</a>
+        <a href="booking.html" class="btn btn-outline-green btn-full">Book Another</a>
       </div>
     </div>
+  </div>
 
-    <div class="footer-bottom">
-      <div class="container footer-bottom-inner">
-        <span class="footer-copy">© 2026 Loginn. All rights reserved.</span>
-      </div>
+  <div class="bottom-bar" id="bottomBar">
+    <div class="bottom-bar-info">
+      <div class="bottom-bar-label" id="bottomLabel">Select a station to continue</div>
+      <div class="bottom-bar-val" id="bottomVal">—</div>
     </div>
-  </footer>
+    <button class="btn btn-ghost" id="btnBack" style="display:none;"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="btn btn-primary" id="btnNext" disabled>Next <i class="fa-solid fa-arrow-right"></i></button>
+  </div>
 
-  <a href="https://wa.me/918075707064" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
-    <i class="fa-brands fa-whatsapp"></i>
-  </a>
+  <script type="module">
+    import { db } from '../js/firebase-config.js';
+    import { collection, addDoc, getDocs, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script type="module" src="../js/booking.js"></script>
-  <script src="../js/common.js"></script>
+    const STATIONS = {
+      'standard-pc': { name: 'Standard PC', type: 'pc', capacity: 10, maxUnits: 10, hasPlayers: false },
+      'performance-pc': { name: 'Performance PC', type: 'pc', capacity: 5, maxUnits: 5, hasPlayers: false },
+      'story-pc': { name: 'Story / Casual PC', type: 'pc', capacity: 1, maxUnits: 1, hasPlayers: false },
+      'ps5': { name: 'PlayStation 5', type: 'console', capacity: 3, maxPlayers: 4, hasPlayers: true },
+      'xbox': { name: 'Xbox Series', type: 'console', capacity: 1, maxPlayers: 4, hasPlayers: true },
+      'ps5-sim': { name: 'PS5 Racing SIM', type: 'sim', capacity: 1, maxUnits: 1, hasPlayers: false },
+      'pc-sim': { name: 'PC Racing SIM', type: 'sim', capacity: 1, maxUnits: 1, hasPlayers: false },
+    };
+    const FIRST_HR = 150, EXTRA_HR = 100, CTRL_FEE = 50, PC_DAY_CAP = 600;
+
+    function calcPrice(id, units, players, hours) {
+      const cfg = STATIONS[id];
+      if (cfg.type === 'pc') {
+        return { total: Math.min(FIRST_HR + Math.max(0, hours - 1) * EXTRA_HR, PC_DAY_CAP) * units };
+      } else {
+        const extra = Math.max(0, players - 1);
+        return { total: (FIRST_HR + extra * CTRL_FEE) + Math.max(0, hours - 1) * (EXTRA_HR + extra * CTRL_FEE) };
+      }
+    }
+
+    const state = { station: null, units: 1, players: 1, date: null, time: null, duration: 1 };
+    let currentStep = 1;
+    let occupiedMins = new Set();
+
+    function getLocalDateStr(offset = 0) {
+      const d = new Date(); d.setDate(d.getDate() + offset);
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function formatDate(d) {
+      if (!d) return '—';
+      const [y, m, day] = d.split('-');
+      return `${+day} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+m - 1]}`;
+    }
+
+    function goTo(n) {
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+      const panels = [null, 'step1', 'step2', 'step3', 'step4', 'step5', 'stepSuccess'];
+      document.getElementById(panels[n])?.classList.add('active');
+      document.querySelectorAll('.step-tab').forEach(tab => {
+        const s = +tab.dataset.step;
+        tab.classList.toggle('active', s === n); tab.classList.toggle('done', s < n);
+      });
+      currentStep = n;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateBottomBar();
+    }
+
+    const btnNext = document.getElementById('btnNext');
+    const btnBack = document.getElementById('btnBack');
+    const bottomLabel = document.getElementById('bottomLabel');
+    const bottomVal = document.getElementById('bottomVal');
+    const bottomBar = document.getElementById('bottomBar');
+
+    function updateBottomBar() {
+      bottomBar.style.display = currentStep === 6 ? 'none' : '';
+      btnBack.style.display = currentStep > 1 && currentStep < 6 ? '' : 'none';
+      const cfg = state.station ? STATIONS[state.station] : null;
+      const labels = ['', 'Select a station', 'Select players', 'Choose a date', 'Pick a time slot', 'Review your booking'];
+      bottomLabel.textContent = labels[currentStep] || '';
+      if (currentStep === 1) { bottomVal.textContent = cfg?.name || '—'; btnNext.disabled = !state.station; btnNext.innerHTML = 'Next <i class="fa-solid fa-arrow-right"></i>'; }
+      else if (currentStep === 2) { bottomVal.textContent = `${cfg.name} · ${cfg.hasPlayers ? state.players + ' player' + (state.players > 1 ? 's' : '') : state.units + ' unit' + (state.units > 1 ? 's' : '')}`; btnNext.disabled = false; btnNext.innerHTML = 'Next <i class="fa-solid fa-arrow-right"></i>'; }
+      else if (currentStep === 3) { bottomVal.textContent = state.date ? formatDate(state.date) + ` · ${state.duration} hr${state.duration > 1 ? 's' : ''}` : '—'; btnNext.disabled = !state.date; btnNext.innerHTML = 'Find Slots <i class="fa-solid fa-arrow-right"></i>'; }
+      else if (currentStep === 4) { bottomVal.textContent = state.time ? `${state.time} · ${state.duration} hr${state.duration > 1 ? 's' : ''}` : 'No slot selected'; btnNext.disabled = !state.time; btnNext.innerHTML = 'Review <i class="fa-solid fa-arrow-right"></i>'; }
+      else if (currentStep === 5) { const { total } = calcPrice(state.station, state.units, state.players, state.duration); bottomVal.textContent = `₹${total} estimated`; btnNext.disabled = false; btnNext.innerHTML = '<i class="fa-solid fa-lock"></i> Block Slot'; }
+    }
+
+    document.querySelectorAll('.stn-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.stn-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected'); state.station = card.dataset.station; updateBottomBar();
+      });
+    });
+
+    function buildStep2() {
+      const cfg = STATIONS[state.station];
+      document.getElementById('step2Sub').textContent = cfg.hasPlayers ? 'Extra controllers: +₹50/hr each beyond 1st player' : cfg.maxUnits > 1 ? 'Select the number of PCs you need' : 'Single unit — 1 player only';
+      const content = document.getElementById('step2Content'); content.innerHTML = '';
+      if (!cfg.hasPlayers && cfg.maxUnits === 1) { content.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--green);font-family:var(--f-heading);font-size:1.1rem;"><i class="fa-solid fa-circle-check" style="font-size:2rem;display:block;margin-bottom:12px;"></i>Single pod — all set!</div>`; state.units = 1; state.players = 1; return; }
+      const max = cfg.hasPlayers ? cfg.maxPlayers : cfg.maxUnits;
+      const grid = document.createElement('div'); grid.className = 'players-grid';
+      for (let i = 1; i <= max; i++) {
+        const btn = document.createElement('button'); btn.className = 'player-btn' + (i === 1 ? ' active' : '');
+        btn.innerHTML = `${i}<small>${cfg.hasPlayers ? 'player' + (i > 1 ? 's' : '') : 'PC' + (i > 1 ? 's' : '')}</small>`;
+        btn.addEventListener('click', () => { grid.querySelectorAll('.player-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); cfg.hasPlayers ? state.players = i : state.units = i; updateBottomBar(); });
+        grid.appendChild(btn);
+      }
+      content.appendChild(grid);
+      if (cfg.hasPlayers) state.players = 1; else state.units = 1;
+    }
+
+    function buildDateStrip() {
+      const strip = document.getElementById('dateStrip'); strip.innerHTML = '';
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      for (let i = 0; i < 7; i++) {
+        const dateStr = getLocalDateStr(i); const d = new Date(dateStr + 'T00:00:00');
+        const chip = document.createElement('div'); chip.className = 'date-chip' + (i === 0 ? ' active' : '');
+        chip.innerHTML = `<span class="day-name">${days[d.getDay()]}</span><span class="day-num">${d.getDate()}</span>`;
+        chip.addEventListener('click', () => { document.querySelectorAll('.date-chip').forEach(c => c.classList.remove('active')); chip.classList.add('active'); state.date = dateStr; state.time = null; updateBottomBar(); });
+        strip.appendChild(chip);
+      }
+      state.date = getLocalDateStr(0);
+    }
+
+    document.querySelectorAll('.dur-chip').forEach(chip => {
+      chip.addEventListener('click', () => { document.querySelectorAll('.dur-chip').forEach(c => c.classList.remove('active')); chip.classList.add('active'); state.duration = +chip.dataset.dur; state.time = null; updateBottomBar(); });
+    });
+
+    async function buildSlots() {
+      ['slotsMorning', 'slotsAfternoon', 'slotsEvening'].forEach(id => { document.getElementById(id).innerHTML = `<div class="slots-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>`; });
+      document.getElementById('step4Sub').textContent = `${formatDate(state.date)} · ${state.duration} hr${state.duration > 1 ? 's' : ''}`;
+      await fetchOccupied();
+      const isToday = state.date === getLocalDateStr(0);
+      const now = new Date(); const nowMins = now.getHours() * 60 + now.getMinutes();
+      const latest = 23 * 60 - state.duration * 60;
+      const morning = [], afternoon = [], evening = [];
+      for (let m = 11 * 60; m <= latest; m += 30) {
+        const isPast = isToday && m <= nowMins; const isBooked = isSlotBlocked(m);
+        const hh = String(Math.floor(m / 60)).padStart(2, '0'); const mm = String(m % 60).padStart(2, '0');
+        const slot = { m, label: `${hh}:${mm}`, isPast, isBooked };
+        if (m < 14 * 60) morning.push(slot); else if (m < 18 * 60) afternoon.push(slot); else evening.push(slot);
+      }
+      renderSlots('slotsMorning', morning); renderSlots('slotsAfternoon', afternoon); renderSlots('slotsEvening', evening);
+    }
+
+    function renderSlots(id, slots) {
+      const el = document.getElementById(id); el.innerHTML = '';
+      if (!slots.length) { el.innerHTML = `<div class="slots-loading" style="grid-column:1/-1;font-size:0.72rem;padding:12px;">None in this period</div>`; return; }
+      slots.forEach(({ m, label, isPast, isBooked }) => {
+        const btn = document.createElement('button'); btn.className = 'slot-btn'; btn.textContent = label;
+        if (isPast || isBooked) { btn.disabled = true; if (isBooked) btn.classList.add('booked'); }
+        else { btn.addEventListener('click', () => { document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); state.time = label; updateBottomBar(); }); }
+        if (state.time === label && !isPast && !isBooked) btn.classList.add('selected');
+        el.appendChild(btn);
+      });
+    }
+
+    async function fetchOccupied() {
+      occupiedMins = new Set();
+      if (!state.station || !state.date) return;
+      const cfg = STATIONS[state.station];
+      try {
+        const [bSnap, wSnap] = await Promise.all([
+          getDocs(query(collection(db, 'bookings'), where('station', '==', state.station), where('date', '==', state.date))),
+          getDocs(query(collection(db, 'walkins'), where('station', '==', state.station), where('status', '==', 'active')))
+        ]);
+        const slotCount = {};
+        function mark(s, e, c) { for (let m = s; m < e; m += 10)slotCount[m] = (slotCount[m] || 0) + c; }
+        bSnap.forEach(d => { const data = d.data(); if (data.status === 'cancelled') return; const [h, min] = data.time.split(':').map(Number); mark(h * 60 + min, h * 60 + min + data.duration * 60, data.units || 1); });
+        wSnap.forEach(d => { const data = d.data(); mark(data.startMinutes, 23 * 60, data.units || 1); });
+        for (let m = 11 * 60; m < 23 * 60; m += 10) { if ((slotCount[m] || 0) >= cfg.capacity) occupiedMins.add(m); }
+      } catch (e) { console.warn('fetchOccupied:', e.message); }
+    }
+
+    function isSlotBlocked(startM) {
+      for (let m = startM; m < startM + state.duration * 60; m += 10) { if (occupiedMins.has(m)) return true; } return false;
+    }
+
+    function buildConfirm() {
+      const cfg = STATIONS[state.station];
+      const { total } = calcPrice(state.station, state.units, state.players, state.duration);
+      const unitsLabel = cfg.hasPlayers ? `${state.players} player${state.players > 1 ? 's' : ''}` : `${state.units} unit${state.units > 1 ? 's' : ''}`;
+      const rows = [['Station', cfg.name], ['Players/Units', unitsLabel], ['Date', formatDate(state.date)], ['Time', state.time], ['Duration', `${state.duration} hr${state.duration > 1 ? 's' : ''}`]];
+      document.getElementById('confirmRows').innerHTML = rows.map(([k, v]) => `<div class="confirm-row"><span class="confirm-row-label">${k}</span><span class="confirm-row-val">${v}</span></div>`).join('');
+      document.getElementById('confirmTotal').textContent = `₹${total}`;
+    }
+
+    async function submitBooking() {
+      btnNext.disabled = true; btnNext.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Blocking…';
+      const cfg = STATIONS[state.station];
+      const { total } = calcPrice(state.station, state.units, state.players, state.duration);
+      const refId = 'LGN' + Date.now().toString(36).toUpperCase();
+      try {
+        await addDoc(collection(db, 'bookings'), { ref: refId, station: state.station, stationName: cfg.name, units: state.units, players: state.players, date: state.date, time: state.time, duration: state.duration, totalPrice: total, status: 'booked', createdAt: serverTimestamp() });
+        document.getElementById('successRef').textContent = refId;
+        goTo(6);
+      } catch (err) {
+        console.error(err); btnNext.disabled = false; btnNext.innerHTML = '<i class="fa-solid fa-lock"></i> Block Slot';
+        alert('Something went wrong. Please try again or call us: +91 80757 07064');
+      }
+    }
+
+    btnNext.addEventListener('click', async () => {
+      if (currentStep === 1 && state.station) { buildStep2(); goTo(2); }
+      else if (currentStep === 2) { buildDateStrip(); goTo(3); }
+      else if (currentStep === 3 && state.date) { await buildSlots(); goTo(4); }
+      else if (currentStep === 4 && state.time) { buildConfirm(); goTo(5); }
+      else if (currentStep === 5) { await submitBooking(); }
+    });
+    btnBack.addEventListener('click', () => { if (currentStep > 1) goTo(currentStep - 1); });
+
+    updateBottomBar();
+  </script>
 </body>
+
 </html>
