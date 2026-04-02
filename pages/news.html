@@ -52,9 +52,9 @@
         <li><a href="gamepass.html" class="nav-link">Review a Game</a></li>
         <li><a href="news.html" class="nav-link">News</a></li>
         <li><a href="../index.html#gallery" class="nav-link">Gallery</a></li>
-        <li class="nav-cta-item"><a href="booking.html" class="btn btn-primary nav-cta-btn"><i class="fa-solid fa-calendar-check"></i> Book Now</a></li>
+        <li class="nav-cta-item"><a href="tel:+918075707064" class="btn btn-primary nav-cta-btn"><i class="fa-solid fa-phone"></i> Call to Book</a></li>
       </ul>
-      <a href="booking.html" class="btn btn-primary nav-cta-btn nav-cta-mobile"><i class="fa-solid fa-calendar-check"></i> Book Now</a>
+      <a href="tel:+918075707064" class="btn btn-primary nav-cta-btn nav-cta-mobile"><i class="fa-solid fa-phone"></i> Call to Book</a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -89,35 +89,8 @@
         <h2 class="section-title">All <span class="accent-blue">Updates</span></h2>
       </div>
 
-      <div class="news-grid">
-        <div class="news-card reveal">
-          <div class="news-date"><i class="fa-regular fa-calendar"></i> March 12, 2026</div>
-          <div class="news-tag tag-blue">NEW GAMES</div>
-          <h3 class="news-title">Avatar &amp; High on Life 2 Added!</h3>
-          <p class="news-desc">We've just updated our library with the latest hits. Avatar: Frontiers of Pandora and High on Life 2 are now available to play and review! Check the 'Review a Game' page for more details.</p>
-          <a href="gamepass.html" class="news-cta">Go to Review Page <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-        <div class="news-card reveal">
-          <div class="news-date"><i class="fa-regular fa-calendar"></i> March 8, 2026</div>
-          <div class="news-tag tag-green">ANNOUNCEMENT</div>
-          <h3 class="news-title">Review a Game Programme Updated</h3>
-          <p class="news-desc">Great news for all members! The 'Review a Game' perk is now available for all membership tiers, including Starter. Previously restricted to Pro and Elite, now everyone can share their verdict.</p>
-          <a href="membership.html" class="news-cta">View Membership Perks <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-        <div class="news-card reveal">
-          <div class="news-date"><i class="fa-regular fa-calendar"></i> February 20, 2026</div>
-          <div class="news-tag tag-blue">NEW GEAR</div>
-          <h3 class="news-title">Performance PC Upgrade Complete</h3>
-          <p class="news-desc">We've completed a full GPU upgrade on our Performance tier PCs — RTX 3060 now runs at full potential with updated drivers and cooling. Framerates are noticeably smoother across all competitive titles.</p>
-          <a href="../index.html#pricing" class="news-cta">See updated specs <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-        <div class="news-card reveal">
-          <div class="news-date"><i class="fa-regular fa-calendar"></i> January 15, 2026</div>
-          <div class="news-tag tag-blue">NEW GEAR</div>
-          <h3 class="news-title">Cammus C5 Direct Drive Wheel Installed</h3>
-          <p class="news-desc">Our PC Racing SIM just got a major upgrade — the Cammus C5 direct drive wheel delivers force feedback that's a massive step up from belt-driven wheels. Come try it on Assetto Corsa today.</p>
-          <a href="../index.html#pricing" class="news-cta">See SIM specs <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
+      <div class="news-grid" id="newsGrid">
+        <div class="news-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading news…</div>
       </div>
     </div>
   </section>
@@ -181,6 +154,10 @@
   </a>
 
   <script src="../js/common.js"></script>
+  <script type="module">
+    import { initNews } from '../js/news.js';
+    initNews('newsGrid', false);
+  </script>
 </body>
 
 </html>

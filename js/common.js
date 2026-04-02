@@ -109,14 +109,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// ===== CURSOR GLOW on cards =====
-document.querySelectorAll('.sp-card, .member-card, .review-card, .news-card').forEach(card => {
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty('--mx', `${((e.clientX - rect.left) / rect.width)  * 100}%`);
-    card.style.setProperty('--my', `${((e.clientY - rect.top)  / rect.height) * 100}%`);
-  });
-});
+// ===== CURSOR GLOW on cards (Disabled for Performance) =====
+// Removed mouse tracking script that was causing lag and dropping frames.
 
 // ===== GALLERY LIGHTBOX =====
 document.querySelectorAll('.gallery-item').forEach(item => {
