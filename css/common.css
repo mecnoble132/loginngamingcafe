@@ -791,12 +791,12 @@ button {
 /* Mobile: shown between logo and hamburger */
 .nav-cta-mobile {
   display: none;
-  padding: 0 14px;
-  font-size: 0.7rem;
+  padding: 0 12px;
+  font-size: 0.65rem;
   min-height: unset !important;
-  height: 36px;
-  line-height: 36px;
-  letter-spacing: 0.07em;
+  height: 32px;
+  line-height: 32px;
+  letter-spacing: 0.06em;
   margin-right: 8px;
   flex-shrink: 0;
   align-items: center;
@@ -823,20 +823,20 @@ button {
 
 @media (max-width: 480px) {
   .nav-cta-mobile {
-    padding: 0 10px;
-    font-size: 0.66rem;
-    height: 34px;
-    line-height: 34px;
-    margin-right: 6px;
+    padding: 0 8px;
+    font-size: 0.62rem;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 5px;
   }
 }
 
 @media (max-width: 380px) {
   .nav-cta-mobile {
-    padding: 0 8px;
-    font-size: 0.62rem;
-    height: 32px;
-    line-height: 32px;
+    padding: 0 6px;
+    font-size: 0.58rem;
+    height: 28px;
+    line-height: 28px;
     margin-right: 4px;
   }
 }
@@ -983,12 +983,12 @@ button {
   }
 
   .container {
-    padding: 0 14px;
+    padding: 0 12px;
   }
 
   .btn {
-    padding: 11px 18px;
-    font-size: 0.85rem;
+    padding: 10px 16px;
+    font-size: 0.8rem;
   }
 
   .section-title {
@@ -996,17 +996,32 @@ button {
   }
 
   .nav-inner {
-    padding: 0 10px;
+    padding: 0 8px;
   }
 
   .nav-logo {
-    font-size: 0.8rem;
-    gap: 6px;
+    font-size: 0.78rem;
+    gap: 5px;
   }
 
   .logo-icon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 340px) {
+  .nav-inner {
+    padding: 0 6px;
+  }
+  .nav-logo {
+    font-size: 0.72rem;
+  }
+  .nav-cta-mobile {
+    padding: 0 5px;
+    font-size: 0.52rem;
+    height: 26px;
+    line-height: 26px;
   }
 }
 
