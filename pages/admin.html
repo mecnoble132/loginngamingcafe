@@ -53,7 +53,7 @@
         </a>
         <div class="admin-nav-right">
           <span class="admin-email" id="adminEmail"></span>
-          <button class="btn btn-ghost btn-sm" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+          <button class="btn btn-ghost btn-sm" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> <span class="hide-mobile">Logout</span></button>
         </div>
       </div>
     </nav>
@@ -64,129 +64,233 @@
         <!-- STATS ROW -->
         <div class="stats-row">
           <div class="stat-card">
-            <div class="stat-card-icon blue"><i class="fa-solid fa-calendar-check"></i></div>
+            <div class="stat-card-icon blue"><i class="fa-solid fa-gamepad"></i></div>
             <div class="stat-card-body">
-              <div class="stat-card-num" id="statTotal">—</div>
-              <div class="stat-card-label">Today's Bookings</div>
+              <div class="stat-card-num" id="statGames">—</div>
+              <div class="stat-card-label">Total Games</div>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-icon green"><i class="fa-solid fa-person-walking"></i></div>
+            <div class="stat-card-icon green"><i class="fa-solid fa-newspaper"></i></div>
             <div class="stat-card-body">
-              <div class="stat-card-num" id="statWalkins">—</div>
-              <div class="stat-card-label">Active Walk-ins</div>
+              <div class="stat-card-num" id="statNews">—</div>
+              <div class="stat-card-label">News / Events</div>
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-icon pink"><i class="fa-solid fa-computer"></i></div>
+            <div class="stat-card-icon pink"><i class="fa-solid fa-database"></i></div>
             <div class="stat-card-body">
-              <div class="stat-card-num" id="statOccupied">—</div>
-              <div class="stat-card-label">Stations Occupied Now</div>
+              <div class="stat-card-num" id="statSync">✓</div>
+              <div class="stat-card-label">Database</div>
             </div>
           </div>
         </div>
 
-        <!-- GRID: Bookings + Walk-ins side by side on large screens -->
-        <div class="admin-grid">
+        <!-- TAB NAVIGATION -->
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-tab="games">
+            <i class="fa-solid fa-gamepad"></i> <span>Games</span>
+          </button>
+          <button class="admin-tab" data-tab="news">
+            <i class="fa-solid fa-newspaper"></i> <span>News & Events</span>
+          </button>
+          <button class="admin-tab" data-tab="featured">
+            <i class="fa-solid fa-star"></i> <span>Featured</span>
+          </button>
+        </div>
 
-          <!-- ── ONLINE BOOKINGS ───────────────────────────── -->
-          <section class="admin-panel">
+        <!-- ════════════ GAMES TAB ════════════ -->
+        <div class="admin-tab-content active" id="tab-games">
+          <div class="admin-panel">
             <div class="panel-header">
-              <h2 class="panel-title"><i class="fa-solid fa-calendar-check accent-blue"></i> Online Bookings</h2>
-              <div class="panel-filters">
-                <input type="date" id="filterDate" class="filter-input" title="Filter by date"/>
-                <select id="filterStation" class="filter-input">
-                  <option value="">All Stations</option>
-                  <option value="standard-pc">Standard PC</option>
-                  <option value="performance-pc">Performance PC</option>
-                  <option value="story-pc">Story PC</option>
-                  <option value="ps5">PS5</option>
-                  <option value="xbox">Xbox</option>
-                  <option value="ps5-sim">PS5 SIM</option>
-                  <option value="pc-sim">PC SIM</option>
-                </select>
-                <button class="btn btn-ghost btn-sm" id="clearFilters">Clear</button>
+              <h2 class="panel-title"><i class="fa-solid fa-gamepad accent-blue"></i> Games Library</h2>
+              <div class="panel-actions">
+                <button class="btn btn-outline-blue btn-sm" id="seedGamesBtn">
+                  <i class="fa-solid fa-download"></i> <span class="hide-mobile">Seed Games</span>
+                </button>
+                <button class="btn btn-outline-blue btn-sm" id="syncGamesBtn">
+                  <i class="fa-solid fa-arrows-rotate"></i> <span class="hide-mobile">Sync DB</span>
+                </button>
+                <button class="btn btn-primary btn-sm" id="addGameBtn">
+                  <i class="fa-solid fa-plus"></i> <span class="hide-mobile">Add Game</span>
+                </button>
               </div>
             </div>
 
-            <div class="table-wrap">
-              <table class="admin-table" id="bookingsTable">
-                <thead>
-                  <tr>
-                    <th>Ref</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Station</th>
-                    <th>Units</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Dur</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="bookingsTbody">
-                  <tr><td colspan="11" class="table-empty">Loading…</td></tr>
-                </tbody>
-              </table>
+            <!-- Search bar for games -->
+            <div class="panel-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="search" placeholder="Search games..." id="gameSearchAdmin" autocomplete="off" />
             </div>
-          </section>
 
-          <!-- ── WALK-INS ──────────────────────────────────── -->
-          <section class="admin-panel">
+            <div class="admin-cards-list" id="gamesList">
+              <div class="table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading games…</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ════════════ NEWS TAB ════════════ -->
+        <div class="admin-tab-content" id="tab-news">
+          <div class="admin-panel">
             <div class="panel-header">
-              <h2 class="panel-title"><i class="fa-solid fa-person-walking accent-green"></i> Walk-ins</h2>
-            </div>
-
-            <!-- Log walk-in form -->
-            <div class="walkin-form">
-              <div class="wf-title">Log a Walk-in</div>
-              <div class="wf-grid">
-                <div class="wf-field">
-                  <label>Station</label>
-                  <select id="wiStation" class="filter-input">
-                    <option value="standard-pc">Standard PC</option>
-                    <option value="performance-pc">Performance PC</option>
-                    <option value="story-pc">Story PC</option>
-                    <option value="ps5">PS5</option>
-                    <option value="xbox">Xbox</option>
-                    <option value="ps5-sim">PS5 SIM</option>
-                    <option value="pc-sim">PC SIM</option>
-                  </select>
-                </div>
-                <div class="wf-field" id="wiUnitsField">
-                  <label>Units / Players</label>
-                  <input type="number" id="wiUnits" class="filter-input" min="1" max="10" value="1" />
-                </div>
-                <div class="wf-field">
-                  <label>Start Time</label>
-                  <input type="time" id="wiTime" class="filter-input" step="600"/>
-                </div>
+              <h2 class="panel-title"><i class="fa-solid fa-newspaper accent-green"></i> News & Events</h2>
+              <div class="panel-actions">
+                <button class="btn btn-primary btn-sm" id="addNewsBtn">
+                  <i class="fa-solid fa-plus"></i> <span class="hide-mobile">Add News</span>
+                </button>
               </div>
-              <button class="btn btn-outline-blue w-full" id="logWalkinBtn">
-                <i class="fa-solid fa-plus"></i> Log Walk-in
-              </button>
             </div>
-
-            <!-- Active walk-ins -->
-            <div class="walkin-list" id="activeWalkins">
-              <div class="table-empty">No active walk-ins.</div>
+            <div class="admin-cards-list" id="newsList">
+              <div class="table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading news…</div>
             </div>
+          </div>
+        </div>
 
-            <!-- Completed walk-ins toggle -->
-            <details class="walkin-history">
-              <summary>Completed Walk-ins Today</summary>
-              <div class="walkin-list" id="completedWalkins">
-                <div class="table-empty">None yet.</div>
-              </div>
-            </details>
-          </section>
+        <!-- ════════════ FEATURED TAB ════════════ -->
+        <div class="admin-tab-content" id="tab-featured">
+          <div class="admin-panel">
+            <div class="panel-header">
+              <h2 class="panel-title"><i class="fa-solid fa-star" style="color:#ffc800;"></i> Featured on Homepage</h2>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); padding:0 24px 16px;">
+              Select up to 5 games to showcase for each category. These appear on your homepage.
+            </p>
+            <div class="admin-cards-list" id="featuredSections" style="gap:30px;">
+              <!-- Dynamically populated by JS: 5 blocks for All, PC, PS5, Xbox, SIM -->
+            </div>
+          </div>
+        </div>
 
-        </div><!-- /admin-grid -->
       </div>
     </main>
   </div><!-- /dashboard -->
+
+  <!-- ════════════ GAME FORM MODAL ════════════ -->
+  <div class="modal-overlay" id="gameModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="gameModalTitle">Add Game</h3>
+        <button class="modal-close" id="gameModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="gameEditId" />
+        <div class="mf-field">
+          <label>Title <span class="req">*</span></label>
+          <input type="text" id="gfTitle" class="mf-input" placeholder="e.g. Valorant" />
+        </div>
+        <div class="mf-row">
+          <div class="mf-field">
+            <label>Cover ID (IGDB)</label>
+            <input type="text" id="gfCoverId" class="mf-input" placeholder="e.g. cobqao" />
+          </div>
+          <div class="mf-field">
+            <label>Color</label>
+            <input type="color" id="gfColor" class="mf-input mf-color" value="#00d4ff" />
+          </div>
+        </div>
+        <div class="mf-field">
+          <label>Platform <span class="req">*</span></label>
+          <div class="mf-checkboxes" id="gfPlatform">
+            <label class="mf-check"><input type="checkbox" value="pc"> PC</label>
+            <label class="mf-check"><input type="checkbox" value="ps5"> PS5</label>
+            <label class="mf-check"><input type="checkbox" value="xbox"> Xbox</label>
+            <label class="mf-check"><input type="checkbox" value="sim"> SIM</label>
+          </div>
+        </div>
+        <div class="mf-field">
+          <label>Genre <span class="req">*</span></label>
+          <input type="text" id="gfGenre" class="mf-input" placeholder="e.g. Tactical Shooter" />
+        </div>
+        <div class="mf-field">
+          <label>Tags (comma-separated)</label>
+          <input type="text" id="gfTags" class="mf-input" placeholder="e.g. Competitive, Team, FPS" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="gameModalCancel">Cancel</button>
+        <button class="btn btn-primary" id="gameModalSave"><i class="fa-solid fa-check"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ NEWS FORM MODAL ════════════ -->
+  <div class="modal-overlay" id="newsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="newsModalTitle">Add News / Event</h3>
+        <button class="modal-close" id="newsModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="newsEditId" />
+        <div class="mf-row">
+          <div class="mf-field">
+            <label>Date <span class="req">*</span></label>
+            <input type="text" id="nfDate" class="mf-input" placeholder="e.g. March 12, 2026" />
+          </div>
+          <div class="mf-field">
+            <label>Tag Label <span class="req">*</span></label>
+            <input type="text" id="nfTag" class="mf-input" placeholder="e.g. NEW GAMES" />
+          </div>
+        </div>
+        <div class="mf-field">
+          <label>Tag Color</label>
+          <div class="mf-checkboxes" id="nfTagColor">
+            <label class="mf-check"><input type="radio" name="nfTagColor" value="tag-blue" checked> Blue</label>
+            <label class="mf-check"><input type="radio" name="nfTagColor" value="tag-green"> Green</label>
+            <label class="mf-check"><input type="radio" name="nfTagColor" value="tag-pink"> Pink</label>
+          </div>
+        </div>
+        <div class="mf-field">
+          <label>Title <span class="req">*</span></label>
+          <input type="text" id="nfTitle" class="mf-input" placeholder="Headline for the news item" />
+        </div>
+        <div class="mf-field">
+          <label>Description <span class="req">*</span></label>
+          <textarea id="nfDesc" class="mf-input mf-textarea" rows="3" placeholder="What's the news about?"></textarea>
+        </div>
+        <div class="mf-row">
+          <div class="mf-field">
+            <label>CTA Text</label>
+            <input type="text" id="nfCtaText" class="mf-input" placeholder="e.g. Learn More" />
+          </div>
+          <div class="mf-field">
+            <label>CTA Link</label>
+            <input type="text" id="nfCtaLink" class="mf-input" placeholder="e.g. membership.html" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="newsModalCancel">Cancel</button>
+        <button class="btn btn-primary" id="newsModalSave"><i class="fa-solid fa-check"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ FEATURE MODAL ════════════ -->
+  <div class="modal-overlay" id="featureModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="featureModalTitle">Feature a Game</h3>
+        <button class="modal-close" id="featureModalClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="ffCategory" />
+        <div class="mf-field">
+          <label>Select Game (<span id="ffCount"></span>/5 featured)</label>
+          <select id="ffGameSelect" class="mf-input" style="background:#0a0a14; color:#fff;">
+            <!-- Options injected by JS -->
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="featureModalCancel">Cancel</button>
+        <button class="btn btn-primary" id="featureModalSave"><i class="fa-solid fa-plus"></i> Add to Homepage</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-container" id="toastContainer"></div>
 
   <script type="module" src="../js/admin.js"></script>
 </body>

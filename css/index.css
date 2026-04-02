@@ -542,7 +542,24 @@
   border-radius: 100px;
 }
 
-/* ─── STATION CARD BOOK NOW BUTTON ──────────────────────── */
+/* ─── STATION CARD CALL / WHATSAPP BUTTONS ─────────────── */
+.sp-book-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.sp-book-btns .sp-book-btn {
+  flex: 1;
+  justify-content: center;
+  padding: 10px 8px;
+  font-size: 0.72rem;
+  min-height: 40px;
+  margin-top: 0;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
 .sp-book-btn {
   width: 100%;
   justify-content: center;

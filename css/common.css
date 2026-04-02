@@ -215,6 +215,24 @@ button {
   border: 1px solid rgba(0, 255, 170, 0.28);
 }
 
+.tag-blue {
+  background: var(--blue-dim);
+  color: var(--blue);
+  border: 1px solid rgba(0, 212, 255, 0.28);
+}
+
+.tag-pink {
+  background: var(--pink-dim);
+  color: var(--pink);
+  border: 1px solid rgba(255, 45, 120, 0.28);
+}
+
+.tag-green {
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(0, 255, 170, 0.28);
+}
+
 /* ─── BUTTONS ────────────────────────────────────────────── */
 .btn {
   display: inline-flex;
