@@ -202,6 +202,35 @@ function setupGameModal() {
   document.getElementById('gameModalClose').addEventListener('click', () => closeModal('gameModal'));
   document.getElementById('gameModalCancel').addEventListener('click', () => closeModal('gameModal'));
 
+  // Quick ID Finder & Auto-extraction
+  const coverInput = document.getElementById('gameCoverId');
+  const titleInput = document.getElementById('gameTitle');
+  const searchLink = document.getElementById('searchIgdbLink');
+
+  const updateSearchLink = () => {
+    const title = titleInput.value.trim();
+    if (title.length > 1) {
+      searchLink.href = `https://www.igdb.com/search?q=${encodeURIComponent(title)}`;
+      searchLink.style.display = 'inline-block';
+    } else {
+      searchLink.style.display = 'none';
+    }
+  };
+
+  titleInput.addEventListener('input', updateSearchLink);
+
+  coverInput.addEventListener('input', () => {
+    const val = coverInput.value.trim();
+    if (val.includes('igdb.com') && val.includes('/')) {
+      const match = val.match(/\/([^\/.]+)\.(jpg|png|webp|jpeg)/i);
+      if (match && match[1]) {
+        const id = match[1].split('/').pop();
+        coverInput.value = id;
+        showToast('ID extracted from URL!', 'info');
+      }
+    }
+  });
+
   document.getElementById('saveGameBtn').addEventListener('click', async () => {
     const title = document.getElementById('gameTitle').value.trim();
     if (!title) { showToast('Please enter a game title.', 'error'); return; }
@@ -244,6 +273,17 @@ function editGame(id) {
   setChecked('gamePlatforms', g.platform || []);
   document.getElementById('gameModalTitle').innerHTML =
     '<i class="fa-solid fa-pen" style="color:var(--blue)"></i> Edit Game';
+  
+  // Update search link visibility immediately
+  const titleInput = document.getElementById('gameTitle');
+  const searchLink = document.getElementById('searchIgdbLink');
+  if (titleInput.value.trim().length > 1) {
+    searchLink.href = `https://www.igdb.com/search?q=${encodeURIComponent(titleInput.value.trim())}`;
+    searchLink.style.display = 'inline-block';
+  } else {
+    searchLink.style.display = 'none';
+  }
+
   openModal('gameModal');
 }
 
@@ -255,6 +295,7 @@ function resetGameForm() {
   document.getElementById('gameColor').value = '#00d4ff';
   document.getElementById('gameTags').value = '';
   clearChecked('gamePlatforms');
+  document.getElementById('searchIgdbLink').style.display = 'none';
 }
 
 // ══════════════════════════════════════════════════════════
