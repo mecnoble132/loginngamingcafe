@@ -31,13 +31,14 @@ highlightNav();
 
 // ===== PRICE CALCULATOR =====
 // Pricing rules:
-//   PC:          1st hr ₹150 · each extra hr ₹100 · DAY CAP ₹600
+//   LAN PC:      flat ₹100/hr every hour
+//   High-End PC: 1st hr ₹150 + ₹50×(players-1) · each extra hr ₹100 + ₹50×(players-1)
 //   Console/SIM: 1st hr ₹150 + ₹50×(players-1) · each extra hr ₹100 + ₹50×(players-1)
 (function () {
-  const PC_DAY_CAP = 600;
-  const FIRST_HR   = 150;
-  const EXTRA_HR   = 100;
-  const CTRL_FEE   = 50;   // per extra player, per hour
+  const PC_FLAT   = 100;   // LAN PC flat rate per hour
+  const FIRST_HR  = 150;
+  const EXTRA_HR  = 100;
+  const CTRL_FEE  = 50;    // per extra player, per hour
 
   const resultEl    = document.getElementById('calcResult');
   const breakdownEl = document.getElementById('calcBreakdown');
@@ -50,36 +51,32 @@ highlightNav();
   let hours = 1, platform = 'pc', controllers = 1;
 
   function calcPrice() {
-    let total, breakdown, capped = false;
+    let total, breakdown;
 
     if (platform === 'pc') {
-      total  = FIRST_HR + Math.max(0, hours - 1) * EXTRA_HR;
-      capped = total > PC_DAY_CAP;
-      total  = Math.min(total, PC_DAY_CAP);
+      // LAN PC — flat rate, no first-hour premium, no day cap
+      total     = hours * PC_FLAT;
+      breakdown = hours === 1
+        ? `₹${PC_FLAT} flat rate for 1 hr`
+        : `₹${PC_FLAT} × ${hours} hrs`;
 
-      if (capped) {
-        breakdown = `₹${FIRST_HR} 1st hr + ₹${EXTRA_HR}/hr after · Day rate applied (capped at ₹${PC_DAY_CAP})`;
-      } else if (hours === 1) {
-        breakdown = `₹${FIRST_HR} for 1st hr`;
-      } else {
-        breakdown = `₹${FIRST_HR} 1st hr + ₹${EXTRA_HR} × ${hours - 1} hr${hours - 1 > 1 ? 's' : ''} after`;
-      }
     } else {
-      // Console / SIM: extra ₹50 per additional player, every hour
+      // High-End PC, Console, SIM — 1st hr premium + extra controller fee
       const extraCtrl = controllers - 1;
       const firstHr   = FIRST_HR + extraCtrl * CTRL_FEE;
       const laterHr   = EXTRA_HR  + extraCtrl * CTRL_FEE;
       total = firstHr + Math.max(0, hours - 1) * laterHr;
 
+      const platformLabel = platform === 'highend' ? 'High-End PC' : 'Console/SIM';
       if (hours === 1) {
-        breakdown = `₹${firstHr} for 1st hr · ${controllers} player${controllers > 1 ? 's' : ''}`;
+        breakdown = `₹${firstHr} for 1st hr · ${controllers} player${controllers > 1 ? 's' : ''} · ${platformLabel}`;
       } else {
         breakdown = `₹${firstHr} 1st hr + ₹${laterHr} × ${hours - 1} hr${hours - 1 > 1 ? 's' : ''} · ${controllers} players`;
       }
     }
 
     resultEl.textContent    = `₹${total}`;
-    resultEl.style.color    = capped ? 'var(--green)' : '';
+    resultEl.style.color    = '';
     breakdownEl.textContent = breakdown;
     hoursEl.textContent     = hours;
   }
@@ -94,8 +91,8 @@ highlightNav();
       document.querySelectorAll('.calc-opt[data-platform]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       platform = btn.dataset.platform;
-      // Show player selector for console only (SIM is single-player)
-      ctrlRow.style.display = (platform === 'console') ? '' : 'none';
+      // Show player selector for console and high-end PC (SIM is single-player)
+      ctrlRow.style.display = (platform === 'console' || platform === 'highend') ? '' : 'none';
       controllers = 1;
       document.querySelectorAll('.ctrl-opt').forEach((b, i) => b.classList.toggle('active', i === 0));
       calcPrice();

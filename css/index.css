@@ -311,6 +311,11 @@
   color: #ffc800;
 }
 
+.soi-icon.gold {
+  background: rgba(255, 176, 0, 0.15);
+  color: #ffb000;
+}
+
 .soi-body {
   min-width: 0;
 }
@@ -383,6 +388,42 @@
   max-width: 100%;
 }
 
+.group-price-badge {
+  font-family: var(--f-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-sub);
+  letter-spacing: 0;
+  text-transform: none;
+  background: var(--bg-surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.group-price-badge .highlight {
+  color: var(--cyan);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.group-price-badge .highlight-gold {
+  color: #ffb000;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.group-price-badge .highlight-pink {
+  color: #ff2a85;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
 .sp-group-label::after {
   content: '';
   flex: 1;
@@ -453,6 +494,10 @@
   background: linear-gradient(to bottom, rgba(0, 212, 255, 0.16) 0%, rgba(8, 8, 16, 0.82) 100%);
 }
 
+.sp-card-img.tint-gold .sp-card-img-overlay {
+  background: linear-gradient(to bottom, rgba(255, 176, 0, 0.28) 0%, rgba(8, 8, 16, 0.85) 100%);
+}
+
 .sp-card-split-top {
   display: flex;
   padding: 18px 20px 0;
@@ -515,6 +560,11 @@
 .sp-icon.green {
   background: var(--green-dim);
   color: var(--green);
+}
+
+.sp-icon.gold {
+  background: rgba(255, 176, 0, 0.15);
+  color: #ffb000;
 }
 
 .sp-title {
@@ -1553,8 +1603,63 @@
   border-radius: var(--r);
   overflow: hidden;
   margin-top: 48px;
-  margin-bottom: 48px;
+  margin-bottom: 24px;
   box-shadow: 0 0 40px rgba(0, 212, 255, 0.06);
+}
+
+/* Split pricing: two banners side by side */
+.pricing-banner-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  margin-top: 48px;
+  margin-bottom: 24px;
+}
+
+.pricing-banner-split .pricing-banner {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.pricing-banner-split-label {
+  font-family: var(--f-display);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pb-label-gold {
+  color: #ffb000;
+  background: rgba(255, 176, 0, 0.13);
+  border: 1px solid rgba(255, 176, 0, 0.28);
+}
+
+.pb-flat-rate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 28px 20px;
+}
+
+.pb-flat-tag {
+  font-family: var(--f-display);
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .pricing-banner-split {
+    grid-template-columns: 1fr;
+  }
 }
 
 .pricing-banner-heading {

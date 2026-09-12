@@ -215,6 +215,12 @@ button {
   border: 1px solid rgba(0, 255, 170, 0.28);
 }
 
+.badge-gold {
+  background: rgba(255, 176, 0, 0.15);
+  color: #ffb000;
+  border: 1px solid rgba(255, 176, 0, 0.35);
+}
+
 .tag-blue {
   background: var(--blue-dim);
   color: var(--blue);
@@ -310,6 +316,18 @@ button {
   background: var(--green);
   color: #000;
   box-shadow: 0 0 20px rgba(0, 255, 170, 0.25);
+}
+
+.btn-outline-gold {
+  background: transparent;
+  color: #ffb000;
+  border-color: #ffb000;
+}
+
+.btn-outline-gold:hover {
+  background: #ffb000;
+  color: #000;
+  box-shadow: 0 0 20px rgba(255, 176, 0, 0.3);
 }
 
 .btn-whatsapp {
