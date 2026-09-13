@@ -1,5 +1,4 @@
-import { db } from './firebase-config.js';
-import { collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { supabase } from './supabase-config.js';
 
 export const FALLBACK_NEWS = [
   { date: 'March 12, 2026', tag: 'NEW GAMES', tagColor: 'tag-blue', title: 'Avatar & High on Life 2 Added!', desc: "We've just updated our library with the latest hits. Avatar: Frontiers of Pandora and High on Life 2 are now available to play and review!", ctaText: 'Go to Review Page', ctaLink: 'gamepass.html' },
@@ -7,11 +6,27 @@ export const FALLBACK_NEWS = [
   { date: 'February 20, 2026', tag: 'NEW GEAR', tagColor: 'tag-blue', title: 'Performance PC Upgrade Complete', desc: "RTX 3060 now runs at full potential with updated drivers and cooling. Framerates are noticeably smoother.", ctaText: 'See updated specs', ctaLink: '../index.html#pricing' },
 ];
 
+function mapRow(row) {
+  return {
+    title: row.title,
+    date: row.date,
+    tag: row.tag,
+    tagColor: row.tag_color,
+    desc: row.description,
+    ctaText: row.cta_text,
+    ctaLink: row.cta_link,
+  };
+}
+
 async function loadNewsData() {
   try {
-    const snap = await getDocs(query(collection(db, 'news'), orderBy('createdAt', 'desc')));
-    if (snap.empty) return FALLBACK_NEWS;
-    return snap.docs.map(d => d.data());
+    const { data, error } = await supabase
+      .from('news')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || !data.length) return FALLBACK_NEWS;
+    return data.map(mapRow);
   } catch (e) {
     console.warn('News load fallback:', e.message);
     return FALLBACK_NEWS;
