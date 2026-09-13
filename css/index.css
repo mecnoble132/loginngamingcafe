@@ -1238,6 +1238,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
+  contain: layout paint;
 }
 
 .gallery-item {
@@ -1247,6 +1248,8 @@
   aspect-ratio: 4/3;
   background: var(--bg-card);
   cursor: pointer;
+  contain: paint;
+  transform: translateZ(0);
 }
 
 .gallery-item.large {
@@ -1256,6 +1259,8 @@
 
 .gallery-item img {
   transition: transform 0.5s;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .gallery-overlay {
@@ -1267,6 +1272,7 @@
   padding: 14px;
   opacity: 0;
   transition: opacity 0.3s;
+  pointer-events: none;
 }
 
 .gallery-overlay span {
