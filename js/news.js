@@ -1,8 +1,7 @@
 import { supabase } from './supabase-config.js';
 
 export const FALLBACK_NEWS = [
-  { date: 'March 12, 2026', tag: 'NEW GAMES', tagColor: 'tag-blue', title: 'Avatar & High on Life 2 Added!', desc: "We've just updated our library with the latest hits. Avatar: Frontiers of Pandora and High on Life 2 are now available to play and review!", ctaText: 'Go to Review Page', ctaLink: 'gamepass.html' },
-  { date: 'March 8, 2026', tag: 'ANNOUNCEMENT', tagColor: 'tag-green', title: 'Review a Game Programme Updated', desc: "Great news for all members! The 'Review a Game' perk is now available for all membership tiers, including Starter.", ctaText: 'View Membership Perks', ctaLink: 'membership.html' },
+  { date: 'March 12, 2026', tag: 'NEW GAMES', tagColor: 'tag-blue', title: 'Avatar & High on Life 2 Added!', desc: "We've just updated our library with the latest hits. Avatar: Frontiers of Pandora and High on Life 2 are now available on Xbox.", ctaText: 'Browse Games', ctaLink: 'games.html' },
   { date: 'February 20, 2026', tag: 'NEW GEAR', tagColor: 'tag-blue', title: 'Performance PC Upgrade Complete', desc: "RTX 3060 now runs at full potential with updated drivers and cooling. Framerates are noticeably smoother.", ctaText: 'See updated specs', ctaLink: '../index.html#pricing' },
 ];
 
