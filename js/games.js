@@ -1,12 +1,10 @@
 /* ============================================================
    LOGINN GAMING CAFE — js/games.js
-   Games Library — loads from Firestore, falls back to hardcoded
+   Games Library — loads from Supabase, falls back to hardcoded
 ============================================================ */
 'use strict';
 
-import { db } from './firebase-config.js';
-import { collection, getDocs, query, orderBy }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { supabase } from './supabase-config.js';
 
 // ── HARDCODED FALLBACK ────────────────────────────────────
 export const FALLBACK_GAMES = [
@@ -220,15 +218,28 @@ if (searchEl) {
   });
 }
 
+// ── Map a Supabase row (snake_case) to the shape the UI expects ──
+function mapRow(row) {
+  return {
+    title: row.title,
+    coverId: row.cover_id,
+    genre: row.genre,
+    color: row.color,
+    tags: row.tags || [],
+    platform: row.platform || [],
+    featuredInCategory: row.featured_in_category || {},
+  };
+}
+
 // ── Load games ─────────────────────────────────────────
 async function loadGames() {
   try {
-    const snap = await getDocs(query(collection(db, 'games'), orderBy('title', 'asc')));
-    if (!snap.empty) {
-      GAMES = snap.docs.map(d => d.data());
-    } else {
-      GAMES = FALLBACK_GAMES;
-    }
+    const { data, error } = await supabase
+      .from('games')
+      .select('*')
+      .order('title', { ascending: true });
+    if (error) throw error;
+    GAMES = (data && data.length) ? data.map(mapRow) : FALLBACK_GAMES;
   } catch (e) {
     console.warn('Games load fallback:', e.message);
     GAMES = FALLBACK_GAMES;

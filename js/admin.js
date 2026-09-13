@@ -5,16 +5,41 @@
 ============================================================ */
 'use strict';
 
-import { db, auth } from './firebase-config.js';
-import {
-  signInWithEmailAndPassword, signOut, onAuthStateChanged
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import {
-  collection, onSnapshot, query, orderBy,
-  doc, updateDoc, addDoc, deleteDoc, setDoc, serverTimestamp, getDocs, writeBatch
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { supabase } from './supabase-config.js';
 import { FALLBACK_GAMES } from './games.js';
 import { FALLBACK_NEWS } from './news.js';
+
+// ── Row <-> UI shape mapping (Postgres uses snake_case) ──────
+function gameToRow(g) {
+  return {
+    title: g.title,
+    cover_id: g.coverId,
+    genre: g.genre,
+    color: g.color,
+    tags: g.tags,
+    platform: g.platform,
+    ...(('featuredInCategory' in g) ? { featured_in_category: g.featuredInCategory } : {}),
+  };
+}
+function rowToGame(r) {
+  return {
+    id: r.id, title: r.title, coverId: r.cover_id, genre: r.genre,
+    color: r.color, tags: r.tags || [], platform: r.platform || [],
+    featuredInCategory: r.featured_in_category || {},
+  };
+}
+function newsToRow(n) {
+  return {
+    title: n.title, date: n.date, tag: n.tag, tag_color: n.tagColor,
+    description: n.desc, cta_text: n.ctaText, cta_link: n.ctaLink,
+  };
+}
+function rowToNews(r) {
+  return {
+    id: r.id, title: r.title, date: r.date, tag: r.tag, tagColor: r.tag_color,
+    desc: r.description, ctaText: r.cta_text, ctaLink: r.cta_link,
+  };
+}
 
 // ══════════════════════════════════════════════════════════
 // AUTH
@@ -22,26 +47,30 @@ import { FALLBACK_NEWS } from './news.js';
 const loginScreen = document.getElementById('loginScreen');
 const dashboard = document.getElementById('dashboard');
 
-onAuthStateChanged(auth, user => {
-  if (user) {
+function applyAuthState(session) {
+  if (session && session.user) {
     loginScreen.style.display = 'none';
     dashboard.style.display = '';
-    document.getElementById('adminEmail').textContent = user.email;
+    document.getElementById('adminEmail').textContent = session.user.email;
     initDashboard();
   } else {
     loginScreen.style.display = '';
     dashboard.style.display = 'none';
   }
-});
+}
+
+// Check current session on load, then react to future changes
+// (login, logout, token refresh) — replaces onAuthStateChanged.
+supabase.auth.getSession().then(({ data }) => applyAuthState(data.session));
+supabase.auth.onAuthStateChange((_event, session) => applyAuthState(session));
 
 document.getElementById('loginBtn').addEventListener('click', async () => {
   const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPass').value;
   const errEl = document.getElementById('loginError');
   errEl.style.display = 'none';
-  try {
-    await signInWithEmailAndPassword(auth, email, pass);
-  } catch (e) {
+  const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+  if (error) {
     errEl.textContent = 'Invalid email or password.';
     errEl.style.display = '';
   }
@@ -50,7 +79,7 @@ document.getElementById('loginBtn').addEventListener('click', async () => {
 document.getElementById('loginPass').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('loginBtn').click();
 });
-document.getElementById('logoutBtn').addEventListener('click', () => signOut(auth));
+document.getElementById('logoutBtn').addEventListener('click', () => supabase.auth.signOut());
 
 // ══════════════════════════════════════════════════════════
 // TABS
@@ -113,17 +142,29 @@ function initDashboard() {
 // GAMES
 // ══════════════════════════════════════════════════════════
 
+async function fetchGames() {
+  const { data, error } = await supabase.from('games').select('*').order('title', { ascending: true });
+  if (error) throw error;
+  allGames = (data || []).map(rowToGame);
+  renderGames();
+  renderFeatured();
+  updateStats();
+}
+
 function listenGames() {
-  onSnapshot(query(collection(db, 'games'), orderBy('title', 'asc')), snap => {
-    allGames = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderGames();
-    renderFeatured();
-    updateStats();
-  }, err => {
+  fetchGames().catch(err => {
     console.warn('Games error:', err.message);
     document.getElementById('gamesListPanel').innerHTML =
       '<div class="table-empty"><i class="fa-solid fa-triangle-exclamation"></i> Error loading games</div>';
   });
+
+  // Realtime subscription — replaces Firestore's onSnapshot.
+  supabase
+    .channel('admin-games')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'games' }, () => {
+      fetchGames().catch(err => console.warn('Games refresh error:', err.message));
+    })
+    .subscribe();
 }
 
 function renderGames(filter = '') {
@@ -247,11 +288,13 @@ function setupGameModal() {
     const editId = document.getElementById('gameEditId').value;
     try {
       if (editId) {
-        await updateDoc(doc(db, 'games', editId), data);
+        const { error } = await supabase.from('games').update(gameToRow(data)).eq('id', editId);
+        if (error) throw error;
         showToast(`"${title}" updated!`);
       } else {
         data.featuredInCategory = null;
-        await addDoc(collection(db, 'games'), data);
+        const { error } = await supabase.from('games').insert(gameToRow(data));
+        if (error) throw error;
         showToast(`"${title}" added!`);
       }
       closeModal('gameModal');
@@ -302,16 +345,27 @@ function resetGameForm() {
 // NEWS / EVENTS
 // ══════════════════════════════════════════════════════════
 
+async function fetchNews() {
+  const { data, error } = await supabase.from('news').select('*').order('created_at', { ascending: false });
+  if (error) throw error;
+  allNews = (data || []).map(rowToNews);
+  renderNews();
+  updateStats();
+}
+
 function listenNews() {
-  onSnapshot(query(collection(db, 'news'), orderBy('createdAt', 'desc')), snap => {
-    allNews = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderNews();
-    updateStats();
-  }, err => {
+  fetchNews().catch(err => {
     console.warn('News error:', err.message);
     document.getElementById('newsListPanel').innerHTML =
       '<div class="table-empty"><i class="fa-solid fa-triangle-exclamation"></i> Error loading news</div>';
   });
+
+  supabase
+    .channel('admin-news')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, () => {
+      fetchNews().catch(err => console.warn('News refresh error:', err.message));
+    })
+    .subscribe();
 }
 
 function renderNews() {
@@ -380,11 +434,13 @@ function setupNewsModal() {
     const editId = document.getElementById('newsEditId').value;
     try {
       if (editId) {
-        await updateDoc(doc(db, 'news', editId), data);
+        const { error } = await supabase.from('news').update(newsToRow(data)).eq('id', editId);
+        if (error) throw error;
         showToast(`"${title}" updated!`);
       } else {
-        data.createdAt = serverTimestamp();
-        await addDoc(collection(db, 'news'), data);
+        // created_at defaults to now() in Postgres — no need to set it manually.
+        const { error } = await supabase.from('news').insert(newsToRow(data));
+        if (error) throw error;
         showToast(`"${title}" added!`);
       }
       closeModal('newsModal');
@@ -514,11 +570,13 @@ async function saveFeatured() {
       const merged = { ...existing, ...cats };
       // Clean: remove false keys
       Object.keys(merged).forEach(k => { if (!merged[k]) delete merged[k]; });
-      return updateDoc(doc(db, 'games', gid), {
-        featuredInCategory: Object.keys(merged).length ? merged : null
-      });
+      return supabase.from('games').update({
+        featured_in_category: Object.keys(merged).length ? merged : null
+      }).eq('id', gid);
     });
-    await Promise.all(promises);
+    const results = await Promise.all(promises);
+    const failed = results.find(r => r.error);
+    if (failed) throw failed.error;
     showToast('Featured games saved!');
   } catch (e) {
     showToast('Error saving featured: ' + e.message, 'error');
@@ -534,11 +592,7 @@ function setupRefresh() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
     try {
-      const snap = await getDocs(query(collection(db, 'games'), orderBy('title', 'asc')));
-      allGames = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderGames();
-      renderFeatured();
-      updateStats();
+      await fetchGames();
       showToast(`Refreshed ${allGames.length} games.`);
     } catch (e) { showToast('Refresh failed: ' + e.message, 'error'); }
     finally {
@@ -552,10 +606,7 @@ function setupRefresh() {
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
     try {
-      const snap = await getDocs(query(collection(db, 'news'), orderBy('createdAt', 'desc')));
-      allNews = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderNews();
-      updateStats();
+      await fetchNews();
       showToast(`Refreshed ${allNews.length} news items.`);
     } catch (e) { showToast('Refresh failed: ' + e.message, 'error'); }
     finally {
@@ -576,12 +627,9 @@ function setupSeeding() {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
     
     try {
-      const batch = writeBatch(db);
-      FALLBACK_GAMES.forEach(g => {
-        const ref = doc(collection(db, 'games'));
-        batch.set(ref, g);
-      });
-      await batch.commit();
+      const rows = FALLBACK_GAMES.map(gameToRow);
+      const { error } = await supabase.from('games').insert(rows);
+      if (error) throw error;
       showToast(`Successfully seeded ${FALLBACK_GAMES.length} games.`);
     } catch (e) { showToast('Seeding failed: ' + e.message, 'error'); }
     finally {
@@ -597,12 +645,9 @@ function setupSeeding() {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
     
     try {
-      const batch = writeBatch(db);
-      FALLBACK_NEWS.forEach(n => {
-        const ref = doc(collection(db, 'news'));
-        batch.set(ref, { ...n, createdAt: serverTimestamp() });
-      });
-      await batch.commit();
+      const rows = FALLBACK_NEWS.map(newsToRow); // created_at defaults to now() per row
+      const { error } = await supabase.from('news').insert(rows);
+      if (error) throw error;
       showToast(`Successfully seeded ${FALLBACK_NEWS.length} news items.`);
     } catch (e) { showToast('Seeding failed: ' + e.message, 'error'); }
     finally {
@@ -615,10 +660,13 @@ function setupSeeding() {
 // ══════════════════════════════════════════════════════════
 // DELETE CONFIRMATION
 // ══════════════════════════════════════════════════════════
-function confirmDelete(collectionName, docId, label) {
+function confirmDelete(tableName, rowId, label) {
   if (!confirm(`Delete this ${label}? This cannot be undone.`)) return;
-  deleteDoc(doc(db, collectionName, docId))
-    .then(() => showToast(`${label.charAt(0).toUpperCase() + label.slice(1)} deleted.`))
+  supabase.from(tableName).delete().eq('id', rowId)
+    .then(({ error }) => {
+      if (error) throw error;
+      showToast(`${label.charAt(0).toUpperCase() + label.slice(1)} deleted.`);
+    })
     .catch(e => showToast('Error: ' + e.message, 'error'));
 }
 
