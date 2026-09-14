@@ -1,0 +1,32 @@
+[build]
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/pages/news.html"
+  to = "/blog"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pages/news"
+  to = "/blog"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/blog"
+  to = "/.netlify/functions/blog"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/blog/*"
+  to = "/.netlify/functions/blog"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/sitemap"
+  status = 200
+  force = true

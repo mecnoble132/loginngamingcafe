@@ -18,6 +18,14 @@ Open **SQL Editor** in the Supabase dashboard, paste the contents of
 - Row Level Security: **anyone can read**, only a **logged-in admin can write**
 - Realtime enabled on both tables (powers the live-updating admin dashboard)
 
+## 2.1 Add the blog schema
+In a new SQL Editor query, run
+`supabase/migrations/20260914_create_blog.sql`. It creates the `posts` table,
+its public/draft access rules, Realtime support, and the public `blog-images`
+Storage bucket used by cover and inline post images. Run this migration once
+per Supabase project; it is separate so existing projects can be upgraded
+without re-running their base schema.
+
 ## 3. Create the admin user
 Do this in the dashboard, not SQL:
 **Authentication → Users → Add user** → enter the admin's email + password →

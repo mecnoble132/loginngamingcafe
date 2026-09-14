@@ -76,8 +76,8 @@
           <div class="stat-card">
             <div class="stat-card-icon green"><i class="fa-solid fa-newspaper"></i></div>
             <div>
-              <div class="stat-card-num" id="statNews">—</div>
-              <div class="stat-card-label">News / Events</div>
+              <div class="stat-card-num" id="statPosts">—</div>
+              <div class="stat-card-label">Posts</div>
             </div>
           </div>
           <div class="stat-card">
@@ -94,8 +94,8 @@
           <button class="admin-tab active" data-tab="games">
             <i class="fa-solid fa-gamepad"></i> Games
           </button>
-          <button class="admin-tab" data-tab="news">
-            <i class="fa-solid fa-newspaper"></i> News / Events
+          <button class="admin-tab" data-tab="blog">
+            <i class="fa-solid fa-pen-nib"></i> Blog
           </button>
           <button class="admin-tab" data-tab="featured">
             <i class="fa-solid fa-star"></i> Featured
@@ -130,23 +130,21 @@
         </div>
 
         <!-- ═══════ NEWS TAB ═══════ -->
-        <div class="admin-tab-content" id="tab-news">
+        <div class="admin-tab-content" id="tab-blog">
           <div class="admin-panel">
             <div class="panel-header">
-              <div class="panel-title"><i class="fa-solid fa-newspaper" style="color:var(--green)"></i> News & Events</div>
+              <div class="panel-title"><i class="fa-solid fa-pen-nib" style="color:var(--green)"></i> Blog posts</div>
               <div class="panel-actions">
-                <button class="btn btn-primary btn-sm" id="addNewsBtn" style="background:var(--green);">
-                  <i class="fa-solid fa-plus"></i> Add Event
+                <button class="btn btn-primary btn-sm" id="addPostBtn" style="background:var(--green);">
+                  <i class="fa-solid fa-plus"></i> New post
                 </button>
-                <button class="btn btn-ghost btn-sm" id="refreshNewsBtn" title="Fetch from Database">
+                <button class="btn btn-ghost btn-sm" id="refreshPostsBtn" title="Fetch from Database">
                   <i class="fa-solid fa-arrows-rotate"></i><span class="hide-mobile">Refresh</span>
-                </button>
-                <button class="btn btn-outline-pink btn-sm" id="seedNewsBtn" title="Seed News with Fallbacks">
-                  <i class="fa-solid fa-database"></i><span class="hide-mobile">Seed</span>
                 </button>
               </div>
             </div>
-            <div class="admin-cards-list" id="newsListPanel">
+            <div class="panel-search"><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="postSearch" placeholder="Search title, slug, author or tag…" aria-label="Search posts"></div>
+            <div class="admin-cards-list" id="postsListPanel">
               <div class="table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>
             </div>
           </div>
@@ -224,54 +222,45 @@
   </div>
 
   <!-- ══════════════ NEWS MODAL ══════════════ -->
-  <div class="modal-overlay" id="newsModal">
-    <div class="modal-card">
+  <div class="modal-overlay" id="postModal">
+    <div class="modal-card post-modal-card" role="dialog" aria-modal="true" aria-labelledby="postModalTitle">
       <div class="modal-header">
-        <div class="modal-title" id="newsModalTitle"><i class="fa-solid fa-newspaper" style="color:var(--green)"></i> Add News / Event</div>
-        <button class="modal-close" id="newsModalClose"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-title" id="postModalTitle"><i class="fa-solid fa-pen-nib" style="color:var(--green)"></i> New post</div>
+        <button class="modal-close" id="postModalClose" aria-label="Close post editor"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="newsEditId" value="">
+        <input type="hidden" id="postEditId" value="">
         <div class="mf-field">
           <label>Title <span class="req">*</span></label>
-          <input type="text" id="newsTitle" class="mf-input" placeholder="e.g. New Games Added!" />
+          <input type="text" id="postTitle" class="mf-input" maxlength="160" placeholder="e.g. Your first racing simulator guide" />
         </div>
         <div class="mf-row">
           <div class="mf-field">
-            <label>Date</label>
-            <input type="text" id="newsDate" class="mf-input" placeholder="e.g. April 2, 2026" />
+            <label>Slug <span class="req">*</span></label>
+            <input type="text" id="postSlug" class="mf-input" maxlength="180" placeholder="your-first-racing-simulator-guide" />
           </div>
           <div class="mf-field">
-            <label>Tag Label</label>
-            <input type="text" id="newsTag" class="mf-input" placeholder="e.g. ANNOUNCEMENT" />
+            <label>Author <span class="req">*</span></label>
+            <input type="text" id="postAuthor" class="mf-input" maxlength="160" value="Loginn Gaming Cafe" />
           </div>
         </div>
         <div class="mf-field">
-          <label>Tag Color</label>
-          <div class="mf-checkboxes" id="newsTagColorGroup">
-            <label class="mf-check"><input type="radio" name="tagColor" value="tag-blue" checked> Blue</label>
-            <label class="mf-check"><input type="radio" name="tagColor" value="tag-green"> Green</label>
-            <label class="mf-check"><input type="radio" name="tagColor" value="tag-pink"> Pink</label>
-          </div>
+          <label>Cover image <span class="req">*</span> <small>(JPEG, PNG or WebP; max 5 MB)</small></label>
+          <input type="file" id="postCoverFile" class="mf-input" accept="image/jpeg,image/png,image/webp">
+          <div id="postCoverPreview" class="post-cover-preview" hidden><img alt="Cover preview"><button type="button" id="removePostCover" aria-label="Remove cover image"><i class="fa-solid fa-xmark"></i></button></div>
         </div>
         <div class="mf-field">
-          <label>Description</label>
-          <textarea id="newsDesc" class="mf-input mf-textarea" placeholder="Write about this news/event…"></textarea>
+          <label>Excerpt <span class="req">*</span> <small id="postExcerptCount">0/320</small></label>
+          <textarea id="postExcerpt" class="mf-input mf-textarea" maxlength="320" placeholder="A concise summary for the blog list and previews."></textarea>
         </div>
-        <div class="mf-row">
-          <div class="mf-field">
-            <label>CTA Button Text</label>
-            <input type="text" id="newsCtaText" class="mf-input" placeholder="e.g. Learn More" />
-          </div>
-          <div class="mf-field">
-            <label>CTA Link</label>
-            <input type="text" id="newsCtaLink" class="mf-input" placeholder="e.g. membership.html" />
-          </div>
-        </div>
+        <div class="mf-field"><label>Tags</label><div class="mf-checkboxes" id="postTags"><label class="mf-check"><input type="checkbox" value="Announcement"> Announcement</label><label class="mf-check"><input type="checkbox" value="Game Guides"> Game Guides</label><label class="mf-check"><input type="checkbox" value="Events"> Events</label><label class="mf-check"><input type="checkbox" value="Cafe Life"> Cafe Life</label></div></div>
+        <div class="mf-field"><label>Meta description <span class="req">*</span> <small id="postMetaCount">0/160</small></label><textarea id="postMetaDescription" class="mf-input mf-textarea" maxlength="160" placeholder="A search-friendly description for this post."></textarea></div>
+        <div class="mf-field"><label>Post body <span class="req">*</span></label><div id="postEditor" class="post-editor"></div><input type="file" id="postInlineFile" accept="image/jpeg,image/png,image/webp" hidden></div>
+        <div class="mf-field"><label>Status</label><select id="postStatus" class="mf-input"><option value="draft">Draft</option><option value="published">Published</option></select></div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-ghost btn-sm" id="newsModalCancel">Cancel</button>
-        <button class="btn btn-primary btn-sm" id="saveNewsBtn" style="background:var(--green);border-color:var(--green);"><i class="fa-solid fa-check"></i> Save</button>
+        <button class="btn btn-ghost btn-sm" id="postModalCancel">Cancel</button>
+        <button class="btn btn-primary btn-sm" id="savePostBtn" style="background:var(--green);border-color:var(--green);"><i class="fa-solid fa-check"></i> Save post</button>
       </div>
     </div>
   </div>
@@ -279,6 +268,7 @@
   <!-- TOAST CONTAINER -->
   <div class="toast-container" id="toastContainer"></div>
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
   <script type="module" src="../js/admin.js"></script>
 </body>
 

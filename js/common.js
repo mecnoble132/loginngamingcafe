@@ -44,10 +44,15 @@ document.addEventListener('click', (e) => {
 // ===== ACTIVE NAV LINK — highlight current PAGE only (not hash anchors) =====
 // FIX 1: Only mark a link active if it points to a real page file (not a #hash).
 // Hash-based section highlighting is handled by index.js on the homepage.
-const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+const pathname = window.location.pathname.replace(/\/+$/, '') || '/';
+const currentPath = pathname.split('/').pop() || 'index.html';
 document.querySelectorAll('.nav-link').forEach(link => {
   const href = link.getAttribute('href');
   if (!href) return;
+  if (href === '/blog' && (pathname === '/blog' || pathname.startsWith('/blog/'))) {
+    link.classList.add('active');
+    return;
+  }
   // Skip pure anchor links — don't mark them active via this check
   if (href.startsWith('#')) return;
   const linkFile = href.split('/').pop().split('#')[0] || 'index.html';
