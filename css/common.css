@@ -48,7 +48,7 @@
   inset: 0;
   z-index: 99999;
   background: var(--bg);
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -132,7 +132,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 10px);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -712,7 +712,6 @@ button {
   color: var(--blue);
   background: var(--blue-dim);
   border-color: rgba(0, 212, 255, 0.2);
-  transform: translateY(-3px);
 }
 
 .footer-bottom {
@@ -754,7 +753,6 @@ button {
 }
 
 .whatsapp-float:hover {
-  transform: scale(1.1) translateY(-2px);
   box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
 }
 
@@ -867,14 +865,8 @@ button {
 
 
 .reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1099,11 +1091,9 @@ button {
     color: var(--blue);
     background: var(--blue-dim);
     border-color: rgba(0, 212, 255, 0.2);
-    transform: translateY(-3px);
   }
 
   .whatsapp-float:hover {
-    transform: scale(1.1) translateY(-2px);
     box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
   }
 }

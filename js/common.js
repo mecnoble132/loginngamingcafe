@@ -1,20 +1,9 @@
 /* ============================================================
    LOGINN GAMING CAFE — js/common.js
-   Navbar, Hamburger, Smooth Scroll, Scroll Reveal
+   Navbar, Hamburger, Smooth Scroll
 ============================================================ */
 
 'use strict';
-
-// ===== PAGE LOADER =====
-(function () {
-  const loader = document.getElementById('page-loader');
-  if (!loader) return;
-  // Hide after 1500 ms (bar animation completes), then remove after fade
-  setTimeout(() => {
-    loader.classList.add('loader-hidden');
-    setTimeout(() => loader.remove(), 150);
-  }, 1500);
-})();
 
 // ===== NAVBAR: Scrolled state =====
 const navbar = document.getElementById('navbar');
@@ -63,50 +52,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
   if (href.startsWith('#')) return;
   const linkFile = href.split('/').pop().split('#')[0] || 'index.html';
   if (linkFile === currentPath) link.classList.add('active');
-});
-
-// ===== SCROLL REVEAL =====
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-document.querySelectorAll('.reveal').forEach((el, i) => {
-  el.style.transitionDelay = `${(i % 4) * 0.08}s`;
-  revealObserver.observe(el);
-});
-
-// ===== SECTION HEADER REVEAL =====
-const headerObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      headerObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.2 });
-
-document.querySelectorAll('.section-header').forEach(el => {
-  el.classList.add('reveal');
-  headerObserver.observe(el);
-});
-
-// ===== SMOOTH ANCHOR SCROLL (offset for fixed nav) =====
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const targetId = this.getAttribute('href');
-    if (targetId === '#') return;
-    const target = document.querySelector(targetId);
-    if (!target) return;
-    e.preventDefault();
-    const navHeight = navbar.offsetHeight;
-    const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 10;
-    window.scrollTo({ top, behavior: 'smooth' });
-  });
 });
 
 // ===== CURSOR GLOW on cards (Disabled for Performance) =====

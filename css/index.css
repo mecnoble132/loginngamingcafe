@@ -457,7 +457,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
 }
 
 .sp-card-img {
@@ -472,7 +471,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
   display: block;
 }
 
@@ -1015,7 +1013,6 @@
   border-radius: var(--r);
   padding: 26px 22px;
   position: relative;
-  transition: transform 0.3s;
 }
 
 .member-featured {
@@ -1154,7 +1151,6 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s, border-color 0.3s;
 }
 
 .whats-on-card.tournament {
@@ -1258,9 +1254,7 @@
 }
 
 .gallery-item img {
-  transition: transform 0.5s;
   backface-visibility: hidden;
-  will-change: transform;
 }
 
 .gallery-overlay {
@@ -1848,12 +1842,6 @@
   background: var(--bg-card); border: 1px solid var(--border);
   border-radius: var(--r);
   display: flex; flex-direction: column;
-  transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
-  opacity: 0; transform: translateY(12px);
-  transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.22s, box-shadow 0.22s;
-}
-.teaser-card.visible {
-  opacity: 1; transform: translateY(0);
 }
 /* Glow strip */
 .teaser-card-glow {
@@ -1872,7 +1860,6 @@
 .teaser-card-img img {
   width: 100%; height: 100%;
   object-fit: cover; display: block;
-  transition: transform 0.4s ease;
 }
 
 /* Card body */
@@ -1933,14 +1920,6 @@
   .station-overview-item:hover { background: rgba(255, 255, 255, 0.03); }
   .station-overview-item:hover .soi-name { color: var(--blue); }
 
-  /* Pricing cards */
-  .sp-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(0, 212, 255, 0.22);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-  }
-  .sp-card:hover .sp-card-img img { transform: scale(1.07); }
-
   /* Pricing note link */
   .pricing-note a:hover { color: #fff; }
 
@@ -1951,34 +1930,13 @@
   .calc-opt:hover { border-color: var(--blue); color: var(--blue); }
   .step-btn:hover { background: rgba(0, 212, 255, 0.14); color: var(--blue); }
 
-  /* Game pills */
-  .game-pill:hover {
-    border-color: var(--border-hi);
-    transform: translateY(-2px);
-    background: var(--bg-card-h);
-  }
-
-  /* Membership snapshot cards */
-  .member-card:hover { transform: translateY(-4px); }
-  .member-featured:hover { transform: scale(1.04) translateY(-4px); }
-
-  /* What's On cards */
-  .whats-on-card:hover { transform: translateY(-4px); border-color: var(--border-hi); }
-  .whats-on-cta:hover { gap: 10px; color: #fff; }
+  /* What's On links */
+  .whats-on-cta:hover { color: #fff; }
 
   /* Gallery */
-  .gallery-item:hover img { transform: scale(1.07); }
   .gallery-item:hover .gallery-overlay { opacity: 1; }
 
   /* Teaser filter buttons */
   .teaser-filter-btn:hover { border-color: var(--blue); color: var(--blue); }
 
-  /* Teaser cards */
-  .teaser-card:hover {
-    border-color: color-mix(in srgb, var(--glow, var(--blue)) 60%, transparent);
-    box-shadow: 0 0 24px color-mix(in srgb, var(--glow, var(--blue)) 20%, transparent);
-    transform: translateY(-4px);
-  }
-  .teaser-card:hover .teaser-card-glow { opacity: 1; }
-  .teaser-card:hover .teaser-card-img img { transform: scale(1.05); }
 }

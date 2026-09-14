@@ -87,7 +87,4 @@ export async function initNews(containerId, isTeaser = false) {
     `).join('');
   }
 
-  document.querySelectorAll(`#${containerId} .reveal`).forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), i * 80);
-  });
 }

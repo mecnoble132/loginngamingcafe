@@ -169,9 +169,6 @@ function render(filter, query) {
     if (visible === 0 && q) {
       list.innerHTML = `<div class="games-empty"><i class="fa-solid fa-magnifying-glass"></i><p>No games found for "<strong>${query}</strong>"</p></div>`;
     }
-    document.querySelectorAll('.game-card.reveal').forEach((el, i) => {
-      setTimeout(() => el.classList.add('visible'), i * 30);
-    });
   }
 
   // Index page teaser (show max 5 featured games)
@@ -183,9 +180,6 @@ function render(filter, query) {
     const countEl = document.getElementById('teaserCount');
     if (countEl) countEl.textContent = sliced.length;
     
-    document.querySelectorAll('#teaserGrid .teaser-card.reveal').forEach((el, i) => {
-      setTimeout(() => el.classList.add('visible'), i * 50);
-    });
   }
 }
 

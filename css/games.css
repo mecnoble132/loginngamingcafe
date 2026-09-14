@@ -57,14 +57,7 @@
   background: var(--bg-card); border: 1px solid var(--border);
   border-radius: var(--r); padding: 0;
   display: flex; flex-direction: column; gap: 0;
-  transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
   cursor: default;
-  /* reveal start */
-  opacity: 0; transform: translateY(12px);
-  transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.22s, box-shadow 0.22s;
-}
-.game-card.visible {
-  opacity: 1; transform: translateY(0);
 }
 /* Glow strip at top */
 .game-card-glow {
@@ -116,7 +109,7 @@
   font-family: var(--f-heading); font-size: 0.62rem; font-weight: 600;
   letter-spacing: 0.04em; padding: 3px 8px; border-radius: 4px;
   background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-  color: var(--text-muted); transition: color 0.2s, border-color 0.2s;
+  color: var(--text-muted);
 }
 
 /* Availability badge */
@@ -209,24 +202,9 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
 }
 
 /* ─── HOVER — POINTER DEVICES ONLY ──────────────────────── */
 @media (hover: hover) and (pointer: fine) {
   .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
-
-  .game-card:hover {
-    border-color: color-mix(in srgb, var(--glow, var(--blue)) 60%, transparent);
-    box-shadow: 0 0 24px color-mix(in srgb, var(--glow, var(--blue)) 20%, transparent);
-    transform: translateY(-3px);
-  }
-  .game-card:hover .game-card-glow { opacity: 1; }
-
-  .game-card:hover .game-tag {
-    border-color: color-mix(in srgb, var(--glow, var(--blue)) 30%, transparent);
-    color: color-mix(in srgb, var(--glow, var(--blue)) 80%, var(--text-muted));
-  }
-
-  .game-card:hover .game-card-img img { transform: scale(1.05); }
 }

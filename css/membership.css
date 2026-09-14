@@ -21,7 +21,6 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .member-featured {
@@ -121,7 +120,6 @@
 .hiw-step {
   background: var(--bg-card); border: 1px solid var(--border);
   border-radius: var(--r); padding: 22px; text-align: center;
-  transition: border-color 0.2s, transform 0.3s;
 }
 .hiw-num {
   width: 48px; height: 48px; border-radius: 50%;
@@ -211,11 +209,4 @@
     gap: 4px;
     margin-bottom: 16px;
   }
-}
-
-/* ─── HOVER — POINTER DEVICES ONLY ──────────────────────── */
-@media (hover: hover) and (pointer: fine) {
-  .hiw-step:hover { border-color: rgba(0,212,255,0.2); transform: translateY(-3px); }
-  .member-card:hover { transform: translateY(-4px); }
-  .member-featured:hover { transform: translateY(-6px); }
 }
