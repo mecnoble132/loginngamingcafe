@@ -1,3 +1,4 @@
+
 import { supabase } from './supabase-config.js';
 
 export const FALLBACK_NEWS = [
@@ -35,7 +36,7 @@ async function loadNewsData() {
 function resolveLink(link, isTeaser) {
   if (!link || link === '#') return '#';
   if (link.startsWith('http')) return link;
-  
+
   if (isTeaser) {
     // index.html context
     if (link === '../index.html' || link.startsWith('../index.html')) {
