@@ -1,6 +1,6 @@
 /* ============================================================
    LOGINN GAMING CAFE — js/admin.js
-   Admin dashboard: Games & News/Events management
+   Admin dashboard: Games & Blog Posts management
    Uses admin.css design system (modals, branded cards, toasts)
 ============================================================ */
 'use strict';
@@ -330,146 +330,6 @@ function resetGameForm() {
 }
 
 // ══════════════════════════════════════════════════════════
-// NEWS / EVENTS
-// ══════════════════════════════════════════════════════════
-
-async function fetchNews() {
-  const { data, error } = await supabase.from('news').select('*').order('created_at', { ascending: false });
-  if (error) throw error;
-  allNews = (data || []).map(rowToNews);
-  renderNews();
-  updateStats();
-}
-
-function listenNews() {
-  fetchNews().catch(err => {
-    console.warn('News error:', err.message);
-    document.getElementById('newsListPanel').innerHTML =
-      '<div class="table-empty"><i class="fa-solid fa-triangle-exclamation"></i> Error loading news</div>';
-  });
-
-  supabase
-    .channel('admin-news')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, () => {
-      fetchNews().catch(err => console.warn('News refresh error:', err.message));
-    })
-    .subscribe();
-}
-
-function renderNews() {
-  const el = document.getElementById('newsListPanel');
-  if (!allNews.length) {
-    el.innerHTML = '<div class="table-empty">No news/events yet. Click "Add Event" to start!</div>';
-    return;
-  }
-
-  el.innerHTML = allNews.map(n => `
-    <div class="admin-news-card" data-id="${n.id}">
-      <div class="anc-top">
-        <div>
-          <span class="anc-tag ${n.tagColor || 'tag-blue'}">${n.tag || 'NEWS'}</span>
-          <span class="anc-date">${n.date || ''}</span>
-        </div>
-        <div class="anc-actions">
-          <button class="action-btn action-edit news-edit" data-id="${n.id}" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="action-btn action-delete news-delete" data-id="${n.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </div>
-      <div class="anc-title">${n.title}</div>
-      <div class="anc-desc">${n.desc || ''}</div>
-      <div class="anc-bottom">
-        ${n.ctaText ? `<span class="anc-cta"><i class="fa-solid fa-link" style="font-size:0.6rem;margin-right:4px;"></i>${n.ctaText}</span>` : '<span></span>'}
-      </div>
-    </div>`
-  ).join('');
-
-  el.querySelectorAll('.news-edit').forEach(btn =>
-    btn.addEventListener('click', () => editNews(btn.dataset.id))
-  );
-  el.querySelectorAll('.news-delete').forEach(btn =>
-    btn.addEventListener('click', () => confirmDelete('news', btn.dataset.id, 'news item'))
-  );
-}
-
-// ── News Modal ───────────────────────────────────────────
-function setupNewsModal() {
-  document.getElementById('addNewsBtn').addEventListener('click', () => {
-    resetNewsForm();
-    document.getElementById('newsModalTitle').innerHTML =
-      '<i class="fa-solid fa-newspaper" style="color:var(--green)"></i> Add News / Event';
-    openModal('newsModal');
-  });
-
-  document.getElementById('newsModalClose').addEventListener('click', () => closeModal('newsModal'));
-  document.getElementById('newsModalCancel').addEventListener('click', () => closeModal('newsModal'));
-
-  document.getElementById('saveNewsBtn').addEventListener('click', async () => {
-    const title = document.getElementById('newsTitle').value.trim();
-    if (!title) { showToast('Please enter a title.', 'error'); return; }
-
-    const tagColor = document.querySelector('input[name="tagColor"]:checked')?.value || 'tag-blue';
-
-    const data = {
-      title,
-      date: document.getElementById('newsDate').value.trim(),
-      tag: document.getElementById('newsTag').value.trim().toUpperCase() || 'NEWS',
-      tagColor,
-      desc: document.getElementById('newsDesc').value.trim(),
-      ctaText: document.getElementById('newsCtaText').value.trim(),
-      ctaLink: document.getElementById('newsCtaLink').value.trim(),
-    };
-
-    const editId = document.getElementById('newsEditId').value;
-    try {
-      if (editId) {
-        const { error } = await supabase.from('news').update(newsToRow(data)).eq('id', editId);
-        if (error) throw error;
-        showToast(`"${title}" updated!`);
-      } else {
-        // created_at defaults to now() in Postgres — no need to set it manually.
-        const { error } = await supabase.from('news').insert(newsToRow(data));
-        if (error) throw error;
-        showToast(`"${title}" added!`);
-      }
-      closeModal('newsModal');
-    } catch (e) {
-      showToast('Error saving: ' + e.message, 'error');
-    }
-  });
-}
-
-function editNews(id) {
-  const n = allNews.find(x => x.id === id);
-  if (!n) return;
-  document.getElementById('newsEditId').value = id;
-  document.getElementById('newsTitle').value = n.title || '';
-  document.getElementById('newsDate').value = n.date || '';
-  document.getElementById('newsTag').value = n.tag || '';
-  document.getElementById('newsDesc').value = n.desc || '';
-  document.getElementById('newsCtaText').value = n.ctaText || '';
-  document.getElementById('newsCtaLink').value = n.ctaLink || '';
-  // Set radio
-  const radio = document.querySelector(`input[name="tagColor"][value="${n.tagColor || 'tag-blue'}"]`);
-  if (radio) radio.checked = true;
-
-  document.getElementById('newsModalTitle').innerHTML =
-    '<i class="fa-solid fa-pen" style="color:var(--green)"></i> Edit News / Event';
-  openModal('newsModal');
-}
-
-function resetNewsForm() {
-  document.getElementById('newsEditId').value = '';
-  document.getElementById('newsTitle').value = '';
-  document.getElementById('newsDate').value = '';
-  document.getElementById('newsTag').value = '';
-  document.getElementById('newsDesc').value = '';
-  document.getElementById('newsCtaText').value = '';
-  document.getElementById('newsCtaLink').value = '';
-  const radio = document.querySelector('input[name="tagColor"][value="tag-blue"]');
-  if (radio) radio.checked = true;
-}
-
-// ══════════════════════════════════════════════════════════
 // FEATURED GAMES
 // ══════════════════════════════════════════════════════════
 const FEATURED_CATEGORIES = ['all', 'pc', 'ps5', 'xbox', 'sim'];
@@ -589,20 +449,6 @@ function setupRefresh() {
     }
   };
 
-  const refreshNews = async () => {
-    const btn = document.getElementById('refreshNewsBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-    try {
-      await fetchNews();
-      showToast(`Refreshed ${allNews.length} news items.`);
-    } catch (e) { showToast('Refresh failed: ' + e.message, 'error'); }
-    finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i><span class="hide-mobile">Refresh</span>';
-    }
-  };
-
   document.getElementById('refreshGamesBtn').addEventListener('click', refreshGames);
   document.getElementById('refreshPostsBtn').addEventListener('click', async () => {
     await fetchPosts(); showToast(`Refreshed ${allPosts.length} posts.`);
@@ -625,24 +471,6 @@ function setupSeeding() {
     finally {
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-database"></i><span class="hide-mobile">Seed DB</span>';
-    }
-  });
-
-  document.getElementById('seedNewsBtn')?.addEventListener('click', async () => {
-    if (!confirm("Add fallback news to the database?")) return;
-    const btn = document.getElementById('seedNewsBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-    
-    try {
-      const rows = FALLBACK_NEWS.map(newsToRow); // created_at defaults to now() per row
-      const { error } = await supabase.from('news').insert(rows);
-      if (error) throw error;
-      showToast(`Successfully seeded ${FALLBACK_NEWS.length} news items.`);
-    } catch (e) { showToast('Seeding failed: ' + e.message, 'error'); }
-    finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-database"></i><span class="hide-mobile">Seed</span>';
     }
   });
 }
@@ -699,7 +527,7 @@ function renderPosts() { const panel=document.getElementById('postsListPanel'), 
 function setupPostModal() { document.getElementById('addPostBtn').onclick=()=>{resetPost();openModal('postModal')}; ['postModalClose','postModalCancel'].forEach(id=>document.getElementById(id).onclick=()=>closeModal('postModal')); document.getElementById('postTitle').oninput=e=>{if(!slugManual)document.getElementById('postSlug').value=slugify(e.target.value)}; document.getElementById('postSlug').oninput=()=>slugManual=true; document.getElementById('postSearch').oninput=renderPosts; document.getElementById('savePostBtn').onclick=()=>savePost().catch(error=>showToast(error.message||'Could not save the post.','error')); document.getElementById('postCoverFile').onchange=e=>{const f=e.target.files[0]; if(f){document.querySelector('#postCoverPreview img').src=URL.createObjectURL(f);document.getElementById('postCoverPreview').hidden=false}}; document.getElementById('removePostCover').onclick=()=>{currentCover='';document.getElementById('postCoverFile').value='';document.getElementById('postCoverPreview').hidden=true}; document.getElementById('postInlineFile').onchange=insertInlineImage; [['postExcerpt','postExcerptCount',320],['postMetaDescription','postMetaCount',160]].forEach(([input,count,max])=>document.getElementById(input).oninput=e=>document.getElementById(count).textContent=`${e.target.value.length}/${max}`); initPostEditor(); }
 async function initPostEditor(){const {default:Quill}=await import('https://esm.sh/quill@2.0.3');postQuill=new Quill('#postEditor',{theme:'snow',modules:{toolbar:[['header',[2,3,false]],['bold','italic'],[{list:'ordered'},{list:'bullet'}],['link','image'],['clean']]}});postQuill.getModule('toolbar').addHandler('image',()=>document.getElementById('postInlineFile').click());}
 async function insertInlineImage(event){const file=event.target.files[0];event.target.value='';if(!file)return;const save=document.getElementById('savePostBtn');save.disabled=true;try{const url=await uploadPostImage(file,postId);const range=postQuill.getSelection(true);postQuill.insertEmbed(range.index,'image',url,'user');postQuill.setSelection(range.index+1,0);}catch(error){showToast(error.message||'Could not upload image.','error');}finally{save.disabled=false;}}
-function resetPost(){postId=crypto.randomUUID();slugManual=false;currentCover='';['postEditId','postTitle','postSlug','postExcerpt','postMetaDescription'].forEach(id=>document.getElementById(id).value='');document.getElementById('postAuthor').value='Loginn Gaming Cafe';document.getElementById('postStatus').value='draft';document.getElementById('postCoverFile').value='';document.getElementById('postCoverPreview').hidden=true;document.getElementById('postExcerptCount').textContent='0/320';document.getElementById('postMetaCount').textContent='0/160';clearChecked('postTags');if(postQuill)postQuill.setContents([]);}
-async function savePost(){const title=document.getElementById('postTitle').value.trim(),slug=document.getElementById('postSlug').value.trim(),body=sanitizePostHtml(postQuill?.root.innerHTML||''),editId=document.getElementById('postEditId').value,coverFile=document.getElementById('postCoverFile').files[0];if(!title||!slug.match(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)||!document.getElementById('postExcerpt').value.trim()||!document.getElementById('postMetaDescription').value.trim()||!body.trim()){showToast('Complete all required fields with a valid slug.','error');return}if(coverFile)currentCover=await uploadPostImage(coverFile,postId);const status=document.getElementById('postStatus').value;if(status==='published'&&!currentCover){showToast('A cover image is required to publish.','error');return}const row={title,slug,author_name:document.getElementById('postAuthor').value.trim(),excerpt:document.getElementById('postExcerpt').value.trim(),meta_description:document.getElementById('postMetaDescription').value.trim(),body_html:body,tags:getChecked('postTags'),status,cover_image:currentCover||null};const {error}=editId?await supabase.from('posts').update(row).eq('id',editId):await supabase.from('posts').insert({id:postId,...row});if(error){showToast(error.message,'error');return}closeModal('postModal');fetchPosts();}
-async function editPost(id){const p=allPosts.find(x=>x.id===id);if(!p)return;postId=p.id;slugManual=true;currentCover=p.cover_image||'';document.getElementById('postEditId').value=p.id;document.getElementById('postTitle').value=p.title;document.getElementById('postSlug').value=p.slug;document.getElementById('postAuthor').value=p.author_name;document.getElementById('postExcerpt').value=p.excerpt;document.getElementById('postMetaDescription').value=p.meta_description;document.getElementById('postStatus').value=p.status;setChecked('postTags',p.tags||[]);postQuill.root.innerHTML=sanitizePostHtml(p.body_html);if(currentCover){document.querySelector('#postCoverPreview img').src=currentCover;document.getElementById('postCoverPreview').hidden=false}openModal('postModal');}
+function resetPost(){postId=crypto.randomUUID();slugManual=false;currentCover='';['postEditId','postTitle','postSlug','postExcerpt','postMetaDescription'].forEach(id=>document.getElementById(id).value='');document.getElementById('postAuthor').value='Loginn Gaming Cafe';document.getElementById('postStatus').value='draft';document.getElementById('postCoverFile').value='';document.getElementById('postCoverPreview').hidden=true;document.getElementById('postExcerptCount').textContent='0/320';document.getElementById('postMetaCount').textContent='0/160';document.getElementById('postTags').value='';if(postQuill)postQuill.setContents([]);}
+async function savePost(){const title=document.getElementById('postTitle').value.trim(),slug=document.getElementById('postSlug').value.trim(),body=sanitizePostHtml(postQuill?.root.innerHTML||''),editId=document.getElementById('postEditId').value,coverFile=document.getElementById('postCoverFile').files[0];if(!title||!slug.match(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)||!document.getElementById('postExcerpt').value.trim()||!document.getElementById('postMetaDescription').value.trim()||!body.trim()){showToast('Complete all required fields with a valid slug.','error');return}if(coverFile)currentCover=await uploadPostImage(coverFile,postId);const status=document.getElementById('postStatus').value;if(status==='published'&&!currentCover){showToast('A cover image is required to publish.','error');return}const row={title,slug,author_name:document.getElementById('postAuthor').value.trim(),excerpt:document.getElementById('postExcerpt').value.trim(),meta_description:document.getElementById('postMetaDescription').value.trim(),body_html:body,tags:document.getElementById('postTags').value.split(',').map(t=>t.trim()).filter(Boolean),status,cover_image:currentCover||null};const {error}=editId?await supabase.from('posts').update(row).eq('id',editId):await supabase.from('posts').insert({id:postId,...row});if(error){showToast(error.message,'error');return}closeModal('postModal');fetchPosts();}
+async function editPost(id){const p=allPosts.find(x=>x.id===id);if(!p)return;postId=p.id;slugManual=true;currentCover=p.cover_image||'';document.getElementById('postEditId').value=p.id;document.getElementById('postTitle').value=p.title;document.getElementById('postSlug').value=p.slug;document.getElementById('postAuthor').value=p.author_name;document.getElementById('postExcerpt').value=p.excerpt;document.getElementById('postMetaDescription').value=p.meta_description;document.getElementById('postStatus').value=p.status;document.getElementById('postTags').value=(p.tags||[]).join(', ');postQuill.root.innerHTML=sanitizePostHtml(p.body_html);if(currentCover){document.querySelector('#postCoverPreview img').src=currentCover;document.getElementById('postCoverPreview').hidden=false}openModal('postModal');}
 async function deletePost(id){if(!confirm('Delete this post?'))return;const {error}=await supabase.from('posts').delete().eq('id',id);if(error)showToast(error.message,'error');else fetchPosts();}

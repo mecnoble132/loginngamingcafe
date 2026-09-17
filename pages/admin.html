@@ -74,7 +74,7 @@
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-icon green"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="stat-card-icon green"><i class="fa-solid fa-pen-nib"></i></div>
             <div>
               <div class="stat-card-num" id="statPosts">—</div>
               <div class="stat-card-label">Posts</div>
@@ -129,7 +129,7 @@
           </div>
         </div>
 
-        <!-- ═══════ NEWS TAB ═══════ -->
+        <!-- ═══════ BLOG TAB ═══════ -->
         <div class="admin-tab-content" id="tab-blog">
           <div class="admin-panel">
             <div class="panel-header">
@@ -221,7 +221,7 @@
     </div>
   </div>
 
-  <!-- ══════════════ NEWS MODAL ══════════════ -->
+  <!-- ══════════════ BLOG POST MODAL ══════════════ -->
   <div class="modal-overlay" id="postModal">
     <div class="modal-card post-modal-card" role="dialog" aria-modal="true" aria-labelledby="postModalTitle">
       <div class="modal-header">
@@ -253,7 +253,22 @@
           <label>Excerpt <span class="req">*</span> <small id="postExcerptCount">0/320</small></label>
           <textarea id="postExcerpt" class="mf-input mf-textarea" maxlength="320" placeholder="A concise summary for the blog list and previews."></textarea>
         </div>
-        <div class="mf-field"><label>Tags</label><div class="mf-checkboxes" id="postTags"><label class="mf-check"><input type="checkbox" value="Announcement"> Announcement</label><label class="mf-check"><input type="checkbox" value="Game Guides"> Game Guides</label><label class="mf-check"><input type="checkbox" value="Events"> Events</label><label class="mf-check"><input type="checkbox" value="Cafe Life"> Cafe Life</label></div></div>
+        <div class="mf-field">
+          <label>Tags (comma separated)</label>
+          <input type="text" id="postTags" class="mf-input" placeholder="e.g. Announcement, Game Guides, Events, Cafe Life" list="postTagSuggestions" />
+          <datalist id="postTagSuggestions">
+            <option value="Announcement"></option>
+            <option value="Game Guides"></option>
+            <option value="Events"></option>
+            <option value="Cafe Life"></option>
+            <option value="Tournaments"></option>
+            <option value="Tips & Tricks"></option>
+            <option value="New Games"></option>
+            <option value="Gear & Setup"></option>
+            <option value="Membership"></option>
+            <option value="Community"></option>
+          </datalist>
+        </div>
         <div class="mf-field"><label>Meta description <span class="req">*</span> <small id="postMetaCount">0/160</small></label><textarea id="postMetaDescription" class="mf-input mf-textarea" maxlength="160" placeholder="A search-friendly description for this post."></textarea></div>
         <div class="mf-field"><label>Post body <span class="req">*</span></label><div id="postEditor" class="post-editor"></div><input type="file" id="postInlineFile" accept="image/jpeg,image/png,image/webp" hidden></div>
         <div class="mf-field"><label>Status</label><select id="postStatus" class="mf-input"><option value="draft">Draft</option><option value="published">Published</option></select></div>

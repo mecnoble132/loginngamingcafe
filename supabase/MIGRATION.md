@@ -26,6 +26,14 @@ Storage bucket used by cover and inline post images. Run this migration once
 per Supabase project; it is separate so existing projects can be upgraded
 without re-running their base schema.
 
+If your project already has a `posts` table from an earlier draft of this
+migration (e.g. you ran `supabase/blog-phase-1.sql` before this branch
+existed), the `create table` above will fail because the table already
+exists. In that case, skip it and instead run
+`supabase/migrations/20260917_align_blog_schema.sql`, which brings that
+table's constraints in line with what the app expects and finishes
+retiring the `news` table.
+
 ## 3. Create the admin user
 Do this in the dashboard, not SQL:
 **Authentication → Users → Add user** → enter the admin's email + password →
