@@ -30,3 +30,9 @@
   to = "/.netlify/functions/sitemap"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/js/env.js"
+  to = "/.netlify/functions/env"
+  status = 200
+  force = true
