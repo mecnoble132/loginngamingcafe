@@ -9,7 +9,7 @@ export default async function handler(request) {
   const client = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
   const rawPath = new URL(request.url).pathname.replace(/\/+$/, '') || '/blog';
   if (rawPath === '/blog' || rawPath.endsWith('/.netlify/functions/blog')) {
-    const { data, error } = await client.from('posts').select('id,title,slug,cover_image,excerpt,tags,published_at').eq('status', 'published').order('published_at', { ascending: false }).limit(24);
+    const { data, error } = await client.from('posts').select('id,title,slug,cover_image,excerpt,tags,published_at,author_name').eq('status', 'published').order('published_at', { ascending: false }).limit(24);
     if (error) { console.error('Blog list query failed', error.message); return response(500, renderStatus(500, 'Something went wrong', 'Please try again shortly.')); }
     return response(200, renderIndex(data || []));
   }
