@@ -73,19 +73,19 @@ function footer() { return `<footer class="main-footer"><div class="container fo
 function tags(tags = []) { return tags.filter(Boolean).map(tag => `<span class="blog-tag">${escapeHtml(tag)}</span>`).join(''); }
 
 function postCard(post) {
-  return `<article class="blog-card"><a href="/blog/${encodeURIComponent(post.slug)}" class="blog-card-image"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}" loading="lazy"></a><div class="blog-card-content"><div class="blog-card-meta"><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time>${tags(post.tags)}</div><h2><a href="/blog/${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a></h2><p>${escapeHtml(post.excerpt)}</p><a class="blog-read-link" href="/blog/${encodeURIComponent(post.slug)}">Read article <i class="fa-solid fa-arrow-right"></i></a></div></article>`;
+  return `<article class="blog-card"><a href="/blog/${encodeURIComponent(post.slug)}" class="blog-card-image"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}" loading="lazy">${post.tags?.length ? `<div class="blog-card-tags">${tags(post.tags.slice(0, 2))}</div>` : ''}</a><div class="blog-card-content"><time class="blog-card-date" datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time><h2><a href="/blog/${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a></h2><p>${escapeHtml(post.excerpt)}</p><a class="blog-read-link" href="/blog/${encodeURIComponent(post.slug)}">Read article <i class="fa-solid fa-arrow-right"></i></a></div></article>`;
 }
 
-function blogRow(post) {
-  return `<article class="blog-row"><a href="/blog/${encodeURIComponent(post.slug)}" class="blog-row-image"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}" loading="lazy"></a><div class="blog-row-content"><div class="blog-card-meta"><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time>${tags(post.tags)}</div><h2><a href="/blog/${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a></h2><p>${escapeHtml(post.excerpt)}</p><a class="blog-read-link" href="/blog/${encodeURIComponent(post.slug)}">Read article <i class="fa-solid fa-arrow-right"></i></a></div></article>`;
+function blogHero(post) {
+  return `<a href="/blog/${encodeURIComponent(post.slug)}" class="blog-hero"><div class="blog-hero-media"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}"></div><div class="blog-hero-overlay"><span class="blog-featured-label"><i class="fa-solid fa-star"></i> Featured story</span><h2>${escapeHtml(post.title)}</h2><p>${escapeHtml(post.excerpt)}</p><div class="blog-card-meta"><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time>${tags(post.tags)}</div></div></a>`;
 }
 
 export function renderIndex(posts) {
   const [featured, ...rest] = posts;
-  const featuredCard = featured ? `<a href="/blog/${encodeURIComponent(featured.slug)}" class="blog-featured"><div class="blog-featured-image"><img src="${escapeHtml(featured.cover_image || '')}" alt="${escapeHtml(featured.title)}"></div><div class="blog-featured-content"><span class="blog-featured-label"><i class="fa-solid fa-star"></i> Featured story</span><div class="blog-card-meta"><time datetime="${escapeHtml(featured.published_at || '')}">${escapeHtml(dateText(featured.published_at))}</time>${tags(featured.tags)}</div><h2>${escapeHtml(featured.title)}</h2><p>${escapeHtml(featured.excerpt)}</p><span class="blog-read-link">Read article <i class="fa-solid fa-arrow-right"></i></span></div></a>` : '';
-  const list = rest.length ? `<div class="blog-list-label"><i class="fa-solid fa-layer-group"></i> More stories</div><div class="blog-list">${rest.map(blogRow).join('')}</div>` : '';
+  const heroCard = featured ? blogHero(featured) : '';
+  const grid = rest.length ? `<div class="blog-list-label"><i class="fa-solid fa-layer-group"></i> More stories</div><div class="blog-grid-index">${rest.map(postCard).join('')}</div>` : '';
   const listBody = posts.length
-    ? `${featuredCard}${list}`
+    ? `${heroCard}${grid}`
     : `<section class="blog-state"><i class="fa-solid fa-pen-nib"></i><h2>Stories are loading in</h2><p>There are no published posts yet. Check back soon for gaming guides, cafe updates, and event news.</p></section>`;
   const hero = `<div class="page-hero"><div class="container page-hero-inner"><div class="page-hero-tag"><i class="fa-solid fa-pen-nib"></i> BLOG</div><h1 class="page-hero-title">From <span class="accent-green">Loginn</span></h1><p class="page-hero-sub">Guides, game nights, and everything happening at Trivandrum’s premium gaming cafe.</p></div></div>`;
   return shell({ title: 'Blog | Loginn Gaming Cafe', description: 'Gaming guides, cafe stories, events, and updates from Loginn Gaming Cafe in Trivandrum.', canonical: `${SITE_URL}/blog`, body: `${hero}<section class="blog-list-section"><div class="container blog-container">${listBody}</div></section>` });
