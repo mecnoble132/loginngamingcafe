@@ -9,7 +9,7 @@
 /* ── Two-column editorial layout: main column + "Latest" rail ── */
 .blog-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 48px; align-items: start; }
 .blog-main { min-width: 0; }
-.blog-sidebar { position: sticky; top: 100px; }
+.blog-sidebar { min-width: 0; }
 
 /* ── Split featured story: image + content side by side (PS Blog style) ── */
 .blog-featured { display: grid; grid-template-columns: 1.35fr 1fr; gap: 36px; align-items: stretch; text-decoration: none; margin-bottom: 44px; padding-bottom: 40px; border-bottom: 1px solid var(--border); }
@@ -71,6 +71,15 @@
 .blog-state { max-width: 660px; margin: 78px auto; padding: 54px 32px; border: 1px dashed var(--border-hi); background: var(--bg-card); text-align: center; }.blog-state i { color: var(--blue); font-size: 2rem; }.blog-state h2 { color: #fff; font-family: var(--f-heading); margin: 16px 0 8px; }.blog-state p { color: var(--text-muted); line-height: 1.7; }
 .blog-status { min-height: 65vh; display: grid; place-items: center; background: radial-gradient(circle at center, rgba(0,212,255,.08), transparent 32%); }.status-code { color: var(--blue)!important; font: 700 4rem/1 var(--f-heading); margin: 10px 0!important; }
 .article { padding: 130px 0 100px; }.article-container { max-width: 940px; }.blog-back { display: inline-block; margin: 0 0 38px; padding: 0; }.article-header { max-width: 810px; margin-bottom: 36px; }.article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }.article h1 { font-size: clamp(2.1rem, 5vw, 4.45rem); }.article-excerpt { max-width: 680px; color: var(--text-muted); font-size: 1.08rem; line-height: 1.75; margin: 21px 0; }.article-cover { display: block; width: 100%; max-height: 530px; object-fit: cover; border: 1px solid var(--border); margin: 0 0 48px; }.article-body { max-width: 720px; margin: 0 auto; color: var(--text); font: 400 1rem/1.95 var(--f-body); }.article-body h2, .article-body h3 { color: #fff; font-family: var(--f-heading); line-height: 1.2; margin: 2.25em 0 .7em; }.article-body h2 { font-size: 1.7rem; }.article-body h3 { font-size: 1.28rem; }.article-body p, .article-body ul, .article-body ol { margin: 0 0 1.35em; }.article-body ul, .article-body ol { padding-left: 1.35em; }.article-body a { color: var(--blue); text-decoration-thickness: 1px; text-underline-offset: 3px; }.article-body img { max-width: 100%; height: auto; margin: 1.5em 0; border: 1px solid var(--border); }.article-cta { max-width: 800px; margin: 64px auto 0; padding: 28px; border: 1px solid rgba(0,212,255,.28); background: linear-gradient(120deg, rgba(0,212,255,.11), rgba(255,45,120,.08)); display: flex; align-items: center; justify-content: space-between; gap: 24px; }.article-cta span { color: var(--blue); font: 600 .63rem var(--f-display); letter-spacing: .13em; }.article-cta h2 { color: #fff; font: 700 1.45rem/1.2 var(--f-heading); margin: 7px 0 0; }
+/* ── End-of-page CTA pointing back to the cafe ── */
+.blog-cta-section { padding: 0 0 110px; }
+.blog-cta { max-width: 1280px; margin: 0 auto; padding: 40px 44px; border: 1px solid rgba(0,212,255,.28); background: linear-gradient(120deg, rgba(0,212,255,.11), rgba(255,45,120,.08)); display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+.blog-cta span { color: var(--blue); font: 600 .68rem var(--f-display); letter-spacing: .13em; }
+.blog-cta h2 { color: #fff; font: 700 1.7rem/1.2 var(--f-heading); margin: 9px 0 8px; }
+.blog-cta p { color: var(--text-muted); font-size: .95rem; margin: 0; max-width: 480px; }
+.blog-cta-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+@media (max-width: 700px) { .blog-cta { flex-direction: column; align-items: flex-start; padding: 32px 26px; } .blog-cta-actions { width: 100%; } .blog-cta-actions .btn { flex: 1; justify-content: center; } }
+
 .blog-related { padding: 0 0 100px; }
 .blog-related .container { max-width: 940px; }
 .blog-related .blog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
