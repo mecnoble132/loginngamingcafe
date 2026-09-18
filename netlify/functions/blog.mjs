@@ -19,5 +19,8 @@ export default async function handler(request) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return response(404, renderStatus(404, 'Post not found', 'This post does not exist or is no longer published.'));
   const { data, error } = await client.from('posts').select('*').eq('slug', slug).eq('status', 'published').maybeSingle();
   if (error) { console.error('Blog post query failed', error.message); return response(500, renderStatus(500, 'Something went wrong', 'Please try again shortly.')); }
-  return data ? response(200, renderArticle(data)) : response(404, renderStatus(404, 'Post not found', 'This post does not exist or is no longer published.'));
+  if (!data) return response(404, renderStatus(404, 'Post not found', 'This post does not exist or is no longer published.'));
+  const { data: related, error: relatedError } = await client.from('posts').select('title,slug,cover_image,excerpt,tags,published_at').eq('status', 'published').neq('slug', slug).order('published_at', { ascending: false }).limit(3);
+  if (relatedError) console.error('Related posts query failed', relatedError.message);
+  return response(200, renderArticle(data, related || []));
 }
