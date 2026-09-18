@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { renderArticle, renderIndex, renderStatus } from './lib/blog-html.mjs';
 
-const headers = { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400' };
+const headers = { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=300' };
 const response = (status, body) => new Response(body, { status, headers });
 
 export default async function handler(request) {
