@@ -7,11 +7,17 @@ const response = (status, body) => new Response(body, { status, headers });
 export default async function handler(request) {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) return response(500, renderStatus(500, 'Something went wrong', 'Please try again shortly.'));
   const client = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-  const rawPath = new URL(request.url).pathname.replace(/\/+$/, '') || '/blog';
+  const url = new URL(request.url);
+  const rawPath = url.pathname.replace(/\/+$/, '') || '/blog';
   if (rawPath === '/blog' || rawPath.endsWith('/.netlify/functions/blog')) {
-    const { data, error } = await client.from('posts').select('id,title,slug,cover_image,excerpt,tags,published_at,author_name').eq('status', 'published').order('published_at', { ascending: false }).limit(24);
+    const pageSize = 12;
+    const page = Math.max(1, parseInt(url.searchParams.get('page'), 10) || 1);
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error, count } = await client.from('posts').select('id,title,slug,cover_image,excerpt,tags,published_at,author_name', { count: 'exact' }).eq('status', 'published').order('published_at', { ascending: false }).range(from, to);
     if (error) { console.error('Blog list query failed', error.message); return response(500, renderStatus(500, 'Something went wrong', 'Please try again shortly.')); }
-    return response(200, renderIndex(data || []));
+    const totalPages = Math.max(1, Math.ceil((count || 0) / pageSize));
+    return response(200, renderIndex(data || [], { page: Math.min(page, totalPages), totalPages }));
   }
   const segment = rawPath.replace(/^\/blog\//, '');
   let slug;
