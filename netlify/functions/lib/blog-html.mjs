@@ -1,4 +1,4 @@
-import sanitizeHtml from 'sanitize-html';
+﻿import sanitizeHtml from 'sanitize-html';
 
 export const SITE_URL = 'https://loginntvm.in';
 const allowedTags = ['p', 'br', 'h1', 'h2', 'h3', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'img'];
@@ -78,15 +78,15 @@ function postCard(post) {
 
 function blogFeatured(post) {
   const authorName = (post.author_name || '').trim() || 'Loginn Gaming Cafe';
-  return `<a href="/blog/${encodeURIComponent(post.slug)}" class="blog-featured"><div class="blog-featured-image"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}"></div><div class="blog-featured-content"><div class="blog-card-meta">${tags(post.tags)}</div><h2>${escapeHtml(post.title)}</h2><p>${escapeHtml(post.excerpt)}</p><div class="article-byline"><span class="article-author"><i class="fa-solid fa-circle-user"></i> ${escapeHtml(authorName)}</span><span class="article-byline-dot"></span><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time></div></div></a>`;
+  return `<a href="/blog/${encodeURIComponent(post.slug)}" class="blog-featured"><div class="blog-featured-clip"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}" class="blog-featured-img"><div class="blog-featured-overlay"><div class="blog-card-meta">${tags(post.tags)}</div><h2>${escapeHtml(post.title)}</h2><div class="article-byline"><span class="article-author"><i class="fa-solid fa-circle-user"></i> ${escapeHtml(authorName)}</span><span class="article-byline-dot"></span><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time></div></div></div></a>`;
 }
 
 function miniCard(post) {
-  return `<article class="blog-mini"><a href="/blog/${encodeURIComponent(post.slug)}" class="blog-mini-image"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}" loading="lazy"></a><div class="blog-mini-content"><h3><a href="/blog/${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a></h3><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time></div></article>`;
+  return `<article class="blog-mini"><a href="/blog/${encodeURIComponent(post.slug)}" class="blog-mini-clip"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}" loading="lazy" class="blog-mini-img"><div class="blog-mini-overlay"><h3>${escapeHtml(post.title)}</h3><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time></div></a></article>`;
 }
 
 function sideItem(post) {
-  return `<a href="/blog/${encodeURIComponent(post.slug)}" class="blog-side-item"><div class="blog-side-thumb"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}" loading="lazy"></div><div class="blog-side-content"><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time><h3>${escapeHtml(post.title)}</h3></div></a>`;
+  return `<a href="/blog/${encodeURIComponent(post.slug)}" class="blog-side-item"><div class="blog-side-content"><time datetime="${escapeHtml(post.published_at || '')}">${escapeHtml(dateText(post.published_at))}</time><h3>${escapeHtml(post.title)}</h3></div><div class="blog-side-thumb"><img src="${escapeHtml(post.cover_image || '')}" alt="${escapeHtml(post.title)}" loading="lazy"></div></a>`;
 }
 
 function pageUrl(page) { return page <= 1 ? '/blog' : `/blog?page=${page}`; }
@@ -113,10 +113,9 @@ export function renderIndex(posts, { page = 1, totalPages = 1 } = {}) {
   const body = posts.length
     ? `<div class="blog-layout"><div class="blog-main">${featuredHtml}${secondaryHtml}${moreHtml}${paginationHtml}</div><aside class="blog-sidebar">${sidebarHtml}</aside></div>`
     : `<section class="blog-state"><i class="fa-solid fa-pen-nib"></i><h2>Stories are loading in</h2><p>There are no published posts yet. Check back soon for gaming guides, cafe updates, and event news.</p></section>`;
-  const hero = `<div class="page-hero"><div class="container page-hero-inner"><div class="page-hero-tag"><i class="fa-solid fa-pen-nib"></i> BLOG</div><h1 class="page-hero-title">From <span class="accent-green">Loginn</span></h1><p class="page-hero-sub">Guides, game nights, and everything happening at Trivandrum’s premium gaming cafe.</p></div></div>`;
   const cta = `<section class="blog-cta-section"><div class="container"><div class="blog-cta"><div><span>READY PLAYER ONE?</span><h2>Stop reading, start playing.</h2><p>Premium rigs, ice-cold vibes, and a squad waiting at Loginn Gaming Cafe, Trivandrum.</p></div><div class="blog-cta-actions"><a href="https://wa.me/918075707064?text=Hi!%20I%27d%20like%20to%20book%20a%20slot%20at%20Loginn" target="_blank" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Book a slot</a><a href="/#find-us" class="btn btn-outline-blue"><i class="fa-solid fa-location-dot"></i> Find us</a></div></div></div></section>`;
   const paginationLinks = [page > 1 ? `<link rel="prev" href="${escapeHtml(`${SITE_URL}${pageUrl(page - 1)}`)}">` : '', page < totalPages ? `<link rel="next" href="${escapeHtml(`${SITE_URL}${pageUrl(page + 1)}`)}">` : ''].join('');
-  return shell({ title: page > 1 ? `Blog – Page ${page} | Loginn Gaming Cafe` : 'Blog | Loginn Gaming Cafe', description: 'Gaming guides, cafe stories, events, and updates from Loginn Gaming Cafe in Trivandrum.', canonical: `${SITE_URL}${pageUrl(page)}`, paginationLinks, body: `${hero}<section class="blog-list-section"><div class="container blog-container">${body}</div></section>${cta}` });
+  return shell({ title: page > 1 ? `Blog – Page ${page} | Loginn Gaming Cafe` : 'Blog | Loginn Gaming Cafe', description: 'Gaming guides, cafe stories, events, and updates from Loginn Gaming Cafe in Trivandrum.', canonical: `${SITE_URL}${pageUrl(page)}`, paginationLinks, body: `<section class="blog-list-section"><div class="container blog-container">${body}</div></section>${cta}` });
 }
 
 export function renderArticle(post, related = []) {
