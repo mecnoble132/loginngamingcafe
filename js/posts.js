@@ -21,7 +21,7 @@ export function isBlogImageUrl(url) {
 
 export function sanitizePostHtml(html) {
   const clean = DOMPurify.sanitize(html || '', {
-    ALLOWED_TAGS: ['p', 'br', 'h2', 'h3', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'img'],
+    ALLOWED_TAGS: ['p', 'br', 'h2', 'h3', 'strong', 'em', 'u', 'blockquote', 'ul', 'ol', 'li', 'a', 'img'],
     ALLOWED_ATTR: ['href', 'src', 'alt', 'target', 'rel'],
     ALLOW_DATA_ATTR: false,
   });

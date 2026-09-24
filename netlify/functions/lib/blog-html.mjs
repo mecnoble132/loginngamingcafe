@@ -1,7 +1,7 @@
 ﻿import sanitizeHtml from 'sanitize-html';
 
 export const SITE_URL = 'https://loginntvm.in';
-const allowedTags = ['p', 'br', 'h1', 'h2', 'h3', 'strong', 'em', 'ul', 'ol', 'li', 'a', 'img'];
+const allowedTags = ['p', 'br', 'h1', 'h2', 'h3', 'strong', 'em', 'u', 'blockquote', 'ul', 'ol', 'li', 'a', 'img'];
 
 export function escapeHtml(value = '') {
   return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');

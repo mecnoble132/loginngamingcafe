@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
   <link rel="stylesheet" href="../css/common.css" />
   <link rel="stylesheet" href="../css/admin.css" />
 </head>
@@ -228,52 +229,73 @@
         <div class="modal-title" id="postModalTitle"><i class="fa-solid fa-pen-nib" style="color:var(--green)"></i> New post</div>
         <button class="modal-close" id="postModalClose" aria-label="Close post editor"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body pe-grid">
         <input type="hidden" id="postEditId" value="">
-        <div class="mf-field">
-          <label>Title <span class="req">*</span></label>
-          <input type="text" id="postTitle" class="mf-input" maxlength="160" placeholder="e.g. Your first racing simulator guide" />
+        <div class="pe-main">
+          <input type="text" id="postTitle" class="pe-title-input" maxlength="160" placeholder="Your post title…" />
+          <div class="post-editor"><div id="postEditor"></div></div>
+          <input type="file" id="postInlineFile" accept="image/jpeg,image/png,image/webp" hidden>
         </div>
-        <div class="mf-row">
-          <div class="mf-field">
-            <label>Slug <span class="req">*</span></label>
-            <input type="text" id="postSlug" class="mf-input" maxlength="180" placeholder="your-first-racing-simulator-guide" />
+        <aside class="pe-sidebar">
+          <div class="pe-side-section">
+            <div class="pe-side-heading"><i class="fa-solid fa-sliders"></i> Post settings</div>
+            <div class="mf-field">
+              <label>Slug <span class="req">*</span></label>
+              <input type="text" id="postSlug" class="mf-input" maxlength="180" placeholder="your-first-racing-simulator-guide" />
+            </div>
+            <div class="mf-field">
+              <label>Author <span class="req">*</span></label>
+              <input type="text" id="postAuthor" class="mf-input" maxlength="160" value="Loginn Gaming Cafe" />
+            </div>
+            <div class="mf-field">
+              <label>Status</label>
+              <select id="postStatus" class="mf-input"><option value="draft">Draft</option><option value="published">Published</option></select>
+            </div>
           </div>
-          <div class="mf-field">
-            <label>Author <span class="req">*</span></label>
-            <input type="text" id="postAuthor" class="mf-input" maxlength="160" value="Loginn Gaming Cafe" />
+          <div class="pe-side-section">
+            <div class="pe-side-heading"><i class="fa-solid fa-image"></i> Cover image <span class="req">*</span></div>
+            <div class="post-cover-dropzone" id="postCoverDropzone">
+              <input type="file" id="postCoverFile" class="mf-input" accept="image/jpeg,image/png,image/webp">
+              <div id="postCoverPreview" class="post-cover-preview" hidden><img alt="Cover preview"><button type="button" id="removePostCover" aria-label="Remove cover image"><i class="fa-solid fa-xmark"></i></button></div>
+              <p class="pe-hint">JPEG, PNG or WebP · max 5 MB · drag &amp; drop supported</p>
+            </div>
           </div>
-        </div>
-        <div class="mf-field">
-          <label>Cover image <span class="req">*</span> <small>(JPEG, PNG or WebP; max 5 MB)</small></label>
-          <input type="file" id="postCoverFile" class="mf-input" accept="image/jpeg,image/png,image/webp">
-          <div id="postCoverPreview" class="post-cover-preview" hidden><img alt="Cover preview"><button type="button" id="removePostCover" aria-label="Remove cover image"><i class="fa-solid fa-xmark"></i></button></div>
-        </div>
-        <div class="mf-field">
-          <label>Excerpt <span class="req">*</span> <small id="postExcerptCount">0/320</small></label>
-          <textarea id="postExcerpt" class="mf-input mf-textarea" maxlength="320" placeholder="A concise summary for the blog list and previews."></textarea>
-        </div>
-        <div class="mf-field">
-          <label>Tags (comma separated)</label>
-          <input type="text" id="postTags" class="mf-input" placeholder="e.g. Announcement, Game Guides, Events, Cafe Life" list="postTagSuggestions" />
-          <datalist id="postTagSuggestions">
-            <option value="Announcement"></option>
-            <option value="Game Guides"></option>
-            <option value="Events"></option>
-            <option value="Cafe Life"></option>
-            <option value="Tournaments"></option>
-            <option value="Tips & Tricks"></option>
-            <option value="New Games"></option>
-            <option value="Gear & Setup"></option>
-            <option value="Membership"></option>
-            <option value="Community"></option>
-          </datalist>
-        </div>
-        <div class="mf-field"><label>Meta description <span class="req">*</span> <small id="postMetaCount">0/160</small></label><textarea id="postMetaDescription" class="mf-input mf-textarea" maxlength="160" placeholder="A search-friendly description for this post."></textarea></div>
-        <div class="mf-field"><label>Post body <span class="req">*</span></label><div id="postEditor" class="post-editor"></div><input type="file" id="postInlineFile" accept="image/jpeg,image/png,image/webp" hidden></div>
-        <div class="mf-field"><label>Status</label><select id="postStatus" class="mf-input"><option value="draft">Draft</option><option value="published">Published</option></select></div>
+          <div class="pe-side-section">
+            <div class="pe-side-heading"><i class="fa-solid fa-align-left"></i> Excerpt <span class="req">*</span></div>
+            <div class="mf-field">
+              <textarea id="postExcerpt" class="mf-input mf-textarea" maxlength="320" placeholder="A concise summary for the blog list and previews."></textarea>
+              <small id="postExcerptCount" class="pe-count">0/320</small>
+            </div>
+          </div>
+          <div class="pe-side-section">
+            <div class="pe-side-heading"><i class="fa-solid fa-tags"></i> Tags</div>
+            <div class="mf-field">
+              <input type="text" id="postTags" class="mf-input" placeholder="e.g. Announcement, Game Guides" list="postTagSuggestions" />
+              <datalist id="postTagSuggestions">
+                <option value="Announcement"></option>
+                <option value="Game Guides"></option>
+                <option value="Events"></option>
+                <option value="Cafe Life"></option>
+                <option value="Tournaments"></option>
+                <option value="Tips & Tricks"></option>
+                <option value="New Games"></option>
+                <option value="Gear & Setup"></option>
+                <option value="Membership"></option>
+                <option value="Community"></option>
+              </datalist>
+            </div>
+          </div>
+          <div class="pe-side-section">
+            <div class="pe-side-heading"><i class="fa-solid fa-magnifying-glass"></i> SEO meta description <span class="req">*</span></div>
+            <div class="mf-field">
+              <textarea id="postMetaDescription" class="mf-input mf-textarea" maxlength="160" placeholder="A search-friendly description for this post."></textarea>
+              <small id="postMetaCount" class="pe-count">0/160</small>
+            </div>
+          </div>
+        </aside>
       </div>
       <div class="modal-footer">
+        <div class="post-editor-meta" id="postWordCount">0 words · 0 min read</div>
         <button class="btn btn-ghost btn-sm" id="postModalCancel">Cancel</button>
         <button class="btn btn-primary btn-sm" id="savePostBtn" style="background:var(--green);border-color:var(--green);"><i class="fa-solid fa-check"></i> Save post</button>
       </div>
@@ -283,7 +305,6 @@
   <!-- TOAST CONTAINER -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css">
   <script src="/js/env.js"></script>
   <script type="module" src="../js/admin.js"></script>
 </body>

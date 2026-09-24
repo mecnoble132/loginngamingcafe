@@ -493,7 +493,149 @@
 .admin-post-card { display:flex; gap:14px; align-items:center; padding:12px; border-radius:var(--r-sm); border:1px solid var(--border); background:var(--bg); margin-bottom:8px; transition:all 0.2s ease; }
 .admin-post-card:hover { border-color:var(--border-hi); background:var(--bg-card-h); }
 .apc-cover { width:74px; height:58px; border-radius:6px; object-fit:cover; background:var(--bg-alt); flex-shrink:0; }.apc-info { flex:1; min-width:0; }.apc-info h3 { margin:5px 0; color:#fff; font:700 .92rem var(--f-heading); }.apc-info p { margin:0; color:var(--text-muted); font-size:.72rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }.apc-actions { display:flex; gap:6px; }.post-status { font:600 .6rem var(--f-display); text-transform:uppercase; letter-spacing:.08em; padding:3px 6px; border:1px solid var(--border); color:var(--text-muted); }.post-status.published { color:var(--green); border-color:rgba(34,197,94,.35); }.post-status.draft { color:var(--blue); border-color:rgba(0,212,255,.35); }
-.post-modal-card { max-width:760px; }.post-modal-card .modal-body { max-height:calc(100vh - 180px); overflow-y:auto; }.post-cover-preview { position:relative; width:170px; margin-top:10px; }.post-cover-preview img { width:170px; height:100px; object-fit:cover; border:1px solid var(--border); }.post-cover-preview button { position:absolute; right:4px; top:4px; border:0; background:var(--pink); color:#fff; width:26px; height:26px; cursor:pointer; }.post-editor { background:#fff; color:#111; min-height:220px; }.post-editor .ql-editor { min-height:180px; font-family:var(--f-body); }.post-editor .ql-toolbar { background:#f5f5f5; border-color:#ccc; }.post-modal-card small { color:var(--text-muted); font-weight:400; }
+/* ── FULL-SCREEN BLOG POST EDITOR ───────────────────────────
+   .post-modal-card fills the viewport; body splits into a wide
+   writing column (.pe-main) and a settings sidebar (.pe-sidebar).
+──────────────────────────────────────────────────────────── */
+#postModal.open { padding: 0; align-items: stretch; justify-content: stretch; }
+.modal-overlay .post-modal-card {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  width: auto; height: auto; max-width: none; max-height: none;
+  border-radius: 0;
+  display: flex; flex-direction: column;
+  animation: none;
+}
+.post-modal-card .modal-header,
+.post-modal-card .modal-footer { flex-shrink: 0; }
+.post-modal-card .modal-header { padding: 18px 28px; border-bottom: 1px solid var(--border); }
+.post-modal-card .modal-title { font-size: 1.15rem; }
+
+.post-modal-card .modal-body.pe-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.pe-main {
+  min-width: 0;
+  overflow-y: auto;
+  padding: 32px 40px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pe-title-input {
+  font-family: var(--f-heading);
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.25;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 6px 2px 18px;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+.pe-title-input::placeholder { color: var(--text-dim); }
+.pe-title-input:focus { border-color: var(--blue); }
+
+.pe-sidebar {
+  min-width: 0;
+  overflow-y: auto;
+  padding: 28px 24px 40px;
+  background: var(--bg-alt);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pe-side-section { display: flex; flex-direction: column; gap: 12px; }
+.pe-side-section + .pe-side-section { padding-top: 24px; border-top: 1px solid var(--border); }
+
+.pe-side-heading {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--f-heading);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.pe-side-heading i { color: var(--blue); width: 16px; text-align: center; }
+.pe-side-heading .req { color: var(--pink); text-transform: none; }
+
+.pe-hint { margin: 8px 0 0; font-size: 0.68rem; color: var(--text-dim); }
+.pe-count { align-self: flex-end; color: var(--text-dim); }
+
+.post-editor-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; color: var(--text-muted);
+  margin-right: auto;
+}
+
+.post-cover-dropzone {
+  border: 1px dashed var(--border-hi);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  background: var(--bg);
+  transition: border-color 0.2s, background 0.2s;
+}
+.post-cover-dropzone.drag-over { border-color: var(--blue); background: var(--blue-dim); }
+.post-cover-preview { position: relative; width: 100%; margin-top: 10px; }
+.post-cover-preview img { width: 100%; height: 130px; object-fit: cover; border-radius: var(--r-sm); border: 1px solid var(--border); display: block; }
+.post-cover-preview button { position: absolute; right: 8px; top: 8px; border: 0; border-radius: 50%; background: var(--pink); color: #fff; width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+.post-editor {
+  background: #fff; color: #111;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  min-height: 220px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: outline 0.15s;
+}
+.post-editor .ql-container { flex: 1; min-height: 0; }
+.post-editor .ql-editor { min-height: 340px; font-family: var(--f-body); color: #111; font-size: 1rem; line-height: 1.7; }
+.post-editor .ql-toolbar { background: #f5f5f5; border-color: #ccc; border-radius: var(--r-sm) var(--r-sm) 0 0; }
+.post-editor.drag-over,
+.post-cover-dropzone.drag-over { outline: 2px dashed var(--blue); outline-offset: -2px; }
+
+.post-editor .ql-toolbar .ql-stroke { stroke:#444; }
+.post-editor .ql-toolbar .ql-fill { fill:#444; }
+.post-editor .ql-toolbar .ql-picker { color:#444; }
+.post-editor .ql-toolbar button:hover .ql-stroke,
+.post-editor .ql-toolbar button.ql-active .ql-stroke,
+.post-editor .ql-toolbar .ql-picker-label:hover .ql-stroke,
+.post-editor .ql-toolbar .ql-picker-label.ql-active .ql-stroke { stroke:var(--blue); }
+.post-editor .ql-toolbar button:hover,
+.post-editor .ql-toolbar button.ql-active,
+.post-editor .ql-toolbar .ql-picker-label:hover,
+.post-editor .ql-toolbar .ql-picker-label.ql-active { color:var(--blue); }
+.post-editor .ql-toolbar .ql-picker-options { background:#fff; color:#111; border-color:#ccc; }
+.post-editor .ql-toolbar .ql-picker-item { color:#111; }
+.post-editor .ql-toolbar .ql-picker-item:hover { color:var(--blue); }
+.post-modal-card small { color: var(--text-muted); font-weight: 400; }
+
+@media (max-width: 860px) {
+  .post-modal-card .modal-body.pe-grid { grid-template-columns: 1fr; overflow-y: auto; overflow-x: hidden; }
+  .pe-main, .pe-sidebar { overflow-y: visible; }
+  .pe-sidebar { border-left: none; border-top: 1px solid var(--border); }
+  .pe-title-input { font-size: 1.4rem; }
+  .modal-footer { flex-wrap: wrap; }
+  .post-editor-meta { width: 100%; order: -1; margin-bottom: 4px; }
+}
 
 .admin-news-card:hover {
   border-color: var(--border-hi);
