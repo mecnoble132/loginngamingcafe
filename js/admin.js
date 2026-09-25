@@ -122,7 +122,6 @@ function initDashboard() {
   setupGameModal();
   setupPostModal();
   setupRefresh();
-  setupSeeding();
   setupFeaturedTab();
 }
 
@@ -452,26 +451,6 @@ function setupRefresh() {
   document.getElementById('refreshGamesBtn').addEventListener('click', refreshGames);
   document.getElementById('refreshPostsBtn').addEventListener('click', async () => {
     await fetchPosts(); showToast(`Refreshed ${allPosts.length} posts.`);
-  });
-}
-
-function setupSeeding() {
-  document.getElementById('seedGamesBtn').addEventListener('click', async () => {
-    if (!confirm("Add all fallback games to the database? This may create duplicates.")) return;
-    const btn = document.getElementById('seedGamesBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-    
-    try {
-      const rows = FALLBACK_GAMES.map(gameToRow);
-      const { error } = await supabase.from('games').insert(rows);
-      if (error) throw error;
-      showToast(`Successfully seeded ${FALLBACK_GAMES.length} games.`);
-    } catch (e) { showToast('Seeding failed: ' + e.message, 'error'); }
-    finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-database"></i><span class="hide-mobile">Seed DB</span>';
-    }
   });
 }
 
