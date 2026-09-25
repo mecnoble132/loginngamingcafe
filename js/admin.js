@@ -1,13 +1,12 @@
 /* ============================================================
    LOGINN GAMING CAFE — js/admin.js
-   Admin dashboard: Games & News/Events management
+   Admin dashboard: Games management
    Uses admin.css design system (modals, branded cards, toasts)
 ============================================================ */
 'use strict';
 
 import { supabase } from './supabase-config.js';
 import { FALLBACK_GAMES } from './games.js';
-import { FALLBACK_NEWS } from './news.js';
 
 // ── Row <-> UI shape mapping (Postgres uses snake_case) ──────
 function gameToRow(g) {
@@ -28,19 +27,6 @@ function rowToGame(r) {
     featuredInCategory: r.featured_in_category || {},
   };
 }
-function newsToRow(n) {
-  return {
-    title: n.title, date: n.date, tag: n.tag, tag_color: n.tagColor,
-    description: n.desc, cta_text: n.ctaText, cta_link: n.ctaLink,
-  };
-}
-function rowToNews(r) {
-  return {
-    id: r.id, title: r.title, date: r.date, tag: r.tag, tagColor: r.tag_color,
-    desc: r.description, ctaText: r.cta_text, ctaLink: r.cta_link,
-  };
-}
-
 // ══════════════════════════════════════════════════════════
 // AUTH
 // ══════════════════════════════════════════════════════════
@@ -123,16 +109,13 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 // DATA
 // ══════════════════════════════════════════════════════════
 let allGames = [];
-let allNews = [];
 let dashboardInitialized = false;
 
 function initDashboard() {
   if (dashboardInitialized) return;
   dashboardInitialized = true;
   listenGames();
-  listenNews();
   setupGameModal();
-  setupNewsModal();
   setupRefresh();
   setupSeeding();
   setupFeaturedTab();
@@ -342,146 +325,6 @@ function resetGameForm() {
 }
 
 // ══════════════════════════════════════════════════════════
-// NEWS / EVENTS
-// ══════════════════════════════════════════════════════════
-
-async function fetchNews() {
-  const { data, error } = await supabase.from('news').select('*').order('created_at', { ascending: false });
-  if (error) throw error;
-  allNews = (data || []).map(rowToNews);
-  renderNews();
-  updateStats();
-}
-
-function listenNews() {
-  fetchNews().catch(err => {
-    console.warn('News error:', err.message);
-    document.getElementById('newsListPanel').innerHTML =
-      '<div class="table-empty"><i class="fa-solid fa-triangle-exclamation"></i> Error loading news</div>';
-  });
-
-  supabase
-    .channel('admin-news')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, () => {
-      fetchNews().catch(err => console.warn('News refresh error:', err.message));
-    })
-    .subscribe();
-}
-
-function renderNews() {
-  const el = document.getElementById('newsListPanel');
-  if (!allNews.length) {
-    el.innerHTML = '<div class="table-empty">No news/events yet. Click "Add Event" to start!</div>';
-    return;
-  }
-
-  el.innerHTML = allNews.map(n => `
-    <div class="admin-news-card" data-id="${n.id}">
-      <div class="anc-top">
-        <div>
-          <span class="anc-tag ${n.tagColor || 'tag-blue'}">${n.tag || 'NEWS'}</span>
-          <span class="anc-date">${n.date || ''}</span>
-        </div>
-        <div class="anc-actions">
-          <button class="action-btn action-edit news-edit" data-id="${n.id}" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="action-btn action-delete news-delete" data-id="${n.id}" title="Delete"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </div>
-      <div class="anc-title">${n.title}</div>
-      <div class="anc-desc">${n.desc || ''}</div>
-      <div class="anc-bottom">
-        ${n.ctaText ? `<span class="anc-cta"><i class="fa-solid fa-link" style="font-size:0.6rem;margin-right:4px;"></i>${n.ctaText}</span>` : '<span></span>'}
-      </div>
-    </div>`
-  ).join('');
-
-  el.querySelectorAll('.news-edit').forEach(btn =>
-    btn.addEventListener('click', () => editNews(btn.dataset.id))
-  );
-  el.querySelectorAll('.news-delete').forEach(btn =>
-    btn.addEventListener('click', () => confirmDelete('news', btn.dataset.id, 'news item'))
-  );
-}
-
-// ── News Modal ───────────────────────────────────────────
-function setupNewsModal() {
-  document.getElementById('addNewsBtn').addEventListener('click', () => {
-    resetNewsForm();
-    document.getElementById('newsModalTitle').innerHTML =
-      '<i class="fa-solid fa-newspaper" style="color:var(--green)"></i> Add News / Event';
-    openModal('newsModal');
-  });
-
-  document.getElementById('newsModalClose').addEventListener('click', () => closeModal('newsModal'));
-  document.getElementById('newsModalCancel').addEventListener('click', () => closeModal('newsModal'));
-
-  document.getElementById('saveNewsBtn').addEventListener('click', async () => {
-    const title = document.getElementById('newsTitle').value.trim();
-    if (!title) { showToast('Please enter a title.', 'error'); return; }
-
-    const tagColor = document.querySelector('input[name="tagColor"]:checked')?.value || 'tag-blue';
-
-    const data = {
-      title,
-      date: document.getElementById('newsDate').value.trim(),
-      tag: document.getElementById('newsTag').value.trim().toUpperCase() || 'NEWS',
-      tagColor,
-      desc: document.getElementById('newsDesc').value.trim(),
-      ctaText: document.getElementById('newsCtaText').value.trim(),
-      ctaLink: document.getElementById('newsCtaLink').value.trim(),
-    };
-
-    const editId = document.getElementById('newsEditId').value;
-    try {
-      if (editId) {
-        const { error } = await supabase.from('news').update(newsToRow(data)).eq('id', editId);
-        if (error) throw error;
-        showToast(`"${title}" updated!`);
-      } else {
-        // created_at defaults to now() in Postgres — no need to set it manually.
-        const { error } = await supabase.from('news').insert(newsToRow(data));
-        if (error) throw error;
-        showToast(`"${title}" added!`);
-      }
-      closeModal('newsModal');
-    } catch (e) {
-      showToast('Error saving: ' + e.message, 'error');
-    }
-  });
-}
-
-function editNews(id) {
-  const n = allNews.find(x => x.id === id);
-  if (!n) return;
-  document.getElementById('newsEditId').value = id;
-  document.getElementById('newsTitle').value = n.title || '';
-  document.getElementById('newsDate').value = n.date || '';
-  document.getElementById('newsTag').value = n.tag || '';
-  document.getElementById('newsDesc').value = n.desc || '';
-  document.getElementById('newsCtaText').value = n.ctaText || '';
-  document.getElementById('newsCtaLink').value = n.ctaLink || '';
-  // Set radio
-  const radio = document.querySelector(`input[name="tagColor"][value="${n.tagColor || 'tag-blue'}"]`);
-  if (radio) radio.checked = true;
-
-  document.getElementById('newsModalTitle').innerHTML =
-    '<i class="fa-solid fa-pen" style="color:var(--green)"></i> Edit News / Event';
-  openModal('newsModal');
-}
-
-function resetNewsForm() {
-  document.getElementById('newsEditId').value = '';
-  document.getElementById('newsTitle').value = '';
-  document.getElementById('newsDate').value = '';
-  document.getElementById('newsTag').value = '';
-  document.getElementById('newsDesc').value = '';
-  document.getElementById('newsCtaText').value = '';
-  document.getElementById('newsCtaLink').value = '';
-  const radio = document.querySelector('input[name="tagColor"][value="tag-blue"]');
-  if (radio) radio.checked = true;
-}
-
-// ══════════════════════════════════════════════════════════
 // FEATURED GAMES
 // ══════════════════════════════════════════════════════════
 const FEATURED_CATEGORIES = ['all', 'pc', 'ps5', 'xbox', 'sim'];
@@ -601,22 +444,7 @@ function setupRefresh() {
     }
   };
 
-  const refreshNews = async () => {
-    const btn = document.getElementById('refreshNewsBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-    try {
-      await fetchNews();
-      showToast(`Refreshed ${allNews.length} news items.`);
-    } catch (e) { showToast('Refresh failed: ' + e.message, 'error'); }
-    finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i><span class="hide-mobile">Refresh</span>';
-    }
-  };
-
   document.getElementById('refreshGamesBtn').addEventListener('click', refreshGames);
-  document.getElementById('refreshNewsBtn').addEventListener('click', refreshNews);
 }
 
 function setupSeeding() {
@@ -635,24 +463,6 @@ function setupSeeding() {
     finally {
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-database"></i><span class="hide-mobile">Seed DB</span>';
-    }
-  });
-
-  document.getElementById('seedNewsBtn').addEventListener('click', async () => {
-    if (!confirm("Add fallback news to the database?")) return;
-    const btn = document.getElementById('seedNewsBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-    
-    try {
-      const rows = FALLBACK_NEWS.map(newsToRow); // created_at defaults to now() per row
-      const { error } = await supabase.from('news').insert(rows);
-      if (error) throw error;
-      showToast(`Successfully seeded ${FALLBACK_NEWS.length} news items.`);
-    } catch (e) { showToast('Seeding failed: ' + e.message, 'error'); }
-    finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="fa-solid fa-database"></i><span class="hide-mobile">Seed</span>';
     }
   });
 }
@@ -675,7 +485,6 @@ function confirmDelete(tableName, rowId, label) {
 // ══════════════════════════════════════════════════════════
 function updateStats() {
   document.getElementById('statGames').textContent = allGames.length;
-  document.getElementById('statNews').textContent = allNews.length;
   const featured = allGames.filter(g =>
     g.featuredInCategory && Object.values(g.featuredInCategory).some(Boolean)
   ).length;

@@ -74,13 +74,6 @@
             </div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-icon green"><i class="fa-solid fa-newspaper"></i></div>
-            <div>
-              <div class="stat-card-num" id="statNews">—</div>
-              <div class="stat-card-label">News / Events</div>
-            </div>
-          </div>
-          <div class="stat-card">
             <div class="stat-card-icon pink"><i class="fa-solid fa-star"></i></div>
             <div>
               <div class="stat-card-num" id="statFeatured">—</div>
@@ -93,9 +86,6 @@
         <div class="admin-tabs">
           <button class="admin-tab active" data-tab="games">
             <i class="fa-solid fa-gamepad"></i> Games
-          </button>
-          <button class="admin-tab" data-tab="news">
-            <i class="fa-solid fa-newspaper"></i> News / Events
           </button>
           <button class="admin-tab" data-tab="featured">
             <i class="fa-solid fa-star"></i> Featured
@@ -124,29 +114,6 @@
               <input type="text" id="gameSearch" placeholder="Search games…" />
             </div>
             <div class="admin-cards-list" id="gamesListPanel">
-              <div class="table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══════ NEWS TAB ═══════ -->
-        <div class="admin-tab-content" id="tab-news">
-          <div class="admin-panel">
-            <div class="panel-header">
-              <div class="panel-title"><i class="fa-solid fa-newspaper" style="color:var(--green)"></i> News & Events</div>
-              <div class="panel-actions">
-                <button class="btn btn-primary btn-sm" id="addNewsBtn" style="background:var(--green);">
-                  <i class="fa-solid fa-plus"></i> Add Event
-                </button>
-                <button class="btn btn-ghost btn-sm" id="refreshNewsBtn" title="Fetch from Database">
-                  <i class="fa-solid fa-arrows-rotate"></i><span class="hide-mobile">Refresh</span>
-                </button>
-                <button class="btn btn-outline-pink btn-sm" id="seedNewsBtn" title="Seed News with Fallbacks">
-                  <i class="fa-solid fa-database"></i><span class="hide-mobile">Seed</span>
-                </button>
-              </div>
-            </div>
-            <div class="admin-cards-list" id="newsListPanel">
               <div class="table-empty"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>
             </div>
           </div>
@@ -219,59 +186,6 @@
       <div class="modal-footer">
         <button class="btn btn-ghost btn-sm" id="gameModalCancel">Cancel</button>
         <button class="btn btn-primary btn-sm" id="saveGameBtn"><i class="fa-solid fa-check"></i> Save Game</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════ NEWS MODAL ══════════════ -->
-  <div class="modal-overlay" id="newsModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div class="modal-title" id="newsModalTitle"><i class="fa-solid fa-newspaper" style="color:var(--green)"></i> Add News / Event</div>
-        <button class="modal-close" id="newsModalClose"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="newsEditId" value="">
-        <div class="mf-field">
-          <label>Title <span class="req">*</span></label>
-          <input type="text" id="newsTitle" class="mf-input" placeholder="e.g. New Games Added!" />
-        </div>
-        <div class="mf-row">
-          <div class="mf-field">
-            <label>Date</label>
-            <input type="text" id="newsDate" class="mf-input" placeholder="e.g. April 2, 2026" />
-          </div>
-          <div class="mf-field">
-            <label>Tag Label</label>
-            <input type="text" id="newsTag" class="mf-input" placeholder="e.g. ANNOUNCEMENT" />
-          </div>
-        </div>
-        <div class="mf-field">
-          <label>Tag Color</label>
-          <div class="mf-checkboxes" id="newsTagColorGroup">
-            <label class="mf-check"><input type="radio" name="tagColor" value="tag-blue" checked> Blue</label>
-            <label class="mf-check"><input type="radio" name="tagColor" value="tag-green"> Green</label>
-            <label class="mf-check"><input type="radio" name="tagColor" value="tag-pink"> Pink</label>
-          </div>
-        </div>
-        <div class="mf-field">
-          <label>Description</label>
-          <textarea id="newsDesc" class="mf-input mf-textarea" placeholder="Write about this news/event…"></textarea>
-        </div>
-        <div class="mf-row">
-          <div class="mf-field">
-            <label>CTA Button Text</label>
-            <input type="text" id="newsCtaText" class="mf-input" placeholder="e.g. Learn More" />
-          </div>
-          <div class="mf-field">
-            <label>CTA Link</label>
-            <input type="text" id="newsCtaLink" class="mf-input" placeholder="e.g. membership.html" />
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-ghost btn-sm" id="newsModalCancel">Cancel</button>
-        <button class="btn btn-primary btn-sm" id="saveNewsBtn" style="background:var(--green);border-color:var(--green);"><i class="fa-solid fa-check"></i> Save</button>
       </div>
     </div>
   </div>
