@@ -1,6 +1,6 @@
 ﻿import sanitizeHtml from 'sanitize-html';
 
-export const SITE_URL = 'https://loginntvm.in';
+export const SITE_URL = 'https://www.loginntvm.in';
 const allowedTags = ['p', 'br', 'h1', 'h2', 'h3', 'strong', 'em', 'u', 'blockquote', 'ul', 'ol', 'li', 'a', 'img'];
 
 export function escapeHtml(value = '') {
@@ -21,7 +21,7 @@ export function sanitizePostHtml(html = '') {
       a: (tagName, attribs) => {
         const href = attribs.href || '';
         const internal = href.startsWith('/') && !href.startsWith('//');
-        if (!internal && !href.startsWith('https://')) return { tagName: 'span', text: '' };
+        if (!internal && !href.startsWith('https://')) return { tagName: 'span', attribs: {} }; // keep the words, drop the unsafe link
         return { tagName, attribs: { href, ...(href.startsWith('https://') ? { target: '_blank', rel: 'noopener noreferrer' } : {}) } };
       },
       img: (tagName, attribs) => isBlogImageUrl(attribs.src) ? { tagName, attribs: { src: attribs.src, alt: attribs.alt || '' } } : { tagName: 'span', text: '' },
@@ -115,7 +115,7 @@ export function renderIndex(posts, { page = 1, totalPages = 1 } = {}) {
     : `<section class="blog-state"><i class="fa-solid fa-pen-nib"></i><h2>Stories are loading in</h2><p>There are no published posts yet. Check back soon for gaming guides, cafe updates, and event news.</p></section>`;
   const cta = `<section class="blog-cta-section"><div class="container"><div class="blog-cta"><div><span>READY PLAYER ONE?</span><h2>Stop reading, start playing.</h2><p>Premium rigs, ice-cold vibes, and a squad waiting at Loginn Gaming Cafe, Trivandrum.</p></div><div class="blog-cta-actions"><a href="https://wa.me/918075707064?text=Hi!%20I%27d%20like%20to%20book%20a%20slot%20at%20Loginn" target="_blank" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Book a slot</a><a href="/#find-us" class="btn btn-outline-blue"><i class="fa-solid fa-location-dot"></i> Find us</a></div></div></div></section>`;
   const paginationLinks = [page > 1 ? `<link rel="prev" href="${escapeHtml(`${SITE_URL}${pageUrl(page - 1)}`)}">` : '', page < totalPages ? `<link rel="next" href="${escapeHtml(`${SITE_URL}${pageUrl(page + 1)}`)}">` : ''].join('');
-  return shell({ title: page > 1 ? `Blog – Page ${page} | Loginn Gaming Cafe` : 'Blog | Loginn Gaming Cafe', description: 'Gaming guides, cafe stories, events, and updates from Loginn Gaming Cafe in Trivandrum.', canonical: `${SITE_URL}${pageUrl(page)}`, paginationLinks, body: `<section class="blog-list-section"><div class="container blog-container">${body}</div></section>${cta}` });
+  return shell({ title: page > 1 ? `Blog – Page ${page} | Loginn Gaming Cafe` : 'Blog | Loginn Gaming Cafe', description: 'Gaming guides, cafe stories, events, and updates from Loginn Gaming Cafe in Trivandrum.', canonical: `${SITE_URL}${pageUrl(page)}`, paginationLinks, body: `<section class="blog-list-section"><div class="container blog-container"><h1 class="sr-only">Loginn Gaming Cafe Blog${page > 1 ? ` – Page ${page}` : ''}</h1>${body}</div></section>${cta}` });
 }
 
 export function renderArticle(post, related = []) {
@@ -125,7 +125,7 @@ export function renderArticle(post, related = []) {
   const relatedSection = related.length ? `<section class="blog-related"><div class="container"><div class="blog-list-label"><i class="fa-solid fa-layer-group"></i> More from the blog</div><div class="blog-grid">${related.map(postCard).join('')}</div></div></section>` : '';
   const titleBlock = `<div class="article-tags">${tags(post.tags)}</div><h1>${escapeHtml(post.title)}</h1>`;
   const hero = post.cover_image
-    ? `<div class="article-hero"><img class="article-cover" src="${escapeHtml(post.cover_image)}" alt="${escapeHtml(post.title)}"><div class="article-hero-overlay">${titleBlock}</div></div>`
+    ? `<div class="article-hero"><img class="article-cover" src="${escapeHtml(post.cover_image)}" alt="${escapeHtml(post.title)}" fetchpriority="high"><div class="article-hero-overlay">${titleBlock}</div></div>`
     : `<header class="article-header">${titleBlock}</header>`;
   return shell({ title: `${post.title} | Loginn Gaming Cafe`, description: post.meta_description, canonical: `${SITE_URL}/blog/${post.slug}`, article: post, body: `<article class="article"><div class="container article-container"><a href="/blog" class="blog-back"><i class="fa-solid fa-arrow-left"></i> All posts</a>${hero}<div class="article-info"><p class="article-excerpt">${escapeHtml(post.excerpt)}</p>${byline}</div><div class="article-body">${body}</div><aside class="article-cta"><div><span>READY PLAYER ONE?</span><h2>Make your next game night legendary.</h2></div><a href="https://wa.me/918075707064?text=Hi!%20I%27d%20like%20to%20book%20a%20slot%20at%20Loginn" target="_blank" class="btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Book a slot</a></aside></div></article>${relatedSection}` });
 }

@@ -154,3 +154,5 @@
   .blog-related .blog-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 980px) and (min-width: 761px) { .blog-related .blog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

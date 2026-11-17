@@ -15,6 +15,9 @@ export default async function handler(request) {
     const from = (page - 1) * pageSize;
     const to = from + pageSize - 1;
     const { data, error, count } = await client.from('posts').select('id,title,slug,cover_image,excerpt,tags,published_at,author_name', { count: 'exact' }).eq('status', 'published').order('published_at', { ascending: false }).range(from, to);
+    // PostgREST answers "Requested range not satisfiable" (PGRST103 / HTTP 416) when the page is past the end.
+    const outOfRange = (error && (error.code === 'PGRST103' || error.status === 416)) || (!error && page > 1 && !data?.length);
+    if (outOfRange) return response(404, renderStatus(404, 'Page not found', 'That page of the blog does not exist.'));
     if (error) { console.error('Blog list query failed', error.message); return response(500, renderStatus(500, 'Something went wrong', 'Please try again shortly.')); }
     const totalPages = Math.max(1, Math.ceil((count || 0) / pageSize));
     return response(200, renderIndex(data || [], { page: Math.min(page, totalPages), totalPages }));
