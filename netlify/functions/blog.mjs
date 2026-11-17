@@ -1,0 +1,35 @@
+import { createClient } from '@supabase/supabase-js';
+import { renderArticle, renderIndex, renderStatus } from './lib/blog-html.mjs';
+
+const headers = { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=0, s-maxage=60, stale-while-revalidate=300' };
+const response = (status, body) => new Response(body, { status, headers });
+
+export default async function handler(request) {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ANON_KEY) return response(500, renderStatus(500, 'Something went wrong', 'Please try again shortly.'));
+  const client = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+  const url = new URL(request.url);
+  const rawPath = url.pathname.replace(/\/+$/, '') || '/blog';
+  if (rawPath === '/blog' || rawPath.endsWith('/.netlify/functions/blog')) {
+    const pageSize = 12;
+    const page = Math.max(1, parseInt(url.searchParams.get('page'), 10) || 1);
+    const from = (page - 1) * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error, count } = await client.from('posts').select('id,title,slug,cover_image,excerpt,tags,published_at,author_name', { count: 'exact' }).eq('status', 'published').order('published_at', { ascending: false }).range(from, to);
+    // PostgREST answers "Requested range not satisfiable" (PGRST103 / HTTP 416) when the page is past the end.
+    const outOfRange = (error && (error.code === 'PGRST103' || error.status === 416)) || (!error && page > 1 && !data?.length);
+    if (outOfRange) return response(404, renderStatus(404, 'Page not found', 'That page of the blog does not exist.'));
+    if (error) { console.error('Blog list query failed', error.message); return response(500, renderStatus(500, 'Something went wrong', 'Please try again shortly.')); }
+    const totalPages = Math.max(1, Math.ceil((count || 0) / pageSize));
+    return response(200, renderIndex(data || [], { page: Math.min(page, totalPages), totalPages }));
+  }
+  const segment = rawPath.replace(/^\/blog\//, '');
+  let slug;
+  try { slug = decodeURIComponent(segment); } catch { return response(404, renderStatus(404, 'Post not found', 'This post does not exist or is no longer published.')); }
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return response(404, renderStatus(404, 'Post not found', 'This post does not exist or is no longer published.'));
+  const { data, error } = await client.from('posts').select('*').eq('slug', slug).eq('status', 'published').maybeSingle();
+  if (error) { console.error('Blog post query failed', error.message); return response(500, renderStatus(500, 'Something went wrong', 'Please try again shortly.')); }
+  if (!data) return response(404, renderStatus(404, 'Post not found', 'This post does not exist or is no longer published.'));
+  const { data: related, error: relatedError } = await client.from('posts').select('title,slug,cover_image,excerpt,tags,published_at').eq('status', 'published').neq('slug', slug).order('published_at', { ascending: false }).limit(3);
+  if (relatedError) console.error('Related posts query failed', relatedError.message);
+  return response(200, renderArticle(data, related || []));
+}

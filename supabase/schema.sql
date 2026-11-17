@@ -18,34 +18,18 @@ create table if not exists public.games (
 
 create index if not exists games_title_idx on public.games (title asc);
 
--- ── NEWS ─────────────────────────────────────────────────────
-create table if not exists public.news (
-  id uuid primary key default gen_random_uuid(),
-  title text not null,
-  date text default '',
-  tag text default 'NEWS',
-  tag_color text default 'tag-blue',
-  description text default '',
-  cta_text text default '',
-  cta_link text default '',
-  created_at timestamptz not null default now()
-);
-
-create index if not exists news_created_at_idx on public.news (created_at desc);
+-- Note: the original `news` table (and its RLS policies) lived here. The
+-- News/Events feature has been retired in favor of the blog — see
+-- supabase/migrations/20260914_create_blog.sql (adds `posts`) and
+-- supabase/migrations/20260917_align_blog_schema.sql (drops `news`).
 
 -- ── ROW LEVEL SECURITY ───────────────────────────────────────
--- Public site (games.html, news.html, index.html) only ever reads.
+-- Public site (games.html, index.html) only ever reads.
 -- Only an authenticated admin (logged in via Supabase Auth) can write.
 alter table public.games enable row level security;
-alter table public.news  enable row level security;
 
 create policy "Public can read games"
   on public.games for select
-  to anon, authenticated
-  using (true);
-
-create policy "Public can read news"
-  on public.news for select
   to anon, authenticated
   using (true);
 
@@ -64,26 +48,10 @@ create policy "Authenticated users can delete games"
   to authenticated
   using (true);
 
-create policy "Authenticated users can insert news"
-  on public.news for insert
-  to authenticated
-  with check (true);
-
-create policy "Authenticated users can update news"
-  on public.news for update
-  to authenticated
-  using (true) with check (true);
-
-create policy "Authenticated users can delete news"
-  on public.news for delete
-  to authenticated
-  using (true);
-
 -- ── REALTIME ─────────────────────────────────────────────────
 -- Lets the admin dashboard subscribe to live changes (replaces
 -- Firestore's onSnapshot).
 alter publication supabase_realtime add table public.games;
-alter publication supabase_realtime add table public.news;
 
 -- ── ADMIN USER ───────────────────────────────────────────────
 -- Do NOT create the admin user with SQL. Instead:
